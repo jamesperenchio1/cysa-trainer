@@ -9073,5 +9073,137 @@
       }
     ],
     "explanation": "This reinforces the earlier metric-definition-consistency theme applied to external benchmarking specifically: a favorable-looking comparison against an industry benchmark is only meaningful if both figures are measuring the same thing using comparable definitions and methodology (same start/end points for 'time to patch,' comparable vulnerability populations, reliable and representative underlying data) — if the benchmark's methodology differs from how the organization calculates its own figure (a very common issue, given the earlier example of different SLA clock-start definitions), the comparison can be genuinely misleading even though both numbers are individually 'accurate' under their own respective definitions. This scrutiny is warranted for any benchmark comparison regardless of report age, and simply presenting whichever number looks more favorable without disclosing the comparison's actual basis would compound rather than resolve this methodological concern."
+  },
+  {
+    "external_key": "SO-091",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An analyst notices that a domain admin account performed an action (creating a new domain admin-level account) at 4:47 AM local time, a time when the actual human account owner has never previously logged in based on 6 months of historical baseline data. The action itself (creating an admin account) is something domain admins do periodically for legitimate reasons. What should drive the analyst's suspicion level here?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "No suspicion is warranted since creating admin accounts is a normal, expected domain admin activity regardless of timing",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The suspicion should come from the BEHAVIORAL ANOMALY (timing wildly inconsistent with 6 months of established baseline activity for this specific account) rather than the action type itself — a legitimate action performed at a highly unusual time for the specific account involved is a meaningful indicator warranting verification (confirming with the account owner, checking for other signs of compromise), since attackers who compromise privileged credentials often act outside the legitimate user's normal patterns, even while performing actions that are individually unremarkable in isolation",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This can only be suspicious if the new account created was subsequently used to access financial systems specifically, and is otherwise fully explainable regardless of timing",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Domain admin account activity should never be baselined or analyzed for behavioral anomalies, since these accounts are inherently trusted and exempt from anomaly-based scrutiny",
+        "correct": false
+      }
+    ],
+    "explanation": "This reinforces the User and Entity Behavior Analytics (UEBA) principle running through several earlier questions: the suspicious signal here is the deviation from an established behavioral BASELINE (timing wildly inconsistent with 6 months of this specific account's actual usage pattern) rather than the action itself being inherently malicious — attackers who compromise privileged credentials frequently operate at unusual times (often to avoid detection by acting when the legitimate user and typical monitoring staff are less active) even while performing individually mundane, legitimate-looking actions. Privileged accounts specifically warrant MORE behavioral scrutiny, not exemption from it, given the outsized impact of their compromise, and the concern here is independent of what the newly-created account is later used for."
+  },
+  {
+    "external_key": "VM-078",
+    "domain": "VM",
+    "subtopic": "Compliance / Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management program's documented policy states remediation SLAs 'in business days,' but the automated tracking system calculates SLA compliance using calendar days. Around holiday periods with several consecutive non-business days, this discrepancy causes findings to be incorrectly flagged as SLA violations that would actually be compliant under the policy's actual documented definition. What is the BEST characterization of this issue?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This is not a genuine issue; calendar days and business days are functionally interchangeable units for SLA tracking purposes with no meaningful practical difference",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "This represents a genuine implementation gap between the documented policy (business days) and the actual automated tracking system's calculation method (calendar days) — beyond just producing misleading compliance metrics around holidays, this kind of definitional mismatch between policy and tooling should be corrected (either updating the tracking system's calculation logic or revising the documented policy to match actual practice) to ensure reported compliance data accurately reflects the organization's own defined standard",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This issue can only be resolved by eliminating SLA-based tracking entirely in favor of a policy with no defined remediation timeframes of any kind",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct fix is to manually and permanently exclude any finding discovered near a holiday period from all future SLA compliance reporting",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing a genuine, common implementation-vs-policy mismatch: business days and calendar days ARE meaningfully different units (a policy allowing '15 business days' is a longer actual window than '15 calendar days,' especially around holidays or weekends), and having the automated tracking tool calculate against a different unit than the documented policy actually specifies produces genuinely inaccurate compliance reporting — findings could be misreported as violations (or compliant, in other scenarios) relative to the organization's own stated standard. The fix is reconciling the documented policy and the actual tracking implementation to match (whichever direction is the organization's genuine intent), not eliminating SLA tracking entirely or applying an ad hoc, undocumented exclusion rule around specific time periods."
+  },
+  {
+    "external_key": "IR-067",
+    "domain": "IR",
+    "subtopic": "Communication & Legal",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "During a multi-week incident investigation, the IR team maintains detailed internal notes in a shared document, including some entries expressing personal frustration or informal speculation about individuals suspected of involvement. Legal counsel requests these notes be reviewed and cleaned up before the investigation concludes. Is this an appropriate request?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "No — legal counsel reviewing or requesting changes to investigative notes always constitutes improper evidence tampering or obstruction, regardless of the specific content involved",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Generally yes, when properly scoped — ensuring investigative documentation reflects factual findings and professional analysis rather than informal speculation, personal frustration, or unsubstantiated conclusions about specific individuals is a legitimate practice that improves the documentation's quality and reduces legal risk (since informal, speculative language can be discoverable and used to undermine the investigation's credibility or create liability); this is meaningfully different from altering or destroying the underlying FACTUAL findings or evidence themselves, which would be genuinely improper",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Yes, and this process should also include permanently deleting the underlying technical evidence and findings that informed the notes, not just the notes' language and tone",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This request has no legitimate purpose and should be refused entirely by the IR team regardless of legal counsel's involvement or rationale",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests distinguishing between legitimate documentation quality/professionalism review and genuinely improper evidence tampering: legal counsel reviewing investigative notes to ensure they reflect factual, professional analysis — rather than informal speculation, personal frustration, or premature unsubstantiated conclusions about specific individuals — is a normal and appropriate practice that protects both the investigation's credibility and the individuals involved from unfair mischaracterization, since informal language can create legal exposure and undermine the investigation's defensibility if scrutinized later. This is clearly distinct from altering or destroying the underlying FACTUAL findings, technical evidence, or substantive conclusions themselves, which would constitute genuine evidence tampering — the appropriateness turns on what's actually being changed (tone/speculation vs. substantive facts)."
+  },
+  {
+    "external_key": "RC-043",
+    "domain": "RC",
+    "subtopic": "Stakeholder Communication",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team's quarterly business review (QBR) presentation to executive leadership includes 15 dense slides covering every security initiative in granular detail, resulting in leadership disengaging partway through and missing the two most important items (a critical budget request and a significant emerging risk). What structural presentation change would BEST address this?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The presentation format and structure should remain completely unchanged; if leadership disengaged, the responsibility for missing important content lies entirely with their own attentiveness",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Restructure the presentation to lead with the most critical, decision-relevant items (the budget request and emerging risk) at the very beginning — before attention inevitably wanes over a long, dense presentation — with comprehensive detail on lower-priority initiatives placed later or in an appendix for those who want to continue engaging, rather than presenting everything in a flat, equally-weighted sequence that buries the most important content",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The correct fix is to eliminate the QBR presentation format entirely and replace it with no structured executive communication of any kind",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Presentation slide count and structure have no bearing on executive engagement or information retention, making any structural change pointless",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a practical communication-structuring principle directly relevant to Reporting & Communication: audience attention and engagement naturally decline over a long, dense presentation, so critical, decision-relevant items should be placed FIRST (often called a 'lead with the ask' or inverted-pyramid structure) rather than at the end of a flat, equally-weighted sequence where they risk being missed entirely if attention has already waned. This is a well-established structural communication principle, not something that can be dismissed as solely the audience's responsibility to power through, and the fix is restructuring for impact and prioritization, not eliminating structured executive communication altogether."
   }
 ]
