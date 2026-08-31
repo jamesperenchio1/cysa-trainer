@@ -8677,5 +8677,137 @@
       }
     ],
     "explanation": "This reinforces the jurisdiction-specific-obligations theme with a multinational corporate structure example: data protection and breach notification obligations generally attach based on where affected individuals are located and/or where the relevant data processing/operations occur, not simply the parent company's country of incorporation — a Canadian subsidiary's affected employee data would generally trigger Canada's own applicable privacy law obligations (e.g., PIPEDA at the federal level, plus potentially applicable provincial law) independent of whatever the US parent company's obligations are under US law. This is a general principle applicable across many multinational scenarios (not unique to the US/Canada pairing), and no corporate structure exempts an organization from country-specific breach notification laws in favor of only broader international treaty obligations."
+  },
+  {
+    "external_key": "SO-088",
+    "domain": "SO",
+    "subtopic": "Network Traffic Analysis",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An analyst reviewing NetFlow data notices a workstation transferring a very large volume of data (several gigabytes) to an external cloud storage IP over the course of several hours, spread out in small, evenly-spaced chunks rather than one continuous large transfer. Why might an attacker deliberately structure exfiltration this way?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This pattern has no strategic purpose and would only occur due to random network congestion, with no relationship to deliberate attacker technique",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Spreading a large transfer into small, evenly-paced chunks over an extended period ('low and slow' exfiltration) is a deliberate technique to avoid triggering volume-based or rate-based anomaly detection thresholds that are tuned to catch large, sudden data transfers — by staying under per-interval thresholds, the attacker can move a large total volume of data while appearing, at any given moment, similar to normal, low-volume background traffic",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This pattern can only indicate a legitimate scheduled backup job and should never be considered a potential exfiltration indicator regardless of other context",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Cloud storage services are technically incapable of receiving data in anything other than small, evenly-spaced chunks, making this pattern universally benign and expected",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing 'low and slow' exfiltration as a deliberate evasion technique: many detection systems flag anomalies based on volume or rate thresholds over specific time windows (e.g., 'more than X GB transferred in Y minutes') — an attacker aware of this can deliberately pace a large total transfer into small, evenly-spaced chunks specifically to stay under those per-interval thresholds while still eventually moving a large total volume of data, making the traffic look more like unremarkable background activity at any single point in time. This pattern combined with the destination (external cloud storage) and total volume over time should be evaluated as a potential exfiltration indicator, not automatically dismissed as coincidental congestion or assumed to be a legitimate backup without further verification."
+  },
+  {
+    "external_key": "IR-063",
+    "domain": "IR",
+    "subtopic": "Attack Frameworks",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team uses the Diamond Model to analyze a series of intrusions and notices that across multiple distinct incidents over 6 months, the Infrastructure and Capability features show consistent overlap (same hosting provider patterns, similar custom tooling), but the apparent Victim profile varies significantly (different industries, no obvious common targeting logic). What is the MOST likely interpretation?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "These must be entirely unrelated incidents from different, unconnected adversaries, since any variation in victim profile definitively rules out a common adversary regardless of other overlapping features",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Consistent overlap in Infrastructure and Capability features across multiple incidents, despite varying victim profiles, suggests these incidents may originate from the SAME adversary (or adversary group) engaged in broad, opportunistic targeting rather than a focused campaign against a specific victim type — the Diamond Model's structure specifically supports this kind of cross-incident pattern analysis, using consistency in some features (infrastructure/capability) even when others (victim) vary, to infer a shared underlying adversary",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The Diamond Model can only be applied to a single incident at a time and has no capability to support pattern analysis correlating multiple separate incidents",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Victim profile is the only feature in the Diamond Model that carries any analytical weight, making the Infrastructure and Capability overlap irrelevant to this determination",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests applying the Diamond Model's core analytical structure (Adversary-Capability-Infrastructure-Victim, with relationships between events) to cross-incident pattern analysis: consistent overlap in some features (Infrastructure, Capability) across multiple incidents, even with variation in another feature (Victim), is a meaningful basis for hypothesizing a shared underlying adversary conducting broad, opportunistic targeting rather than a narrowly victim-specific campaign — this is precisely the kind of cross-event correlation the Diamond Model is designed to support, using whichever features show consistency as anchors for attribution/pattern reasoning, rather than requiring ALL four features to match or treating any single feature as universally more important than the others."
+  },
+  {
+    "external_key": "IR-064",
+    "domain": "IR",
+    "subtopic": "Communication & Legal",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "During an incident, the IR team discovers evidence suggesting the initial compromise occurred through a vulnerability that a vendor's security advisory had already publicly disclosed six months earlier, which the organization failed to patch. Legal counsel asks whether this fact should be included in the customer-facing breach notification. What is the BEST consideration in this decision?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This fact should always be omitted entirely from any external communication regardless of any legal or regulatory disclosure requirement, since it could create negative publicity",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "This determination depends on the specific applicable legal/regulatory notification requirements (which may mandate disclosing the root cause or vulnerability details) and a broader assessment of accuracy and transparency obligations — omitting a known, relevant root cause purely to avoid negative publicity, if a genuine legal disclosure obligation exists, could itself create additional legal exposure, so this decision should be made based on the actual applicable requirements and transparency principles, not simply reputational risk avoidance",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This fact should always be prominently included in the customer-facing notification specifically to publicly shame the organization's own security failures, regardless of any legal counsel guidance",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Root cause information about how an incident occurred is never relevant to any breach notification requirement under any regulatory framework, making this question moot",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests weighing legal/regulatory transparency obligations against reputational concerns in incident communication: the decision about what to include in a breach notification should be driven by actual applicable legal/regulatory requirements (some frameworks require disclosing root cause or specific circumstances) and broader accuracy/transparency principles, not simply an instinct to avoid negative publicity by omitting an unflattering but potentially legally-required fact — doing so could create ADDITIONAL legal exposure if a genuine disclosure obligation exists and isn't met. This is a determination legal counsel should make based on the actual applicable framework's requirements, not a blanket rule to either always omit or always prominently include such details regardless of what's actually legally required."
+  },
+  {
+    "external_key": "RC-040",
+    "domain": "RC",
+    "subtopic": "Stakeholder Communication",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team's report to a business unit leader recommends implementing multi-factor authentication (MFA) for a specific legacy application, citing a specific CVE and CVSS score as justification. The business leader, unfamiliar with these technical terms, dismisses the request as 'not urgent' without understanding the actual risk. What communication approach would likely have been more effective?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The original technical justification (CVE and CVSS score) was fully appropriate and sufficient, and the business leader's dismissal reflects solely their own failure to research unfamiliar terminology independently",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Framing the recommendation in terms of the business leader's actual concerns and context — e.g., 'this application currently allows account compromise with just a stolen password, which could expose [specific business-relevant data/process] to unauthorized access; MFA would require a second verification step, closing this gap' — translates the technical risk into concrete, relevant business language the leader can actually evaluate and act on, rather than relying on jargon (CVE numbers, CVSS scores) the leader isn't equipped to interpret",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The security team should have simply implemented MFA unilaterally without any business leader approval or communication, since technical security decisions should never require business stakeholder buy-in",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct approach is to escalate immediately to the business leader's supervisor whenever a request is initially declined, bypassing any attempt at improved communication with the original stakeholder",
+        "correct": false
+      }
+    ],
+    "explanation": "This reinforces the audience-calibration theme running throughout Reporting & Communication with a specific business-stakeholder example: leading with technical jargon (CVE identifiers, CVSS scores) that the audience isn't equipped to interpret is a common way for a legitimately important security recommendation to get dismissed, not because the underlying risk isn't real, but because the communication didn't translate it into terms the decision-maker could actually evaluate. Reframing in concrete business-relevant terms — what could actually happen, and how the proposed control addresses it — respects the audience's decision-making needs and is far more likely to produce buy-in than either blaming the stakeholder for not understanding jargon, bypassing them entirely, or immediately escalating over their head rather than first attempting clearer communication."
   }
 ]
