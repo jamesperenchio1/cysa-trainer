@@ -8083,5 +8083,170 @@
       }
     ],
     "explanation": "This tests a subtle but important metric interpretation issue: a rising raw count of blocked phishing emails is ambiguous between two very different explanations — genuinely improved detection/blocking effectiveness, OR simply a rising volume of incoming attempts (which says nothing about how well the defenses are actually performing, since the SAME percentage-blocked rate applied to more attempts still produces a higher raw blocked count). Distinguishing between these requires tracking total attempt volume and/or a normalized effectiveness rate (percentage blocked, or successfully-delivered-phishing count) alongside the raw blocked figure — this reasoning applies broadly across industries, not just high-risk sectors, and doesn't mean phishing metrics are unmeasurable, just that a single raw count needs proper context to be meaningful."
+  },
+  {
+    "external_key": "SO-083",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An analyst notices a user account authenticating successfully from two geographically distant locations (e.g., New York and Singapore) within a 20-minute window — a pattern often called 'impossible travel.' A stakeholder argues this must be a false positive because 'the user could be using a VPN.' How should the analyst weigh this explanation?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The stakeholder's explanation is definitively correct and the alert should be closed immediately with no further verification, since VPN usage always fully explains any impossible-travel pattern",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "VPN usage is a plausible legitimate explanation worth checking, but it should be VERIFIED rather than assumed — confirming whether the user's device/organization actually has a VPN client configured, whether the login source IPs match known corporate VPN egress points, and whether the user can be reached to confirm their actual activity — rather than closing the alert based on an unverified hypothetical explanation that happens to sound plausible",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Impossible travel alerts should always be treated as confirmed account compromise with no possibility of ever being a false positive under any circumstances",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "VPN usage is technically incapable of producing this type of authentication pattern, meaning the stakeholder's explanation should be dismissed outright without any verification",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests appropriate verification discipline rather than accepting a plausible-sounding explanation without confirmation: VPN usage genuinely CAN produce impossible-travel-looking patterns (a real known cause of this alert type), but that doesn't mean any impossible-travel finding should be closed simply because someone proposes VPN usage as a hypothesis — the analyst should verify this specific case (checking against known corporate VPN egress IPs, confirming with the user, reviewing device/session details) before accepting it as the explanation, rather than either dismissing the alert on an unverified assumption or refusing to consider a legitimate, common explanation at all."
+  },
+  {
+    "external_key": "SO-084",
+    "domain": "SO",
+    "subtopic": "Threat Intelligence",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A threat intelligence team subscribes to multiple commercial and open-source feeds, resulting in tens of thousands of indicators being ingested daily with minimal deduplication or quality filtering. The SOC complains that the flood of low-quality/low-context indicators makes it hard to identify genuinely actionable intelligence. What is the BEST way to address this?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The correct fix is to cancel all threat intelligence feed subscriptions entirely, since any volume of indicators beyond what the SOC can manually review by hand provides negative value",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Implement a structured intelligence curation/enrichment process — deduplicating overlapping indicators across feeds, filtering or deprioritizing low-confidence/low-context indicators, and enriching remaining indicators with relevance scoring (e.g., specific to the organization's actual threat profile and technology stack) before they reach the SOC — rather than either consuming raw, unfiltered feed output directly or abandoning threat intelligence feeds altogether",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The SOC should be instructed to manually review every single indicator individually regardless of volume, since any automated filtering would inherently discard valuable intelligence",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This problem can only be solved by hiring proportionally more SOC analysts to match the raw indicator volume, with no possible process or tooling improvement available",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing that raw threat intelligence FEED VOLUME isn't the same as ACTIONABLE intelligence, and that this is a solvable process/tooling problem rather than a reason to abandon threat intelligence altogether or simply throw more headcount at unfiltered volume: mature threat intelligence programs implement curation processes — deduplication across overlapping feeds, confidence/context-based filtering, and relevance scoring against the organization's specific profile — to transform a raw firehose of indicators into a manageable, genuinely actionable stream before it reaches SOC analysts. This 'signal from noise' curation function is a well-established and valuable capability, not something that inherently discards value or that can only be solved by proportionally scaling headcount to match raw volume."
+  },
+  {
+    "external_key": "VM-071",
+    "domain": "VM",
+    "subtopic": "Web App Vulnerabilities",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security assessment finds that an API's error responses include full stack traces with internal file paths, framework version numbers, and database query structure whenever an unhandled exception occurs. A developer argues this is 'just a debugging convenience' and shouldn't be considered a security finding since 'it doesn't directly expose customer data.' What is the flaw in this argument?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The developer is correct; detailed error information that doesn't directly include customer data can never be considered a meaningful security finding under any circumstances",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Detailed error disclosure (stack traces, internal paths, framework versions, query structure) constitutes valuable RECONNAISSANCE information for an attacker — it reveals the technology stack and specific versions (enabling targeted exploitation of known CVEs for that exact version), internal file structure (useful for path traversal or local file inclusion attempts), and query construction patterns (potentially revealing SQL injection points) — none of which needs to directly BE customer data to meaningfully assist an attacker in planning and executing further, more targeted attacks",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This concern is only valid for publicly-facing APIs and has no relevance to internal-only APIs regardless of who might access the error output",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Verbose error messages are purely a performance/logging concern and have zero relationship to any recognized security vulnerability category",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing information disclosure as a meaningful security risk category independent of directly exposing sensitive DATA: verbose error output revealing technology stack details, versions, internal paths, and query structure provides an attacker valuable reconnaissance for planning targeted exploitation (matching known CVEs to specific disclosed versions, informing path traversal attempts, revealing potential injection points) — this reconnaissance value exists regardless of whether the error message itself contains customer data, and 'internal-only' APIs can still be reached by an attacker who has gained any foothold inside the network, making this concern broader than public-facing-only. Information disclosure is a well-recognized security finding category specifically because attackers use exactly this kind of detail to inform and improve subsequent attacks."
+  },
+  {
+    "external_key": "IR-059",
+    "domain": "IR",
+    "subtopic": "Attack Frameworks",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization uses MITRE ATT&CK to build a detection coverage heat map, showing which techniques have strong, moderate, or no detection coverage. A stakeholder proposes treating 100% coverage across all techniques as the program's primary goal. What is the BEST critique of this specific goal framing?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This goal framing is fully appropriate with no meaningful critique; achieving literal 100% detection coverage across every ATT&CK technique should always be the primary and sole objective of any detection engineering program",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Not all ATT&CK techniques carry equal relevance or risk for a given organization — some techniques are far more likely to be used against this specific organization (based on its threat profile, industry, and technology stack) than others, and pursuing literal 100% coverage as an undifferentiated goal risks spreading detection engineering effort thin across techniques with low actual relevance instead of prioritizing deep, high-quality coverage for the techniques most likely to actually be used against this organization",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "MITRE ATT&CK coverage heat maps have no legitimate use in detection engineering prioritization and should be discontinued entirely",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "100% technique coverage is technically impossible to visualize using a heat map format, making this goal fundamentally incompatible with the tool being used",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests critical evaluation of an intuitively appealing but potentially misguided detection engineering goal: treating literal, undifferentiated 100% ATT&CK technique coverage as the primary objective risks diluting effort across many techniques with genuinely low relevance to this specific organization's actual threat profile, rather than concentrating deep, high-quality detection engineering on the techniques most likely to actually be used against it (informed by relevant threat intelligence about the organization's specific risk profile). Coverage heat maps remain a valuable prioritization tool — the critique is about the SPECIFIC GOAL of pursuing undifferentiated maximum coverage, not about the tool's usefulness generally, and this framing issue is conceptual, not a technical limitation of heat map visualization."
+  },
+  {
+    "external_key": "RC-036",
+    "domain": "RC",
+    "subtopic": "Stakeholder Communication",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team's incident status update to executive leadership during an active, ongoing incident includes highly technical language ('we identified lateral movement via WMI persistence and are conducting memory forensics on affected hosts') without translating what this means for business impact or expected resolution timeline. What is the BEST way to restructure this specific communication?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The communication is fully appropriate as written; executives should be expected to research unfamiliar technical terminology on their own during an active incident",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Lead with business-relevant information the audience actually needs during an active incident — current business impact/systems affected, whether the situation is contained or still active, and an estimated timeline or next update — with technical details available as supporting detail for those who want it, rather than opening with unexplained technical jargon that doesn't tell an executive what they most urgently need to know: how bad is this, and what happens next",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "All technical detail should be omitted from executive incident updates entirely, communicating only a vague statement that 'the situation is being handled'",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Executive incident updates should only ever be delivered after the incident is fully resolved, since providing information during an active, unresolved incident is inherently premature and inappropriate",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests audience-appropriate structuring specifically for TIME-SENSITIVE, active-incident communication: during an ongoing incident, executives most urgently need to know business impact, containment status, and expected timeline — not unexplained technical jargon that doesn't answer those questions, even if it's technically accurate and relevant to the investigation itself. The fix is leading with the business-relevant framing (impact, status, timeline) with technical detail available as supporting context, not eliminating substantive detail entirely down to a vague reassurance, and not withholding updates until full resolution — active incidents specifically require ongoing, appropriately-framed communication precisely because leadership needs current information to make real-time decisions."
   }
 ]
