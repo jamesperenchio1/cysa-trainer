@@ -8545,5 +8545,137 @@
       }
     ],
     "explanation": "This tests the same output-vs-outcome metric distinction seen in earlier RC questions, applied to security awareness training specifically: completion rate measures an ACTIVITY (did people click through the required modules) rather than an OUTCOME (did their actual behavior change — measured via things like phishing simulation click rates over time, incident reporting behavior, or observed practice changes). A high completion percentage is easy to achieve and easy to report, but doesn't by itself demonstrate the training worked — meaningful program evaluation needs behavioral outcome measures alongside completion tracking (which still has SOME value, e.g., confirming baseline exposure to the material), not a replacement of one metric with the other or an arbitrary completion-rate threshold treated as proof of effectiveness."
+  },
+  {
+    "external_key": "SO-087",
+    "domain": "SO",
+    "subtopic": "Cloud Security",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A cloud environment uses infrastructure-as-code (IaC, e.g., Terraform) to provision resources, with all changes going through a code review and CI/CD pipeline. A developer discovers that a manual change was made directly in the cloud console (bypassing IaC) to temporarily loosen a security group rule for urgent troubleshooting, and this manual change was never reverted or reflected back in the IaC code. What risk does this specific scenario illustrate?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no meaningful risk; manual console changes and IaC-managed configuration are always automatically kept in sync by the cloud platform itself with no possibility of drift",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "This is 'configuration drift' — the actual running infrastructure state has diverged from what the IaC code (the presumed source of truth) describes, meaning the security-relevant loosened rule is invisible to code review processes and could be silently overwritten back to the (now more restrictive but less risky) IaC-defined state on a future deployment, OR could persist indefinitely as an unreviewed, undocumented security exception if the IaC pipeline doesn't detect and reconcile the drift",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This scenario can only occur if the organization has no CI/CD pipeline at all, making it irrelevant to environments that do use one",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Manual emergency changes made directly in the console should always be considered permanently authoritative and should retroactively update the IaC code automatically with no human review needed",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding configuration drift as a specific IaC-related risk: when infrastructure is managed via code but someone makes an out-of-band manual change directly against the live environment, the actual running state diverges from the code that's supposed to describe it — this manual change bypasses the code review process entirely (meaning a security-relevant loosened rule was never reviewed) and creates ambiguity about which state is authoritative, risking either silent reversion on a future deployment or indefinite, undocumented persistence of the exception. This is a real risk even in organizations with mature CI/CD pipelines (the pipeline governs code-driven changes, not manual console access, unless specifically locked down), and manual emergency changes should be reconciled back into IaC through the normal review process, not auto-promoted to authoritative without review."
+  },
+  {
+    "external_key": "VM-075",
+    "domain": "VM",
+    "subtopic": "Web App Vulnerabilities",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability scan flags an application's file upload feature as vulnerable because it allows uploading files with a '.php' extension despite the application being built to accept only image uploads. The application does correctly validate that the file CONTENT matches expected image formats (checking magic bytes/headers) before accepting it. A developer argues the finding is invalid since 'we already validate the actual file content.' What is the remaining risk?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no remaining risk; content-based validation (checking magic bytes) combined with any extension is always fully sufficient to prevent any file upload vulnerability",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Content validation alone doesn't address a related but distinct risk: if the uploaded file (even one with genuinely valid image content properties) is stored with a '.php' extension in a web-accessible directory, and the web server is configured to execute '.php' files based on extension, certain image formats can be crafted to embed valid PHP code within otherwise-valid image data (e.g., via polyglot files or metadata fields) that the web server would then execute if requested directly — restricting the ALLOWED extension for stored files (not just validating content) and/or storing uploads outside any web-server-executable location are additional necessary controls, since extension-based execution and content validation are separate concerns",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This concern is only relevant if the application also lacks a web application firewall, and content validation alone is sufficient in any environment already protected by a WAF",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "File upload extension restrictions and file content validation are functionally identical controls that always provide the exact same protection",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a nuanced but well-documented file upload vulnerability class (sometimes involving 'polyglot' files — files valid as both an image format and containing embedded, syntactically-valid code in another language): validating that uploaded file CONTENT matches an expected format is a genuinely important control, but it's a SEPARATE concern from what EXTENSION the file is stored with and whether the storage location is configured to execute files by extension. If a file is stored with a '.php' extension in a location the web server treats as executable, certain crafted files with technically-valid image content can still result in code execution when directly requested — restricting stored file extensions and/or storing uploads in a non-executable location are necessary COMPLEMENTARY controls to content validation, not redundant with it, and this concern exists independent of whether a WAF is also present (which provides a different layer of defense, not a substitute for proper upload handling)."
+  },
+  {
+    "external_key": "IR-062",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization conducts an annual tabletop exercise simulating a ransomware incident, always using the exact same scenario script year after year for consistency. After several years, the team performs extremely well during each exercise, executing the response flawlessly. A new CISO questions whether this consistently strong performance actually reflects genuine incident response readiness. What is the CISO's likely concern?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no legitimate concern; consistently strong performance on the same tabletop scenario each year is conclusive proof of genuine, comprehensive incident response readiness for any real-world scenario",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Repeatedly using the IDENTICAL scenario risks the team essentially memorizing the specific script and expected sequence of actions rather than genuinely exercising their real-time decision-making, communication, and adaptability under novel or unexpected conditions — varying the scenario details, injecting unexpected complications, or testing different incident types tests the team's actual READINESS rather than their ability to recall a familiar, rehearsed script",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Tabletop exercises provide no genuine value under any circumstances and should be replaced entirely with live-fire, unannounced red team exercises",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This concern is only valid if the tabletop exercise takes less than four hours to complete, regardless of any other characteristic of the exercise design",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a specific and common exercise-design pitfall, analogous to the earlier phishing-simulation-template-memorization lesson: repeatedly running the IDENTICAL tabletop scenario risks the team essentially learning and reciting a rehearsed script rather than genuinely exercising real-time judgment, communication, and adaptability under novel conditions — which is the actual capability tabletop exercises are meant to build and validate. Varying scenario details, incident types, and injecting unexpected complications each cycle better tests genuine readiness. This doesn't mean tabletop exercises have no value (they're a legitimate and valuable exercise format, complementary to but not replaced by live-fire red team exercises), and exercise duration isn't the relevant design flaw here — scenario variety and realism are."
+  },
+  {
+    "external_key": "RC-039",
+    "domain": "RC",
+    "subtopic": "Regulatory Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A US company with a subsidiary operating in a US state and another in Canada experiences a breach affecting employee data in both locations. The compliance team assumes US federal law fully governs the response for both locations since the parent company is US-based. Is this assumption sound?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Yes — the parent company's country of incorporation always fully and exclusively determines which breach notification laws apply to ALL of its subsidiaries and their data, regardless of where the affected individuals or subsidiary operations are actually located",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "No — breach notification and data protection obligations are generally determined by factors like WHERE the affected individuals are located and/or where the specific data processing/subsidiary operations occur, not simply the parent company's country of incorporation; the Canadian subsidiary's affected employee data would likely trigger Canadian federal/provincial privacy law obligations (e.g., PIPEDA) independent of the US parent's own obligations under applicable US law, requiring the compliance team to evaluate BOTH jurisdictions' requirements separately rather than assuming one country's law covers the whole corporate group",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This assumption is only incorrect for Canadian subsidiaries specifically; for any other country, a US parent company's obligations would fully cover all subsidiary operations",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Multinational corporate structures are entirely exempt from any individual country's data breach notification requirements, being subject only to international treaty obligations instead",
+        "correct": false
+      }
+    ],
+    "explanation": "This reinforces the jurisdiction-specific-obligations theme with a multinational corporate structure example: data protection and breach notification obligations generally attach based on where affected individuals are located and/or where the relevant data processing/operations occur, not simply the parent company's country of incorporation — a Canadian subsidiary's affected employee data would generally trigger Canada's own applicable privacy law obligations (e.g., PIPEDA at the federal level, plus potentially applicable provincial law) independent of whatever the US parent company's obligations are under US law. This is a general principle applicable across many multinational scenarios (not unique to the US/Canada pairing), and no corporate structure exempts an organization from country-specific breach notification laws in favor of only broader international treaty obligations."
   }
 ]
