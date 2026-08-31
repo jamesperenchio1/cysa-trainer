@@ -8941,5 +8941,137 @@
       }
     ],
     "explanation": "This tests a common but flawed compliance reasoning pattern: enforcement is generally reactive (often triggered by a specific complaint, breach, or scheduled audit) and inconsistent, meaning an organization can have genuine, significant compliance gaps that simply haven't yet been discovered or triggered enforcement — the absence of a fine reflects the absence of DETECTED and PENALIZED non-compliance, not necessarily the absence of actual non-compliance. Genuine compliance assessment requires proactive internal/external audit against the actual applicable requirements, not inference from a lack of past penalties — this reasoning flaw applies across industries generally (not exclusively heavily-regulated sectors), and deliberately provoking an investigation would obviously be an inappropriate and counterproductive response to this concern."
+  },
+  {
+    "external_key": "SO-090",
+    "domain": "SO",
+    "subtopic": "Threat Hunting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A threat hunter documents a hunt hypothesis, methodology, findings, and outcome in a formal report, even for hunts that find nothing actionable. A colleague argues this documentation overhead is wasted effort for 'negative' hunts. What is the BEST justification for documenting even unsuccessful hunts?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The colleague is correct; documentation should only ever be produced for hunts that find a confirmed compromise, since anything else provides no organizational value",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Documenting hunt methodology and outcomes (including negative results) builds an institutional record of what's already been checked and confirmed clean, preventing duplicate future effort on the same hypothesis, supports demonstrating detection coverage to auditors/stakeholders, and creates a knowledge base that helps train new team members and refine future hunt hypotheses based on what has and hasn't been productive historically — this value exists independent of any single hunt's specific outcome",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Threat hunting should never be documented at all regardless of outcome, since documentation itself creates a discoverable record that could be used against the organization in litigation",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Documentation is only valuable if a hunt takes longer than eight hours to complete, and should be skipped for any shorter, less resource-intensive hunt regardless of methodology or outcome",
+        "correct": false
+      }
+    ],
+    "explanation": "This reinforces the earlier lesson about the value of a negative hunt outcome with a documentation-specific angle: recording methodology and outcomes even for unsuccessful hunts prevents future teams from redundantly re-investigating the same hypothesis, provides evidence of detection coverage efforts for audits or stakeholder reporting, and builds a knowledge base useful for training and refining future hunt prioritization — this value is independent of whether any specific hunt found something actionable. General litigation-discoverability concerns don't override the substantial operational and knowledge-management value of maintaining this kind of institutional record, and hunt duration isn't a meaningful threshold for whether documentation is worthwhile."
+  },
+  {
+    "external_key": "VM-077",
+    "domain": "VM",
+    "subtopic": "Remediation",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management team discovers that a critical finding was actually remediated correctly, but the vulnerability scanner's own database of known vulnerability signatures hadn't been updated to reflect the patched version, causing it to continue incorrectly flagging the (actually-fixed) host as vulnerable for several weeks. What does this scenario illustrate about scanner reliability?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Vulnerability scanners are entirely unreliable in all cases and should never be used as any part of a vulnerability management program going forward",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A scanner's OWN detection signature/plugin database needs to be kept current, just like any other software component — a stale signature database can produce false positives (as in this case, where the fix was real but the scanner's outdated knowledge of what constitutes 'patched' caused it to keep flagging a non-issue) just as easily as it can produce false negatives from missing newer vulnerability signatures, meaning scanner/plugin update currency is itself something to monitor as part of program reliability, not something to assume is automatically always current",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This scenario can only occur with free, open-source scanning tools, and never with any commercial vulnerability scanning product",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct fix is to permanently ignore all findings from this specific vulnerability signature going forward, regardless of future scanner updates",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing that the vulnerability scanning tool ITSELF requires maintenance to remain accurate — its detection signatures/plugins for identifying specific vulnerable versions need periodic updates just like any other software component, and a stale signature database can produce false positives (continuing to flag an actually-remediated issue because the scanner's knowledge of what version constitutes 'fixed' is outdated) in addition to the more commonly discussed risk of false negatives (missing genuinely new vulnerabilities due to outdated signatures). This is a general scanner-maintenance consideration applicable to both commercial and open-source tools, and the fix is ensuring the scanner's own update currency is monitored as part of program reliability — not permanently suppressing the specific signature, which would risk missing a genuine future recurrence of the same vulnerability."
+  },
+  {
+    "external_key": "IR-066",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization's IR plan assigns the same person as both 'Incident Commander' (responsible for overall coordination and decision-making) and 'Technical Lead' (responsible for hands-on technical investigation and remediation) for cost/staffing reasons. During a complex incident, this dual role creates a bottleneck where the individual can't simultaneously coordinate stakeholder communication AND perform deep technical investigation. What does this illustrate about IR role design?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This is fully acceptable and represents an efficient staffing model with no meaningful downside for any incident regardless of complexity or scale",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Combining fundamentally different cognitive/functional roles (strategic coordination and stakeholder management vs. deep hands-on technical work) in a single person creates a genuine bottleneck during complex, higher-intensity incidents where both functions demand significant simultaneous attention — while combining roles may be acceptable for smaller organizations or lower-severity incidents due to genuine resource constraints, IR plans should ideally identify a path to separate these roles (even via a designated backup or cross-trained colleague) for incidents that exceed a certain complexity/severity threshold, rather than assuming the combined-role model scales to any incident size",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This dual-role structure can only ever cause problems in organizations with fewer than five total employees, and is fully appropriate at any larger organizational scale",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct fix is to eliminate the Incident Commander role entirely, having all coordination responsibilities default to whoever happens to be available first during an incident",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing a role-design tradeoff in IR planning, particularly relevant for smaller organizations with genuine resource constraints: combining Incident Commander (strategic coordination, stakeholder communication, decision-making) and Technical Lead (deep hands-on investigation and remediation) into one person may be a reasonable and necessary compromise for smaller organizations or lower-severity incidents, but creates a real bottleneck during complex incidents where both functions require substantial simultaneous attention — a mature IR plan should identify escalation paths or designated backups to separate these roles when incident complexity/severity crosses a certain threshold, rather than assuming a combined-role model works at any scale. This isn't a problem exclusively tied to a specific organization size threshold, and eliminating the coordination role entirely (rather than better structuring it) would remove needed strategic oversight during an incident."
+  },
+  {
+    "external_key": "RC-042",
+    "domain": "RC",
+    "subtopic": "Metrics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team compares their organization's 'average time to patch Critical vulnerabilities' (18 days) favorably against a published industry benchmark report showing an average of 45 days across surveyed organizations, presenting this as strong evidence of program excellence. What methodological question should be asked before accepting this comparison at face value?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "No methodological questions are necessary; any comparison against a published industry benchmark report is automatically valid and directly comparable regardless of the specific methodologies involved",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Whether the benchmark report's methodology for measuring 'time to patch' (e.g., what start/end points are used, what vulnerability population is included, how the surveyed organizations self-reported their data, and whether the survey sample is representative of similar organizations) is actually comparable to how THIS organization calculates and defines its own 18-day figure — benchmark comparisons are only meaningful if the underlying measurement definitions and methodologies genuinely align, and differing measurement approaches (like the earlier 'triage vs. detection' SLA-clock-start discrepancy) can make an apparently favorable comparison misleading",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This methodological concern is only relevant if the industry benchmark report is more than five years old; any report published within the past five years can always be safely compared without further scrutiny",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct approach is to simply report the more favorable of the two numbers to stakeholders without disclosing the comparison methodology at all",
+        "correct": false
+      }
+    ],
+    "explanation": "This reinforces the earlier metric-definition-consistency theme applied to external benchmarking specifically: a favorable-looking comparison against an industry benchmark is only meaningful if both figures are measuring the same thing using comparable definitions and methodology (same start/end points for 'time to patch,' comparable vulnerability populations, reliable and representative underlying data) — if the benchmark's methodology differs from how the organization calculates its own figure (a very common issue, given the earlier example of different SLA clock-start definitions), the comparison can be genuinely misleading even though both numbers are individually 'accurate' under their own respective definitions. This scrutiny is warranted for any benchmark comparison regardless of report age, and simply presenting whichever number looks more favorable without disclosing the comparison's actual basis would compound rather than resolve this methodological concern."
   }
 ]
