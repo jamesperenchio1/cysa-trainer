@@ -9568,5 +9568,104 @@
       }
     ],
     "explanation": "This tests the security team's role as an informed-decision-enabler rather than either an absolute blocker or a silent approver, a recurring theme in effective security-business communication: the constructive path is clearly communicating the specific risk and its plausible impact, alongside concrete actionable options (interim mitigation, documented risk acceptance, or a narrowly-scoped timeline adjustment) — equipping the actual accountable decision-makers to make an informed tradeoff, rather than unilaterally overriding business timelines, silently suppressing a genuine finding to avoid friction, or immediately escalating to the most senior possible level without first working through the normal risk communication and acceptance process at the appropriate level."
+  },
+  {
+    "external_key": "SO-097",
+    "domain": "SO",
+    "subtopic": "Network Traffic Analysis",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An analyst reviewing proxy logs notices repeated outbound connections to a legitimate, well-known cloud storage provider's API endpoints (e.g., a major cloud drive service), but the connection pattern (frequency, payload size consistency, timing regularity) doesn't match typical human file-sync behavior — it more closely resembles automated, programmatic API usage. What technique might this represent, and why is it effective for an attacker?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This traffic pattern is always fully benign since connections to a well-known, legitimate cloud provider can never be associated with malicious activity under any circumstances",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "This may represent C2-over-legitimate-cloud-service abuse — attackers increasingly use trusted, widely-allowed cloud platforms (storage, collaboration tools, code repositories) as covert C2 or exfiltration channels specifically because traffic to these well-known, reputable domains is far less likely to be blocked or scrutinized by network security controls than traffic to an unknown or newly-registered domain, blending malicious communication into what looks like routine, expected business traffic to a trusted service",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This pattern can only indicate a misconfigured backup schedule and has no plausible connection to any malicious use case",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Cloud storage providers are technically incapable of being used for any purpose other than their intended, documented file storage/sync functionality",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing a well-documented modern evasion technique: attackers increasingly abuse legitimate, widely-trusted cloud platforms (storage services, collaboration tools, code repositories, and similar) as C2 or exfiltration channels specifically because traffic to these reputable, commonly-allowed domains is much less likely to be blocked or flagged by network security controls than traffic to unfamiliar infrastructure — this 'hiding in plain sight' among expected business traffic is precisely why the technique is effective. A traffic pattern that doesn't match typical human usage behavior (unusual regularity, consistency, or automation-like characteristics) accessing a legitimate service's API is a meaningful anomaly worth investigating, not something to dismiss simply because the destination itself is reputable."
+  },
+  {
+    "external_key": "IR-071",
+    "domain": "IR",
+    "subtopic": "Communication & Legal",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "During a cross-border incident affecting both US and EU-based customer data, the IR team's external counsel advises that certain investigative findings should be communicated only verbally in initial briefings rather than in written form, with formal written reports following only after legal review. What is the LIKELY rationale for this approach?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This approach has no legitimate rationale and represents an improper attempt to conceal facts from any future legal or regulatory scrutiny",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Early-stage investigative findings are often preliminary, incomplete, or subject to revision as an investigation progresses — premature written documentation of unconfirmed early theories can become discoverable material that, if later shown to be inaccurate or incomplete, could undermine the investigation's credibility or create confusion; verbal initial briefings with formal written documentation following legal review (once findings are more confirmed) is a legitimate practice for managing this specific risk, separate from destroying or hiding any final, confirmed findings",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This approach is only used in situations involving criminal prosecution and has no legitimate application to a purely civil or regulatory-compliance-focused incident response",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Verbal-only communication is a technique used exclusively to comply with GDPR's specific technical requirements and has no broader applicability to any other jurisdiction's legal framework",
+        "correct": false
+      }
+    ],
+    "explanation": "This reinforces the earlier communication-and-legal-privilege theme with a specific cross-border complexity: early investigative findings are often preliminary and subject to revision, and prematurely creating detailed written documentation of unconfirmed theories can become discoverable material that creates confusion or undermines credibility if later findings differ — using verbal briefings for early-stage, evolving findings with formal written reports following once conclusions are more confirmed (and appropriately reviewed by counsel) is a legitimate, common practice for managing this risk, distinct from any improper attempt to conceal or destroy actually-confirmed final findings. This practice isn't specific to criminal matters or GDPR requirements specifically — it's a general legal-risk-management approach applicable across various jurisdictions and incident types."
+  },
+  {
+    "external_key": "RC-047",
+    "domain": "RC",
+    "subtopic": "Regulatory Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization's compliance team treats meeting the MINIMUM requirements of a specific regulatory framework (e.g., the exact wording of a specific control requirement) as fully equivalent to being 'secure.' A security architect points out that strict minimum compliance and genuine security posture aren't the same thing. What is the BEST illustration of this distinction?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no meaningful distinction; meeting the literal minimum requirement of any regulatory framework is, by definition, always fully equivalent to achieving genuine, adequate security posture",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Regulatory frameworks typically establish a MINIMUM baseline based on requirements at the time they were written, often reflecting a floor rather than current best practice — an organization can satisfy the literal minimum requirement (e.g., 'passwords must be at least 8 characters') while still maintaining a genuinely weak security posture in practice (e.g., not requiring MFA, allowing easily-guessable passwords that technically meet the length requirement, or having other unaddressed risks the framework doesn't specifically enumerate) — compliance frameworks are a floor to build from, not a ceiling defining full security adequacy",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This distinction is only relevant for frameworks published more than 10 years ago; any framework published within the last decade fully and completely defines adequate security posture with no gap between compliance and genuine security",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct resolution is to abandon regulatory compliance efforts entirely in favor of pursuing only internally-defined security standards with no reference to any external framework",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the well-established distinction between compliance and genuine security posture, a foundational concept for Reporting & Communication around risk framing: regulatory/compliance frameworks generally establish a MINIMUM baseline (often reflecting requirements as understood when written, and necessarily generalized across many different organizations and threat environments) — satisfying the literal minimum wording doesn't guarantee adequate protection against the organization's actual, specific threat landscape, since frameworks can't enumerate every possible risk or mandate every best practice for every environment. This gap exists across frameworks of any age (not just old ones), and the appropriate response is treating compliance as a necessary floor while pursuing genuine security maturity beyond it — not abandoning compliance efforts, which remain necessary for their own distinct legal/contractual reasons, in favor of internal standards alone."
   }
 ]
