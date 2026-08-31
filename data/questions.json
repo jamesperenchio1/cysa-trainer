@@ -5806,5 +5806,236 @@
       }
     ],
     "explanation": "This tests the internal-stakeholder-communication dimension of IR communications planning: frontline customer-facing teams need a defined communication protocol during incidents — approved talking points that can be updated as the investigation progresses, clear escalation paths for questions outside the approved guidance, and explicit instruction not to speculate — precisely to prevent the scenario here, where uninformed staff guess and provide inconsistent or inaccurate information to external parties. This is a communication PROCESS gap connecting the IR team to customer-facing staff, not a customer support training deficiency in isolation, and the fix is proactive planning, not withholding all information indefinitely or having staff confirm unverified claims."
+  },
+  {
+    "external_key": "SO-061",
+    "domain": "SO",
+    "subtopic": "Network Architecture",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A network design places all internal DNS resolvers in the same VLAN as general user workstations, reasoning 'DNS traffic is internal and low-risk.' A security architect recommends isolating DNS infrastructure into its own restricted segment. What is the PRIMARY justification for this recommendation?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "DNS servers should be isolated purely for performance reasons; there is no security rationale for this recommendation",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "DNS infrastructure is a high-value target — compromising a DNS resolver can enable widespread attacks (DNS cache poisoning/spoofing affecting many downstream clients, or using the resolver itself as a pivot point) — and co-locating it with general user workstations (a common source of malware infection and phishing compromise) unnecessarily exposes critical infrastructure to compromise originating from the more frequently-targeted general user population",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "DNS traffic is inherently unencryptable and therefore isolating the DNS servers provides no additional protective benefit",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This recommendation is unnecessary since DNS resolvers cannot be compromised by any means originating from client-side infrastructure",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests critical infrastructure segmentation reasoning: DNS resolvers are foundational, high-value infrastructure — a compromised resolver can redirect traffic broadly (cache poisoning affecting all its clients) or serve as a lateral movement pivot point. User workstations are a much more frequent initial-compromise vector (phishing, drive-by downloads, malicious attachments) than typical server infrastructure, so co-locating critical DNS servers in the same broadcast/network segment as that higher-risk population unnecessarily increases DNS infrastructure's exposure — isolating it into a restricted segment with limited, controlled access reduces this risk, independent of any performance consideration or unrelated encryption question."
+  },
+  {
+    "external_key": "SO-062",
+    "domain": "SO",
+    "subtopic": "Cloud Security",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A container image scan flags a base image as containing several outdated packages with known CVEs. The development team argues this is a false positive because 'we never install or use those specific packages' functionality in our application.' Investigation confirms the packages are present in the image (inherited from the base image) but genuinely unused by the application code. What is the MOST accurate assessment?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The finding should be closed as a confirmed false positive with no further consideration, since unused code can never present any risk",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The finding is technically accurate (the vulnerable packages ARE present in the image) even though current risk may be reduced by the packages being unused — this still represents unnecessary attack surface (the packages could be invoked by an attacker who gains code execution, a future code change could start using them, or a vulnerability could be reachable through the OS layer rather than the application layer), so reducing the image (e.g., via a minimal/distroless base image) is still worthwhile even if immediate exploitability is genuinely lower given current usage",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This can only be resolved by upgrading to a completely different container orchestration platform",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Unused packages present in a container image pose exactly the same risk level as actively-used vulnerable packages, with no meaningful distinction between the two",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests nuanced risk assessment of unused-but-present vulnerable components: the finding isn't a false positive (the packages genuinely are present and vulnerable), but immediate exploitability may indeed be reduced if the application layer never invokes that functionality — however, 'unused today' doesn't mean 'zero risk,' since an attacker with code execution could still directly invoke the vulnerable functionality, a future code change could start using it, or the vulnerability might be reachable at the OS/system level independent of the application's own code paths. Minimizing image surface area (removing unnecessary packages, using minimal base images) remains good practice even when current risk is genuinely lower than a 'used and vulnerable' finding would represent."
+  },
+  {
+    "external_key": "VM-050",
+    "domain": "VM",
+    "subtopic": "Web App Vulnerabilities",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security assessment finds that an application's password reset flow sends a reset link containing a token, and that token is a predictable, sequential integer rather than a cryptographically random value. The development team argues this is low risk because 'the token is only sent via email, which only the legitimate user can access.' What is the flaw in this reasoning?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The reasoning is fully sound; since the token is delivered via a private channel (email), its predictability is irrelevant to the overall security of the reset flow",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A predictable/sequential token means an attacker doesn't need to intercept the email at all — they can potentially GUESS or enumerate valid reset tokens directly (e.g., by requesting their own reset to see the current sequence value, then trying nearby values for a target account) and use a guessed token directly against the reset endpoint, bypassing the email delivery channel's protection entirely",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This is only a legitimate concern if the application also lacks HTTPS, since predictable tokens pose no risk over an encrypted connection",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Password reset tokens are never a meaningful attack surface regardless of their construction, since password reset is a rarely-used feature",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing that token PREDICTABILITY is an independent vulnerability regardless of the delivery channel's confidentiality: the security assumption 'only the legitimate user can access their email' is irrelevant if the attacker doesn't need to see the actual emailed token at all — a sequential or otherwise guessable token lets an attacker directly guess/enumerate valid values and submit them to the reset endpoint, completely bypassing the email delivery mechanism. This is why reset tokens must be cryptographically random and sufficiently long, independent of any transport-layer encryption (which protects the token in transit but does nothing about its inherent guessability), and password reset flows are a well-known, frequently-targeted attack surface, not a low-priority feature."
+  },
+  {
+    "external_key": "VM-051",
+    "domain": "VM",
+    "subtopic": "Scanning Methodology",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management program's scan schedule runs full network scans on the first Sunday of each month. An asset provisioned on the second Monday of the month (a new production web server) remains completely unscanned and unassessed for nearly a full month until the next scheduled scan cycle. What structural gap does this illustrate?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This is fully acceptable and represents no meaningful gap, since monthly scanning satisfies any reasonable vulnerability management standard for all assets regardless of provisioning timing",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A purely calendar-based scan schedule creates a coverage gap for newly-provisioned assets that fall between scan cycles — a more robust approach integrates vulnerability scanning into the asset provisioning/deployment pipeline itself (e.g., triggering an initial scan automatically when a new asset is registered or deployed) rather than relying solely on periodic, calendar-driven scans that can leave new assets unassessed for weeks",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The only fix is to scan continuously with no defined schedule at all, which is universally preferable to any periodic approach regardless of operational cost",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "New assets should be scanned by IT operations rather than the vulnerability management team, resolving the timing issue through a change in team responsibility rather than process design",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing a structural coverage gap in purely calendar-based scanning programs: assets provisioned between scheduled scan cycles can go unassessed for a significant window, during which they may already be exposed to the internet or handling production traffic with unknown vulnerabilities. Mature vulnerability management integrates scanning into the deployment/provisioning pipeline (triggering an on-demand initial scan for new assets, in addition to ongoing periodic scans) rather than relying purely on a fixed calendar schedule — this is a process design issue, not simply a matter of reassigning which team owns the task."
+  },
+  {
+    "external_key": "IR-043",
+    "domain": "IR",
+    "subtopic": "Communication & Legal",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "During a ransomware incident, the IR team determines with high confidence that the attacker exfiltrated data before encrypting systems, based on outbound transfer logs to an unfamiliar cloud storage endpoint. Legal counsel asks the team to describe this finding in the incident report as 'unauthorized outbound data transfer was observed' rather than 'data was stolen' or 'data was exfiltrated.' Is this request problematic?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Yes — this always constitutes an attempt to conceal or minimize the incident from any future audit or investigation",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Not necessarily — precise, technically-accurate language that describes exactly what evidence shows (an observed outbound transfer) without overstating certainty about downstream consequences (e.g., whether the data was actually retained, misused, or represents a confirmed breach under a specific legal definition) is a legitimate and common practice; the concern would only be valid if the requested language were being used to misrepresent or hide genuinely confirmed facts rather than to maintain appropriate technical/legal precision",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This request has no legal or communication significance whatsoever and is purely a stylistic preference with zero substantive difference",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The IR team should refuse this request entirely and report only their own preferred terminology regardless of legal counsel's input, since legal counsel has no legitimate role in reviewing IR report language",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding the legitimate legal review role in IR reporting language: precise, evidence-grounded language ('an outbound transfer was observed to X') versus a broader legal/factual conclusion ('data was stolen,' which may carry specific legal implications and requires additional confirmation beyond just observing a transfer) is a genuine and common distinction — legal counsel reviewing report language for precision and to avoid overstating conclusions not yet fully established is a normal, legitimate part of incident reporting, not inherently an attempt to conceal facts. This becomes genuinely problematic only if it's being used to misrepresent evidence that actually IS conclusively established, which isn't indicated here."
+  },
+  {
+    "external_key": "IR-044",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A forensic analyst extracts browser history from a suspect's workstation showing visits to a specific whistleblowing/leak site shortly before a confirmed data leak. The analyst wants to conclude this proves the employee is responsible for the leak. What is the BEST characterization of this evidence?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This conclusively proves the employee's guilt, since browser history evidence is always definitive and unambiguous proof of intent and action",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Browser history showing a visit to a relevant site is circumstantial evidence that establishes correlation/opportunity, but does not by itself prove causation or exclude alternative explanations (e.g., another user of the same account/device, research/curiosity unrelated to the leak, or the visit being unrelated to how the data was actually leaked) — it should be treated as one data point to be corroborated with additional evidence (file access logs, network transfer evidence, authentication records) rather than standalone proof",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Browser history has no evidentiary value in any digital forensic investigation and should be disregarded entirely",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This evidence can only be used if the employee explicitly confesses to visiting the site, making the browser history itself irrelevant",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests appropriate evidentiary reasoning in digital forensics: a single piece of circumstantial evidence (a browser history entry) establishes correlation and opportunity but not conclusive causation — alternative explanations (shared device/account access, unrelated research, timing coincidence) must be considered and ruled out through corroborating evidence before reaching a confident conclusion. Overstating what a single artifact proves is a common analytical error; sound forensic conclusions build a case from multiple corroborating evidence sources (file access logs, data transfer records, authentication timestamps) rather than treating any single data point as definitive proof."
+  },
+  {
+    "external_key": "RC-026",
+    "domain": "RC",
+    "subtopic": "Metrics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security operations center reports '99.9% SLA compliance for alert triage time' based on a metric measuring the time from alert creation to the FIRST analyst action (even just opening/viewing the alert), rather than time to a meaningful triage decision (escalate, close as benign, etc.). A reviewer notes analysts have learned to click 'open' on alerts immediately to stop the SLA clock, then return to actually work them later. What does this illustrate?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This is a fully valid metric and accurately represents the SOC's actual responsiveness to security alerts",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A metric measuring a trivially-satisfiable proxy action (opening an alert) rather than the meaningful outcome it's meant to represent (an actual triage decision) is vulnerable to exactly this kind of goal-displacement/gaming behavior — once staff learn what specifically stops the clock, they will optimize for satisfying that specific technicality rather than the underlying intent, producing an impressive-looking metric that doesn't reflect genuine responsiveness",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This behavior is a training issue, not a metric design issue, and would occur regardless of how the metric itself was defined",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "SLA metrics for SOC alert handling should be eliminated entirely, since any such metric is inherently unmeasurable",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing Goodhart's-Law-style metric gaming in security operations reporting: when a metric measures an easily-satisfiable proxy (clicking 'open') rather than the actual meaningful outcome it's intended to represent (a genuine triage decision), people will rationally optimize toward satisfying the measured proxy rather than the underlying goal — this is a metric DESIGN flaw, not purely a training/behavior issue, since well-intentioned staff will predictably respond to how a metric is actually defined. The fix is redefining the metric to measure the meaningful outcome (time to actual triage decision, not first click), not eliminating measurement of SOC responsiveness altogether."
   }
 ]
