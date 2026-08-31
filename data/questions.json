@@ -7159,5 +7159,203 @@
       }
     ],
     "explanation": "This tests a common but risky compliance oversimplification: US state breach notification laws (and international frameworks like GDPR) each have their own specific requirements — different notification timelines, different content requirements, different regulator notification obligations, and different triggering thresholds for what constitutes a reportable breach. There's no single jurisdiction whose compliance automatically and reliably satisfies every other jurisdiction's distinct legal requirements, whether comparing US states to each other or to GDPR — a genuinely thorough compliance response requires independently evaluating and satisfying each applicable jurisdiction's specific obligations, not assuming a 'strictest jurisdiction wins' shortcut covers everything."
+  },
+  {
+    "external_key": "SO-074",
+    "domain": "SO",
+    "subtopic": "Network Traffic Analysis",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An analyst reviewing TLS traffic metadata (via JA3/JA3S fingerprinting, which fingerprints the specific way a TLS client negotiates a handshake) notices a workstation making HTTPS connections with a JA3 fingerprint that doesn't match any known legitimate browser or application in the environment, connecting to an external IP. Since the traffic is encrypted, why is this fingerprinting technique still useful for detection?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "JA3 fingerprinting requires decrypting the TLS traffic first, so this scenario is not technically possible without breaking encryption",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "JA3 fingerprints the CLIENT's TLS handshake negotiation parameters (cipher suites, extensions, and their specific order) BEFORE encryption is established — this metadata is visible without decrypting the actual payload, and since different TLS libraries/applications (including malware C2 frameworks) tend to produce distinctive, identifiable fingerprint patterns, an unrecognized fingerprint can indicate traffic from an unauthorized or malicious application even though the encrypted content itself remains unreadable",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This technique only works on unencrypted HTTP traffic and provides no value whatsoever for analyzing HTTPS/TLS connections",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "JA3 fingerprinting can only identify the destination server, never any characteristic of the connecting client",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding a specific network detection technique that works WITHOUT breaking encryption: JA3 fingerprints the client-side TLS handshake negotiation (the ClientHello message's cipher suites, extensions, and their ordering) — metadata that is exchanged in the clear before encryption is fully established, making it observable without decrypting the actual application data. Since different TLS implementations (browsers, legitimate applications, and notably many malware C2 frameworks using specific libraries) tend to produce distinctive, identifiable handshake fingerprints, an unrecognized JA3 value on a host can be a meaningful indicator of unauthorized software — including malware — communicating externally, entirely independent of decrypting the actual payload content."
+  },
+  {
+    "external_key": "SO-075",
+    "domain": "SO",
+    "subtopic": "Malware Analysis",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "During static analysis, an analyst identifies that a suspicious executable's imports include functions commonly associated with process injection (like VirtualAllocEx, WriteProcessMemory, CreateRemoteThread). A colleague argues this alone is sufficient to conclusively confirm the file is malicious. Is this a sound conclusion?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Yes — the presence of these specific Windows API imports is, by itself, always definitive and sufficient proof of malicious intent with no exceptions",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Not necessarily — these specific Windows APIs are legitimately used by many benign applications for valid purposes (debuggers, certain security tools, some legitimate software injection for compatibility shims, etc.), so their mere PRESENCE in imports establishes CAPABILITY, not confirmed malicious INTENT or behavior; this warrants further investigation (dynamic analysis, code context around how these APIs are actually called, overall behavior) rather than treating the import list alone as conclusive proof",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "These specific API functions are exclusively used by malware and have no legitimate application whatsoever in any benign software",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Static analysis of imports is entirely useless and provides zero analytical value regardless of what specific functions are found",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests avoiding an overconfident conclusion from a single static analysis indicator: while VirtualAllocEx/WriteProcessMemory/CreateRemoteThread are a classic combination associated with process injection techniques often used maliciously, these are also legitimate, documented Windows APIs used by some benign software (certain debuggers, compatibility shims, some legitimate security tools) for valid purposes. Their presence in an import table establishes technical CAPABILITY to perform injection, not confirmed malicious intent or actual observed behavior — sound analysis treats this as one meaningful data point warranting further investigation (dynamic analysis, examining the actual code context and call patterns) rather than standalone conclusive proof, while still recognizing this combination is a significant analytical starting point, not something to dismiss."
+  },
+  {
+    "external_key": "VM-062",
+    "domain": "VM",
+    "subtopic": "Web App Vulnerabilities",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability scan reports a 'Broken Authentication' finding because a web application's session tokens don't expire until the user explicitly logs out, with no maximum session lifetime or idle timeout enforced. A developer argues this is intentional 'for user convenience' and shouldn't be treated as a vulnerability. What is the BEST response to this argument?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The developer is correct; session expiration has no security relevance and exists purely as an inconvenience to users with no protective value",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Indefinite session lifetime meaningfully increases risk: if a session token is ever stolen (via XSS, a shared/public device, a lost laptop, or network interception), that stolen token remains valid indefinitely, giving an attacker unlimited time to exploit it — reasonable idle timeout and maximum session lifetime policies limit this exposure window while still balancing user convenience, rather than either extreme (indefinite sessions or excessively short, disruptive timeouts)",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This finding is only valid for applications handling financial data specifically, and has no relevance to any other type of application",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Session expiration policy is exclusively a compliance/audit checkbox requirement with no genuine technical security benefit for the application itself",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a genuine, common security-vs-convenience tradeoff that CySA+ material addresses under authentication weaknesses: a stolen or hijacked session token (via various means — XSS, physical device access, network capture) remains exploitable for as long as it's valid, so an indefinite session lifetime maximizes an attacker's exploitation window if compromise occurs. Reasonable idle timeout and maximum session lifetime settings meaningfully reduce this exposure window while still balancing legitimate usability concerns — this isn't purely a compliance formality, and the underlying risk (stolen session token) applies broadly, not just to financial applications specifically."
+  },
+  {
+    "external_key": "VM-063",
+    "domain": "VM",
+    "subtopic": "CVSS / Prioritization",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability's CVSS vector includes 'Confidentiality: None, Integrity: None, Availability: High' (meaning it can cause a denial-of-service but doesn't expose or alter data), resulting in a Base Score of 7.5 (High). A stakeholder argues this can't really be a 'High' severity issue since 'no data is actually stolen or changed.' What is the flaw in this reasoning?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The stakeholder is correct; without any confidentiality or integrity impact, a vulnerability can never legitimately warrant a High severity classification regardless of availability impact",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "CVSS Impact metrics recognize Confidentiality, Integrity, and Availability as three independent dimensions of the CIA triad, each capable of independently driving significant real-world severity — a High-impact Availability-only vulnerability (e.g., one enabling reliable denial-of-service against a critical system) can represent a genuinely severe business risk (lost revenue, safety impact for critical infrastructure, reputational damage from downtime) even with zero data confidentiality or integrity impact, and equating 'severity' exclusively with data theft/tampering misses this entire risk dimension",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Availability-only vulnerabilities can never receive a CVSS score above 5.0 (Medium) under the scoring rubric, meaning this score must reflect a calculation error",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This vulnerability should be rescored with Confidentiality and Integrity impact added artificially to justify the High severity rating, regardless of whether those impacts are actually applicable",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests correcting a common misconception that equates 'severe' exclusively with data breach/tampering: the CIA triad treats Confidentiality, Integrity, and Availability as three independent pillars, and a vulnerability that solely and severely impacts Availability (a reliable, impactful denial-of-service) can legitimately represent very high real-world business risk — lost revenue, safety implications for critical/OT systems, reputational damage from significant downtime — entirely independent of any data exposure or tampering. CVSS scoring correctly reflects this by allowing a High/Critical score driven purely by Availability impact, and there's no rule capping availability-only vulnerabilities at Medium; artificially inflating other metrics to 'justify' a score that's already accurately calculated would be dishonest and unnecessary."
+  },
+  {
+    "external_key": "IR-054",
+    "domain": "IR",
+    "subtopic": "Attack Frameworks",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team building a threat model for a specific critical application uses the STRIDE framework (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege) during design review, separately from their use of MITRE ATT&CK for post-incident analysis. A stakeholder asks why the team doesn't just use one framework for both purposes. What is the BEST explanation for using both?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "STRIDE and MITRE ATT&CK serve identical purposes and using both simultaneously is pure redundancy with no distinct value from either",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "STRIDE is a threat-modeling framework designed for proactively identifying categories of POTENTIAL threats during system DESIGN (before an application even exists in production), organized around threat TYPES relevant to software architecture, while MITRE ATT&CK catalogs OBSERVED real-world adversary tactics/techniques useful for analyzing ACTUAL incidents and building detections — they operate at different points in the security lifecycle (proactive design-time threat modeling vs. reactive/detective real-world technique cataloging) and are complementary rather than substitutes for each other",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "STRIDE has been officially deprecated and replaced by MITRE ATT&CK for all use cases, making its continued use inappropriate",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "MITRE ATT&CK is only applicable to network-based attacks, while STRIDE is only applicable to physical security threats, making them non-overlapping by definition",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding that different security frameworks serve different purposes across the security lifecycle: STRIDE is a design-time threat modeling methodology used to proactively reason about categories of potential threats to a system's architecture before/during development, organized around threat TYPES (Spoofing, Tampering, etc.) relevant to software design. MITRE ATT&CK catalogs actually-OBSERVED real-world adversary techniques, primarily useful for detection engineering and post-incident analysis of what really happened. These operate at different points (proactive architectural threat modeling vs. reactive/detective technique analysis) and are genuinely complementary — using both isn't redundant, and neither framework has replaced or is scoped exclusively to a narrow domain like 'physical security' or 'network attacks only.'"
+  },
+  {
+    "external_key": "RC-031",
+    "domain": "RC",
+    "subtopic": "Stakeholder Communication",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team's quarterly report to the CFO includes a line item requesting budget for a new security tool, justified only with the statement 'this will significantly improve our security posture.' The CFO rejects the request, asking for more specific justification. What is the BEST way to restructure this request for a financial decision-maker?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Resubmit the identical request unchanged, since 'improving security posture' should be considered self-evidently sufficient justification for any financial decision-maker",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Reframe the justification in terms a financial stakeholder can evaluate against competing budget priorities — quantifying the specific risk being addressed (e.g., estimated likelihood/impact of the threat this tool mitigates, potential cost of an incident it could prevent, or a comparison against the cost of NOT having this capability), rather than a vague qualitative claim that doesn't provide a basis for weighing this investment against other budget requests",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The correct fix is to remove the CFO from the budget approval process entirely, since financial stakeholders should never be involved in security tooling decisions",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Security budget requests should never include any justification at all, since security needs should be automatically approved regardless of financial context",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests translating a security need into terms that support an actual financial/business decision, a core Reporting & Communication skill: 'this will improve security posture' is a vague, unquantified claim that gives a financial decision-maker no way to weigh this request against competing priorities. Effective budget justification should quantify (even approximately) the risk being addressed — likelihood, potential impact, comparative cost of inaction versus investment — giving the CFO an actual basis for the funding decision. Removing financial stakeholders from budget decisions or refusing to provide justification at all isn't a realistic or appropriate path to secured funding."
   }
 ]
