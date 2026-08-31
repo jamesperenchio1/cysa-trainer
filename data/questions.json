@@ -5344,5 +5344,236 @@
       }
     ],
     "explanation": "This tests a common measurement validity trap in security awareness metrics: if the same or highly similar test content is reused repeatedly, a declining click rate can reflect narrow template-pattern memorization rather than a genuine improvement in general phishing-recognition skill — employees learn to spot 'this specific email we've seen in training before' without necessarily improving at spotting phishing indicators in a NEW, unfamiliar email. Valid measurement requires varied/evolving simulation content and ideally corroborating indicators (real-world reported phishing volume, performance on entirely novel simulations) rather than relying on a single metric that can be inflated by test-specific familiarity."
+  },
+  {
+    "external_key": "SO-056",
+    "domain": "SO",
+    "subtopic": "Malware Analysis",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "During dynamic analysis in a sandbox, a suspicious binary makes a DNS query to a domain, receives an NXDOMAIN (non-existent domain) response, and then terminates without further activity. The analyst concludes the binary is benign since it 'couldn't do anything.' What is a more accurate interpretation of this behavior?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The conclusion is fully correct — a binary that fails to resolve a domain has definitively proven it has no capability to cause harm under any circumstance",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "This is a common sandbox-evasion / C2 fallback pattern: the malware may check for a specific C2 domain's availability as an environment/connectivity check, and terminating cleanly when it fails to resolve could indicate either a dead/sinkholed C2 domain in THIS sample, or deliberate behavior designed to appear inert when its expected infrastructure isn't reachable — this doesn't establish benign intent, and the domain and binary should be investigated further (e.g., via reputation checks, static analysis of any additional embedded domains, or testing with the domain artificially resolved)",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "NXDOMAIN responses can only occur due to sandbox network configuration errors and have no relevance to malware behavior analysis",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This proves the binary is a legitimate DNS testing utility unrelated to any malicious purpose",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing that an inconclusive dynamic analysis result (behavior stopping due to an external dependency failing) is not the same as proof of benignity — malware C2 infrastructure gets taken down, sinkholed, or rotated regularly, and a sample failing to reach ITS specific C2 domain in a sandbox doesn't mean the sample itself lacks malicious capability; it may simply lack currently-functioning infrastructure. Thorough analysis should investigate the queried domain's reputation/history and consider techniques (like DNS response spoofing in a controlled sandbox) to observe what the malware would do if the domain HAD resolved, rather than treating a failed C2 check as proof of harmlessness."
+  },
+  {
+    "external_key": "SO-057",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A file server's audit logs show a service account (normally used only for automated backup jobs) accessing hundreds of files across multiple sensitive departments within a 3-minute window, each accessed with only a 'read' operation and no corresponding write/modify. A stakeholder argues this is not concerning because 'read-only access can't cause any damage.' What is the BEST response?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The stakeholder is correct — read-only access has no security implications whatsoever and this pattern requires no further investigation",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Read-only access at this speed and breadth is consistent with automated data staging/collection ahead of exfiltration — 'no damage' framing misses that unauthorized READ access to sensitive data is itself a confidentiality breach regardless of whether anything was modified, and the volume/speed/scope here (hundreds of files across multiple sensitive departments in minutes) is far outside this account's normal automated-backup behavior pattern and warrants investigation as potential data exfiltration staging",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This can only be concerning if the files were also deleted after being read",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Service accounts are exempt from any anomaly-based monitoring since their activity is always automated and therefore inherently trusted",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a common misconception that confidentiality breaches require modification or destruction to matter: unauthorized or anomalous READ access to sensitive data is itself a security incident, since confidentiality (not just integrity/availability) is a core security objective — an attacker (or compromised automation) reading large volumes of sensitive files rapidly is a classic pattern preceding data exfiltration, even with zero files modified or deleted. The volume, speed, and breadth here are also well outside a normal backup job's expected access pattern, which is exactly the kind of anomaly-based detection service accounts should be monitored for, not exempted from."
+  },
+  {
+    "external_key": "SO-058",
+    "domain": "SO",
+    "subtopic": "Security Tools",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management tool and an EDR platform both claim to detect the same class of process-injection technique, but produce contradictory results on a test binary: the EDR flags it as malicious, while the vulnerability scanner (checking installed software inventory against known-vulnerable versions) reports the host as fully patched with no relevant findings. Is this contradiction actually surprising?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Yes — since both tools nominally cover the same technique category, one of them must be malfunctioning and should be immediately uninstalled",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "No — these tools operate on fundamentally different detection models: the vulnerability scanner assesses whether known VULNERABILITIES (specific software flaws with CVEs) are present based on version/patch status, while the EDR observes BEHAVIOR at runtime (e.g., a process actually attempting injection); a host can be fully patched against all known vulnerabilities while still exhibiting malicious behavior via a technique that doesn't rely on any unpatched vulnerability at all (e.g., abusing legitimate OS APIs), so the two results are not actually contradictory",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This is only possible if the EDR agent itself is outdated and needs to be reinstalled immediately",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Vulnerability scanners and EDR platforms are functionally identical tools that should always produce matching results by design",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding of the distinct detection models these tool categories use: vulnerability scanning is fundamentally about identifying known, catalogued FLAWS (CVEs) via version/configuration checks, while EDR is about observing runtime BEHAVIOR regardless of whether that behavior exploits a 'vulnerability' in the CVE sense. Many attack techniques (like process injection using legitimate Windows APIs) don't require any unpatched vulnerability at all — they abuse normal OS functionality in a malicious way. A fully-patched host (per vulnerability scanning) can absolutely still exhibit malicious runtime behavior (per EDR), and this isn't a sign either tool is broken — it reflects that they answer genuinely different questions."
+  },
+  {
+    "external_key": "VM-046",
+    "domain": "VM",
+    "subtopic": "CVSS / Prioritization",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team is deciding between two open-source risk-scoring frameworks to supplement CVSS: one focused on EPSS (Exploit Prediction Scoring System, which estimates the probability a vulnerability will be exploited in the wild within the next 30 days) and one focused purely on asset criticality tiering. A junior analyst asks whether these two approaches are redundant. What is the BEST explanation of how they differ and complement each other?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "They are fully redundant, since both frameworks ultimately measure the exact same underlying concept and using both provides no additional value",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "EPSS estimates the LIKELIHOOD a specific vulnerability will actually be exploited based on real-world exploitation intelligence, while asset criticality tiering measures the potential IMPACT if a given asset is compromised, independent of any specific vulnerability — combining likelihood (EPSS) with impact (asset criticality) gives a more complete risk picture than either alone, since a highly-likely-to-be-exploited vulnerability on a low-criticality asset and a rarely-exploited vulnerability on a mission-critical asset both need different prioritization logic than either factor alone would suggest",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "EPSS is only relevant for CVSS Base Score calculation and has no independent analytical use of its own",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Asset criticality tiering has been fully superseded by EPSS and should no longer be used in any modern vulnerability management program",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding of how complementary risk-scoring dimensions combine in a mature prioritization framework: EPSS addresses LIKELIHOOD of real-world exploitation (a probabilistic estimate based on observed exploitation patterns and vulnerability characteristics), while asset criticality tiering addresses IMPACT (what happens if this specific asset is compromised, independent of any particular vulnerability). True risk-based prioritization needs both dimensions — likelihood × impact — since neither factor alone captures the full picture, and treating them as redundant or one as a replacement for the other misses that they measure genuinely different things."
+  },
+  {
+    "external_key": "VM-047",
+    "domain": "VM",
+    "subtopic": "Compliance / Reporting",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization's vulnerability management policy states that 'all Critical findings must be remediated within 15 days.' An internal audit finds that in practice, when a Critical finding can't be remediated in time, the team simply re-classifies it as 'High' severity to stop the SLA clock, without any actual change to the underlying technical risk. What is the BEST characterization of this practice?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This is an acceptable and common practice, since severity classifications are inherently subjective and can be adjusted freely to manage workload",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "This is a form of metric gaming/SLA manipulation that undermines the entire purpose of severity-based prioritization — reclassifying severity based on remediation timeline pressure rather than actual technical risk characteristics produces misleading compliance metrics and can leave genuinely high-risk vulnerabilities unremediated for longer than reported, while also eroding the credibility of the severity classification system for future findings",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This practice is only problematic if it happens more than once per quarter; occasional reclassification is a normal part of vulnerability management",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This is a legitimate way to manage remediation workload and should be formalized as official organizational policy going forward",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing a genuine integrity problem in vulnerability management governance: severity classification should reflect the vulnerability's actual technical risk characteristics (impact, exploitability), not be adjusted reactively to avoid missing an SLA deadline. Doing so produces artificially favorable compliance metrics that don't reflect actual security posture, can leave truly dangerous vulnerabilities exposed longer than official reporting suggests, and undermines trust in the severity system for all future findings — this is a form of metric gaming that should be identified and corrected (with a proper exception/risk-acceptance process instead), not normalized or formalized as policy."
+  },
+  {
+    "external_key": "IR-039",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization's IR plan defines specific roles (Incident Commander, Technical Lead, Communications Lead) but during an actual after-hours incident, the designated Incident Commander is unreachable for two hours, and no one steps into that role in the interim, causing significant confusion and delayed decision-making. What IR preparation gap does this MOST directly illustrate?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The IR plan itself was fundamentally flawed for defining specific roles at all; ad hoc, undefined roles would have prevented this problem",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Missing role redundancy/succession planning — IR plans need clearly designated backup/alternate personnel for each critical role (especially for after-hours coverage), with an unambiguous escalation path for who assumes authority when the primary designee is unreachable, rather than assuming the primary contact will always be available",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This indicates the incident should have been immediately re-classified as a lower severity, since role confusion is evidence the incident wasn't actually serious",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This is exclusively an HR staffing issue with no bearing on IR plan design or preparation",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a specific and common IR preparation gap: defining roles is necessary but incomplete without also defining backup/alternate personnel and clear succession rules for when a primary role-holder is unreachable — especially relevant for after-hours incidents, which don't wait for business hours staffing. A robust IR plan should specify who has authority to act in each critical role's absence, with unambiguous escalation criteria, rather than assuming the named primary will always be available; this is squarely an IR preparation/plan-design issue, not evidence about incident severity or a pure HR matter."
+  },
+  {
+    "external_key": "IR-040",
+    "domain": "IR",
+    "subtopic": "Attack Frameworks",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team uses the Lockheed Martin Cyber Kill Chain to structure their detection strategy, focusing primarily on detecting activity at the 'Delivery' and 'Exploitation' stages. A colleague from a red team background argues this leaves the organization poorly positioned against attacks that don't follow a clean linear progression — for example, attacks using already-compromised valid credentials that skip several early stages entirely. What is the BEST response to this critique?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The critique is invalid, since 100% of real-world attacks always follow the Cyber Kill Chain's stages in strict linear order with no exceptions",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The critique has merit — the Cyber Kill Chain's linear model doesn't map well to attacks that begin with already-obtained access (such as valid stolen credentials or an insider threat), which is exactly why many teams supplement it with more flexible, non-linear frameworks like MITRE ATT&CK (which doesn't assume a strict sequential progression) to ensure detection strategy isn't overly weighted toward stages an attacker might skip entirely",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The Cyber Kill Chain and MITRE ATT&CK are mutually exclusive frameworks that can never be used together in the same detection strategy",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This critique only applies to physical security incidents and has no relevance to cyber attack modeling",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests critical evaluation of a specific framework's known limitation: the Cyber Kill Chain models a generally linear attack progression, which fits many traditional malware-delivery attacks well but doesn't naturally represent attacks that begin further along (e.g., using already-compromised valid credentials, skipping delivery/exploitation of a technical vulnerability entirely) or that don't follow a clean sequence, such as insider threats. This is a well-recognized critique, and many practitioners use MITRE ATT&CK's more flexible, non-sequential technique catalog alongside (not instead of) the Kill Chain specifically to cover this gap — the two frameworks are commonly used together, not as mutually exclusive alternatives."
   }
 ]
