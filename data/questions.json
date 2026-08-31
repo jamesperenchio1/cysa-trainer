@@ -4255,5 +4255,335 @@
       }
     ],
     "explanation": "This tests the classic output-vs-outcome metric distinction in security reporting: alert volume is easy to measure and can look impressive, but it says nothing on its own about quality (true positive rate), efficiency (time to triage/respond), or actual risk reduction — a poorly-tuned tool generating a flood of false positives would show the same 'improvement' by this metric as a well-tuned tool catching genuinely more threats. Meaningful ROI reporting needs outcome-oriented context (precision/recall, response time, confirmed incidents prevented or caught) alongside or instead of raw volume."
+  },
+  {
+    "external_key": "SO-046",
+    "domain": "SO",
+    "subtopic": "Endpoint Detection",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An EDR platform's behavioral detection engine flags a spike in 'suspicious' alerts immediately after a company-wide software deployment that installs a new remote monitoring and management (RMM) agent. The RMM tool performs actions like remote script execution and credential-less remote desktop access — behaviors that closely resemble known attacker tradecraft. What is the BEST way to handle this going forward?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Disable the EDR's behavioral detection engine entirely, since it is clearly incompatible with legitimate IT tooling",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Create a scoped, documented detection exception (allowlist) for the specific known-good RMM tool's verified binary/publisher/behavior signature, rather than broadly suppressing the underlying detection logic — this preserves the EDR's ability to catch a DIFFERENT tool exhibiting the same suspicious behavior while eliminating noise from the known legitimate one",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Ignore all future alerts related to remote script execution or remote desktop access across the entire environment going forward",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Uninstall the RMM tool entirely, since any tool that triggers EDR behavioral detections should never be used regardless of its legitimate business purpose",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests proper EDR tuning practice when a legitimate tool's normal behavior overlaps with attacker tradecraft (a common situation with RMM tools, which attackers also deliberately abuse for exactly this reason — 'living off the land' with legitimate remote-management software). The correct fix is a narrowly-scoped exception tied to the specific verified tool (binary hash, publisher signature, or similarly specific identifier), not disabling the broader detection capability or ignoring an entire category of alerts, which would also blind the team to an attacker using a different tool with the same suspicious behavior pattern."
+  },
+  {
+    "external_key": "SO-047",
+    "domain": "SO",
+    "subtopic": "Malware Analysis",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "Static analysis of a suspicious binary shows no obviously malicious strings or imports, and its entropy score is very high (close to 8.0 out of 8.0) across nearly the entire file. What does this most likely indicate, and what should the analyst do next?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The high entropy score conclusively proves the file is benign, since malicious files typically have low entropy",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Very high entropy across most of a file is a strong indicator of packing, encryption, or compression — commonly used by malware to evade static signature-based detection and obscure its actual code from analysis — the analyst should proceed to dynamic analysis (sandbox execution) or unpacking techniques to observe the file's actual runtime behavior, since static analysis alone is largely blind to packed content",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "High entropy only ever indicates the file is a legitimate compressed archive format and requires no further analysis",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Entropy analysis is not a valid technique for malware analysis and should be disregarded entirely",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests entropy analysis as a static malware analysis technique: near-maximum entropy across most of a file's bytes is a classic sign of packing, encryption, or compression, all of which are used both legitimately (compressed installers) and, very commonly, by malware specifically to defeat static signature-based scanning and hinder direct code inspection. When static analysis is inconclusive because the file is packed, the appropriate next step is dynamic analysis (sandboxing) or manual unpacking to observe the actual behavior/code once it decompresses or decrypts itself at runtime — high entropy is a lead for further investigation, not proof of either maliciousness or benignity on its own."
+  },
+  {
+    "external_key": "SO-048",
+    "domain": "SO",
+    "subtopic": "Network Architecture",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A network segmentation review finds that the guest Wi-Fi VLAN and the corporate IoT device VLAN (smart thermostats, badge readers) are both configured to allow outbound internet access but are NOT permitted to communicate with each other or with the primary corporate VLAN. A stakeholder asks why IoT devices, which are all internally managed, need to be isolated as strictly as untrusted guest traffic. What is the BEST justification?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "IoT devices being internally managed makes isolation unnecessary; only genuinely untrusted external traffic like guest Wi-Fi warrants segmentation",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "IoT devices frequently run outdated, unpatchable, or vendor-locked firmware with weak security controls, making them attractive and often easy initial-access or pivot targets — isolating them limits the blast radius if one is compromised, regardless of whether the organization manages the physical devices, since 'internally managed' doesn't mean 'well-patched' or 'hardened'",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "IoT devices should actually have MORE network access than guest Wi-Fi, since they are trusted corporate assets",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This segmentation is purely a compliance checkbox exercise with no genuine security benefit for internally managed devices",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests risk-based segmentation reasoning beyond simple trust-by-ownership assumptions: IoT devices are commonly under-patched, run on manufacturer firmware with limited security update support, and often can't run endpoint security agents — making them a well-known category of easy compromise and lateral-movement pivot points, independent of who owns/manages them. Treating them with guest-Wi-Fi-level isolation (segmented from the sensitive corporate network) is a defensible, common practice specifically because 'we manage the hardware' doesn't mean 'the device is hardened' or 'the firmware gets timely security patches.'"
+  },
+  {
+    "external_key": "VM-037",
+    "domain": "VM",
+    "subtopic": "Scanning Methodology",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management team runs their standard authenticated network vulnerability scanner against a fleet of Kubernetes worker nodes and reports zero critical findings, concluding the container environment is secure. A security architect points out this conclusion is flawed. What is the architect MOST likely to point out?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The conclusion is correct and complete; scanning the underlying worker nodes fully covers the security posture of everything running inside containers on those nodes",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Traditional network/host-based vulnerability scanning of worker nodes doesn't assess vulnerabilities INSIDE container images (outdated base images, vulnerable application dependencies packaged into the container), misconfigurations in Kubernetes-specific objects (RBAC, pod security policies, network policies), or the container runtime/orchestration layer itself — a genuinely thorough assessment requires container image scanning and Kubernetes-specific configuration review in addition to traditional host scanning",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Kubernetes environments cannot be meaningfully assessed by any automated tooling and require exclusively manual penetration testing",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The scan results must be a false negative caused by a licensing limitation, unrelated to scope or methodology",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding that container/orchestration environments have their own distinct attack surface that traditional host-based scanning doesn't cover: vulnerabilities packaged inside container images (base OS layers, application dependencies), and misconfigurations specific to the orchestration layer (Kubernetes RBAC, pod security standards, network policies, exposed API server settings) exist independently of the underlying worker node's own OS-level vulnerability posture. A complete assessment needs container image scanning tools and Kubernetes-specific configuration review as complementary practices, not a replacement for host scanning, but also not something host scanning alone substitutes for."
+  },
+  {
+    "external_key": "VM-038",
+    "domain": "VM",
+    "subtopic": "Remediation",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability scan identifies an outdated OpenSSL version on a fleet of servers, vulnerable to a known CVE. The vendor's advisory says upgrading OpenSSL requires a full application stack recompile due to ABI (application binary interface) incompatibility with the current version, which the team estimates will take 6 weeks of testing. What is the MOST appropriate immediate interim step while remediation is planned?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Take no interim action of any kind, since a full remediation timeline has already been established and interim measures are never worthwhile",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Determine whether the specific vulnerable functionality/code path is actually reachable/exploitable in this deployment's configuration (e.g., if the vulnerable feature is disabled or unused), and if it is reachable, apply available compensating controls (WAF rules, network restrictions, enhanced monitoring for exploitation attempts targeting this specific CVE) while the full remediation is tested and scheduled",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Immediately roll back to an even older, unpatched OpenSSL version to avoid ABI compatibility concerns entirely",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Publicly disclose the vulnerability and remediation timeline on the company's status page to demonstrate transparency before any fix is in place",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests practical interim risk management when a full fix has a long lead time: first assess actual exploitability in this specific deployment context (is the vulnerable code path even reachable given how the feature is used/configured), then apply available compensating controls (WAF signatures, network-level restrictions, targeted monitoring) to reduce risk during the remediation window — doing nothing, making the situation worse (downgrading further), or prematurely publicizing an unpatched vulnerability's details are all worse than a measured interim risk-reduction approach."
+  },
+  {
+    "external_key": "VM-039",
+    "domain": "VM",
+    "subtopic": "CVSS / Prioritization",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management dashboard uses a single composite 'risk score' per asset, calculated as the sum of all open vulnerabilities' CVSS scores on that asset. A server with 50 Low-severity (CVSS 2-3) findings shows a higher composite score than a server with 2 Critical (CVSS 9.5+) findings. Leadership is directed to remediate the first server first based on this dashboard ranking. What is the flaw in this approach?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no flaw; summing CVSS scores across all findings on an asset is always the most accurate way to represent that asset's true risk level",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Summing scores conflates volume with severity — a large number of low-severity findings mathematically outweighing a small number of critical findings inverts the actual risk priority, since a small number of critical, easily-exploitable vulnerabilities typically represents a far greater immediate risk than many minor findings; a sound prioritization approach should weight by severity/exploitability appropriately rather than simply summing raw scores",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "CVSS scores should never be displayed on any dashboard, since any aggregation method is inherently invalid",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The dashboard is correct, and remediation should always follow whichever asset has the most total open findings by count, regardless of scoring",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a genuine and common vulnerability management dashboard design flaw: naive summation of CVSS scores across all findings on an asset lets sheer volume of minor issues outrank a small number of genuinely dangerous critical vulnerabilities, which inverts sound risk prioritization. A small number of Critical, easily-exploitable vulnerabilities on an asset typically represents materially higher risk than a large pile of Low-severity findings — dashboards and prioritization logic should be designed to reflect that (e.g., weighting heavily toward highest severity present, or using a proper risk-based scoring model) rather than a flat sum that treats all points as fungible."
+  },
+  {
+    "external_key": "IR-031",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "During the identification phase of a suspected incident, an analyst is uncertain whether observed anomalous behavior (a spike in outbound traffic from a database server) represents a genuine security incident or a legitimate but undocumented business process (like an unscheduled data export). What is the BEST immediate action?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Immediately declare a formal incident and begin full containment procedures, since any ambiguity should always be resolved by assuming the worst-case scenario without further investigation",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Immediately close the alert with no further action, since ambiguous findings should always be assumed benign until definitively proven otherwise",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "Perform rapid preliminary investigation and validation — checking for a known business justification (change records, scheduled jobs, stakeholder confirmation) and initial technical indicators (destination reputation, data volume/pattern) — before committing to either full incident declaration or dismissal, since the identification phase exists specifically to make this determination based on evidence rather than a default assumption in either direction",
+        "correct": true
+      },
+      {
+        "label": "D",
+        "body": "Escalate directly to external law enforcement before performing any internal investigation of any kind",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the purpose of the identification phase in the IR lifecycle: its job is precisely to determine, through rapid but genuine investigation (checking change records, business context, and initial technical indicators), whether an anomaly represents an actual incident before committing to the resource-intensive containment/eradication process or dismissing it outright. Defaulting to either extreme (full incident response or automatic dismissal) without this validation step undermines the entire purpose of having a distinct identification phase."
+  },
+  {
+    "external_key": "IR-032",
+    "domain": "IR",
+    "subtopic": "Attack Frameworks",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An analyst uses the Diamond Model of Intrusion Analysis to document an incident, identifying the four core features: Adversary, Capability, Infrastructure, and Victim. A colleague asks why this model is used alongside MITRE ATT&CK rather than just using ATT&CK alone. What is the BEST explanation of the complementary value?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The Diamond Model and MITRE ATT&CK are functionally identical and redundant, so using both provides no additional analytical value",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "MITRE ATT&CK is primarily focused on cataloging the specific tactics, techniques, and procedures (the 'how') an adversary used, while the Diamond Model provides a relational framework connecting who the adversary is, what capability/infrastructure they used, and who the victim is — together they support both granular technical analysis (ATT&CK) and higher-level intrusion analysis/attribution and pattern tracking across incidents (Diamond Model)",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The Diamond Model is exclusively used for physical security incidents and has no application to cyber intrusions",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "MITRE ATT&CK has been fully deprecated and replaced by the Diamond Model industry-wide",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding of complementary analytical frameworks: MITRE ATT&CK is a detailed technique-level taxonomy of adversary behavior (the specific 'how'), useful for detection engineering and technical analysis. The Diamond Model provides a higher-level relational structure (Adversary-Capability-Infrastructure-Victim) that's especially useful for intrusion analysis, tracking patterns across multiple incidents, and supporting attribution reasoning. Using both together — granular technique cataloging plus relational intrusion-event modeling — gives a more complete analytical picture than either alone; neither has replaced or deprecated the other."
+  },
+  {
+    "external_key": "RC-019",
+    "domain": "RC",
+    "subtopic": "Stakeholder Communication",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team's monthly report to engineering leadership lists every single vulnerability finding individually, resulting in a 40-page document that engineering managers report they no longer read in detail. What is the BEST way to restructure this reporting without losing important information?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Continue producing the same 40-page report unchanged, since reducing the level of technical detail would violate transparency obligations",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Restructure the primary report as a concise executive summary highlighting trends, top-priority items, and SLA compliance, with the full granular finding-by-finding detail moved to a separate, always-available appendix or a searchable ticketing system that engineers can reference as needed — this preserves full information availability while making the primary communication actually consumable by its intended audience",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Eliminate detailed vulnerability tracking entirely and report only a single aggregate pass/fail status each month",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The report length is irrelevant; if managers aren't reading it, that is entirely a management performance issue unrelated to reporting design",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests audience-appropriate report structuring, a core reporting competency: a report that's technically complete but too dense to actually be read by its audience fails at its communication purpose despite containing accurate information. The fix is layering the information — a concise, decision-useful summary for the primary audience, with full detail still available (in an appendix, dashboard, or ticketing system) for anyone who needs to dig in — rather than either preserving an unreadable format or discarding necessary detail altogether."
+  },
+  {
+    "external_key": "RC-020",
+    "domain": "RC",
+    "subtopic": "Regulatory Reporting",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A multinational organization suffers a breach affecting EU residents' personal data. The organization is a data processor (not the data controller) for the affected data, processing it on behalf of a client company. Under GDPR, who bears the PRIMARY obligation to notify the relevant supervisory authority?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The data processor bears the sole and complete notification obligation to the supervisory authority, with no role for the data controller",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The data controller bears the primary obligation to notify the supervisory authority (typically within 72 hours of becoming aware); the data processor's obligation under GDPR is to notify the CONTROLLER without undue delay upon becoming aware of a breach, so the controller can then meet its own regulatory notification duties — the processor doesn't notify the regulator directly under this structure",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Neither party has any notification obligation under GDPR if the breach was caused by a technical failure rather than a deliberate attack",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The notification obligation exclusively depends on which party's physical infrastructure was compromised, regardless of controller/processor role",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the controller/processor distinction in GDPR breach notification obligations: the data controller (the entity determining the purposes and means of processing) bears the primary duty to notify the relevant supervisory authority, generally within 72 hours of becoming aware of a qualifying breach. A data processor (acting on the controller's behalf, as in this scenario) has a distinct obligation to notify the CONTROLLER without undue delay, which then triggers the controller's own regulatory notification clock — the processor generally does not independently notify the regulator under this structure, and this obligation applies regardless of whether the cause was a deliberate attack or a technical failure."
   }
 ]
