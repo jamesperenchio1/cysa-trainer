@@ -3859,5 +3859,401 @@
       }
     ],
     "explanation": "This tests critical evaluation of how definitional scope affects the honesty of a headline security metric: a technically-accurate 'zero incidents' claim under a narrow, exfiltration-only definition can create a misleading impression of a quiet threat landscape if it silently excludes detected-and-stopped intrusion attempts that are highly relevant to understanding the actual threat activity the organization faced. Good reporting practice discloses the methodology and includes adjacent relevant activity, rather than letting a narrow definition imply more than it actually demonstrates — though this doesn't mean contained attempts should be reclassified as confirmed breaches, which would be inaccurate in the other direction."
+  },
+  {
+    "external_key": "SO-041",
+    "domain": "SO",
+    "subtopic": "Threat Hunting",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A threat hunter uses stacking analysis (frequency analysis) across all Windows scheduled tasks in the environment and finds one task name that appears on exactly 3 of 4,000 endpoints, with an unusual, randomly-generated-looking name. A colleague argues this can't be significant because 'only 3 machines are affected, that's statistically insignificant.' What is the BEST response?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The colleague is correct — any indicator affecting less than 1% of the environment can be safely deprioritized as statistically insignificant",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "In stacking/frequency analysis for threat hunting, RARITY is often the signal, not commonality — malicious persistence mechanisms are typically deployed to a small, targeted subset of hosts specifically to avoid detection, so an artifact appearing on only 3 of 4,000 hosts (especially with a randomized-looking name, which is itself suspicious) is a stronger hunting lead than one appearing everywhere",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Scheduled task names are never relevant to security investigations regardless of frequency",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This can only be investigated further if it appears on at least 10% of endpoints, per a universal threat-hunting threshold",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a core threat-hunting/stacking analysis principle: in frequency analysis, what's RARE is often more interesting than what's common, because attackers typically don't deploy persistence broadly (which would increase detection risk) — they target a small number of hosts. A colleague treating '3 out of 4,000' as automatically insignificant has the stacking-analysis logic backwards; combined with a suspicious naming pattern, this is exactly the kind of outlier a hunt hypothesis should chase down, not dismiss on volume alone."
+  },
+  {
+    "external_key": "SO-042",
+    "domain": "SO",
+    "subtopic": "Network Architecture",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A network diagram shows a DMZ hosting a public web server, with a firewall rule allowing the DMZ web server to initiate connections to the internal database server on port 1433 (SQL). A security reviewer flags this as a risk even though the rule is scoped to a single port and single host pair. What is the underlying concern?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no legitimate concern; any firewall rule scoped to a specific port and host pair is inherently safe regardless of the environments it connects",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The rule creates a direct path from a lower-trust zone (the internet-facing DMZ, which has the largest attack surface) into a higher-trust zone (the internal network holding sensitive data) — if the web server is compromised, that scoped rule becomes the attacker's ready-made pivot path to the database, so this kind of DMZ-to-internal rule warrants extra scrutiny (e.g., an application-layer proxy/API tier instead of direct DB access) even when narrowly scoped",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Port 1433 is inherently insecure and should never be used for any purpose regardless of network placement",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The concern is invalid because DMZ segments are defined specifically to allow unrestricted access to internal databases",
+        "correct": false
+      }
+    ],
+    "explanation": "A narrowly-scoped rule still creates a trust-zone boundary crossing: the DMZ is, by design, the most exposed segment (internet-facing), and any direct rule letting it reach the internal network's sensitive assets becomes the attacker's built-in pivot path the moment the DMZ host is compromised — narrow scoping reduces but doesn't eliminate this risk. A common architectural mitigation is inserting an application-layer tier (an API/service layer) between the DMZ and the database rather than allowing direct DB connectivity from an internet-facing host, regardless of how tightly the firewall rule is scoped."
+  },
+  {
+    "external_key": "SO-043",
+    "domain": "SO",
+    "subtopic": "Security Tools",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A SOAR (Security Orchestration, Automation, and Response) playbook automatically isolates any endpoint that triggers three or more distinct EDR alerts within 10 minutes. During a legitimate but noisy software deployment, dozens of endpoints get auto-isolated, disrupting business operations. What does this incident BEST illustrate about automation in detection and response?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "SOAR automation should never be used for containment actions under any circumstances, since this incident proves automation is fundamentally unsafe",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Automated response playbooks need safeguards — such as allowlisting known noisy/legitimate activities (e.g., scheduled deployment windows), tuning thresholds against realistic operational baselines, or requiring human-in-the-loop approval for high-impact actions like isolation — because an automation designed for a malicious pattern can just as easily fire on a legitimate but similarly-shaped event",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The correct fix is to remove the EDR tool entirely, since it clearly cannot distinguish malicious from benign activity",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This is expected and acceptable collateral damage that should simply be tolerated as the cost of having automated detection and response",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a real and common SOAR pitfall: automation trigger logic (like 'X alerts within Y minutes') can match both malicious behavior and legitimate high-activity events (mass deployments, patch rollouts, vulnerability scans) if it isn't tuned against those known patterns or gated with human review for high-impact actions. The fix is adding safeguards — allowlisting known change windows, refining thresholds, or requiring analyst approval before disruptive actions like isolation — not abandoning automation entirely or accepting business disruption as an unavoidable cost."
+  },
+  {
+    "external_key": "SO-044",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An analyst reviewing authentication logs notices a service account (used only by an automated backup job that runs nightly at 2 AM) successfully authenticated at 11:47 AM from an IP address that doesn't match the backup server. What is the MOST appropriate initial response?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "No action needed — service accounts are exempt from anomaly review since they are not tied to a human user",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Treat this as a high-priority anomaly requiring investigation: a service account authenticating outside its expected schedule, source, and purpose is a classic indicator of credential compromise or misuse, precisely because service accounts often have broad privileges and are less closely monitored by users who would otherwise notice unexpected activity on their own account",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This is expected behavior, since service accounts are designed to authenticate from any IP address at any time by definition",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This can only be investigated if the account also shows a failed login attempt beforehand",
+        "correct": false
+      }
+    ],
+    "explanation": "Service accounts are a frequent target for credential theft and lateral movement precisely because they often carry elevated privileges, aren't monitored the way a human user might notice their own anomalous activity, and typically have well-defined, predictable usage patterns (specific schedule, specific source host, specific purpose) that make deviations easy to detect and highly suspicious when they occur. An authentication far outside that expected pattern warrants prompt investigation, not a blanket exemption from anomaly review."
+  },
+  {
+    "external_key": "SO-045",
+    "domain": "SO",
+    "subtopic": "Cloud Security",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization uses a Cloud Access Security Broker (CASB) in API mode (out-of-band, inspecting data at rest and via provider APIs) rather than proxy mode (inline, inspecting traffic in real time). A security architect notes that a data exfiltration event via a sanctioned SaaS app was detected by the CASB, but only 40 minutes after the file was actually downloaded externally. What does this reveal about API-mode CASB deployment?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This indicates the CASB is defective and should be replaced, since any security tool with detection latency is non-functional",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "API-mode CASB deployment is inherently near-real-time in the same way proxy mode is, so the 40-minute gap must be an unrelated logging delay",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "API-mode CASB relies on polling provider APIs and analyzing logs/events after the fact, which is well-suited for visibility, data-at-rest scanning, and retroactive investigation, but introduces inherent detection latency compared to proxy/inline mode, which inspects traffic in real time and can block an action before it completes — this is an expected architectural trade-off, not a product defect",
+        "correct": true
+      },
+      {
+        "label": "D",
+        "body": "CASB tools cannot monitor sanctioned SaaS applications under any deployment mode, only unsanctioned shadow IT",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the API-mode vs. proxy-mode CASB architectural trade-off: API-mode integrates with the cloud provider's own APIs and logs, which gives broad visibility (including data at rest) but is inherently after-the-fact/polling-based, introducing detection latency. Proxy/inline mode sits in the traffic path in real time and can block actions before completion, at the cost of more complex deployment and potential performance/compatibility impact. Neither mode is a 'defect' — choosing between them (or combining both) is a deliberate architectural decision based on what visibility and response speed a given use case requires."
+  },
+  {
+    "external_key": "VM-034",
+    "domain": "VM",
+    "subtopic": "CVSS / Prioritization",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability's CVSS vector shows Attack Complexity: High (AC:H) and Privileges Required: High (PR:H), resulting in a Base Score of 6.5 (Medium), while another vulnerability with Attack Complexity: Low (AC:L) and Privileges Required: None (PR:N) scores 9.1 (Critical) for a similar impact. A junior analyst asks why these otherwise-similar-impact vulnerabilities score so differently. What is the correct explanation?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "CVSS scores are randomly assigned by vendors and have no consistent underlying logic connecting them to the vulnerability's actual characteristics",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "CVSS Base Score incorporates exploitability metrics (like Attack Complexity and Privileges Required) alongside impact — a vulnerability that's harder to exploit (requiring specific conditions) and requires an attacker to already have elevated privileges represents a meaningfully lower real-world risk than one exploitable by anyone with no special access or conditions, even if the ultimate impact if successfully exploited is similar",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The scores must reflect a data entry error, since equal-impact vulnerabilities are required to always receive equal CVSS scores regardless of other factors",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Attack Complexity and Privileges Required only affect the Temporal Score, never the Base Score",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding of how CVSS Base Score is actually composed: it's not purely an impact rating — it blends exploitability metrics (Attack Vector, Attack Complexity, Privileges Required, User Interaction) with impact metrics (Confidentiality, Integrity, Availability). Two vulnerabilities with similar potential impact can score very differently in Base Score if one requires high complexity and existing privileges to exploit (lowering the practical risk and thus the score) while the other is trivially exploitable by anyone — this is by design, not an error, and both AC and PR are part of the Base Score's Exploitability sub-score, not the Temporal Score."
+  },
+  {
+    "external_key": "VM-035",
+    "domain": "VM",
+    "subtopic": "Compliance / Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An internal audit for PCI DSS compliance requires evidence of quarterly vulnerability scanning of the cardholder data environment (CDE). The vulnerability management team provides scan reports, but the auditor rejects them because the reports show scans of the entire corporate network rather than a scope specifically covering (and limited to a validated boundary around) the CDE. What is the auditor's concern?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The auditor is being unreasonable; scanning more of the network than strictly required can only ever exceed compliance requirements, never fail to meet them",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "PCI DSS scoping requires scans to specifically and verifiably cover the defined CDE boundary (and connected/security-impacting systems) — a broad, undifferentiated network-wide scan doesn't provide evidence that the CDE's actual boundary was validated and fully assessed, and could mask CDE-specific gaps within an overall corporate-wide result, so scope-specific evidence is required, not just broader-than-necessary coverage",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Quarterly scanning frequency itself is insufficient regardless of scope, since PCI DSS always requires continuous, real-time scanning of the CDE",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The scan reports are rejected solely because they weren't generated by an Approved Scanning Vendor (ASV), which is the only requirement being tested here",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests PCI DSS scoping discipline in compliance vulnerability management: compliance evidence needs to demonstrate that the specific, defined boundary (the cardholder data environment) was assessed — a broader network-wide scan report doesn't prove the CDE's actual boundary was correctly identified, validated, and fully covered, and could obscure gaps specific to that environment within an aggregate result. 'Scanning more broadly' isn't equivalent to 'providing valid scope-specific evidence,' which is what auditors require."
+  },
+  {
+    "external_key": "VM-036",
+    "domain": "VM",
+    "subtopic": "Web App Vulnerabilities",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security assessment finds that an internal API validates and sanitizes all user-supplied input server-side before use in database queries, fully preventing SQL injection. However, the assessment still flags a Server-Side Request Forgery (SSRF) risk because the API accepts a user-supplied URL parameter (for a 'fetch preview image' feature) and makes a server-side HTTP request to that URL with no restriction on the target. Why is proper input sanitization against SQL injection not sufficient to address this separate finding?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "SSRF and SQL injection are the same underlying vulnerability class, so proper SQL injection prevention should have automatically prevented this as well",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "SQL injection and SSRF are different vulnerability classes with different root causes: SQL injection sanitization addresses how input is used in a DATABASE query, while SSRF requires validating what NETWORK DESTINATIONS the server is allowed to be directed to (e.g., blocking internal/private IP ranges, cloud metadata endpoints, and non-allowlisted hosts) — sanitizing for one class of injection doesn't protect against a fundamentally different misuse of user input",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This finding is invalid, since any input sanitization applied anywhere in an application automatically covers all other vulnerability classes",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "SSRF can only occur in applications that also have unpatched SQL injection vulnerabilities present",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the distinction between different vulnerability classes and why generic 'we sanitize input' claims don't universally apply: SQL injection defenses (parameterized queries, escaping for a SQL context) protect against malicious input reaching a database query unsafely, but they say nothing about validating what network destination a server-side HTTP request is allowed to target. SSRF requires its own specific control — such as an allowlist of permitted destination hosts/schemes and explicit blocking of internal IP ranges and cloud metadata endpoints (a very common real-world SSRF-to-cloud-credential-theft chain) — regardless of how well other, unrelated input-handling paths are secured."
+  },
+  {
+    "external_key": "IR-029",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An IR team declares an incident 'closed' immediately after the malicious process is killed and the affected host is returned to production. Two weeks later, a post-incident audit finds no formal validation was ever performed to confirm the attacker's persistence mechanisms were fully removed or that no data had actually been exfiltrated. What phase of the IR lifecycle was skipped?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "No phase was skipped; killing the malicious process and returning the host to service fully constitutes complete eradication and recovery",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Validation as part of recovery (and thorough eradication before it) was skipped — recovery should include confirming the threat is fully eradicated (not just the most visible symptom), validating system integrity, and determining actual impact (e.g., whether data was exfiltrated) BEFORE declaring an incident closed and returning to normal operations",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The identification phase was skipped, since the team failed to identify the malicious process in the first place",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This is a containment failure, not a lifecycle phase issue, and has no bearing on eradication or recovery practices",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the distinction between reacting to the most visible symptom and completing the full eradication/recovery lifecycle: killing a process addresses the immediate active threat, but doesn't confirm all persistence mechanisms are removed, that the vulnerability enabling initial access is closed, or that the actual scope of impact (including data exfiltration) has been determined. A rigorous recovery phase validates all of this before declaring closure — skipping it is a common but risky shortcut that can leave residual compromise in place."
+  },
+  {
+    "external_key": "IR-030",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A forensic investigator working a suspected insider-threat case obtains a forensic disk image using proper write-blocking and hashing procedures. During analysis, the investigator discovers files that appear to show evidence of a completely unrelated crime unconnected to the original scope of authorization (the insider-threat data-exfiltration investigation). What is the MOST appropriate action?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Continue analyzing and reporting on the unrelated material immediately, since anything found on an already-authorized forensic image can be freely investigated and reported without further authorization",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Immediately delete the unrelated files from the analysis workstation to avoid any legal complications, then continue the original investigation as if nothing was found",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "Stop analysis of the unrelated material, document the discovery, and consult with legal counsel/management before proceeding further — analysis was authorized for a specific scope (the insider-threat investigation), and expanding into unrelated findings without proper authorization can create legal and evidentiary problems, even though the discovery itself should still be preserved and reported through proper channels",
+        "correct": true
+      },
+      {
+        "label": "D",
+        "body": "The investigator should take no further action of any kind and should not even document that the unrelated material was found",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests scope-of-authorization discipline in digital forensics: an investigator's authority to analyze evidence is generally tied to the specific scope of the authorized investigation (e.g., a specific search authorization or corporate investigation mandate). Discovering unrelated evidence doesn't automatically extend that authorization to a new matter — proper practice is to halt analysis of the out-of-scope material, document what was found (without further digging), and involve legal/management to determine the appropriate next steps (which may include separate authorization), rather than either freely expanding scope on their own or destroying/ignoring the discovery."
+  },
+  {
+    "external_key": "RC-017",
+    "domain": "RC",
+    "subtopic": "Regulatory Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A healthcare organization subject to HIPAA discovers that an employee accessed a patient's medical record without a legitimate treatment, payment, or operations reason ('curiosity browsing'), but no data was copied, printed, or transmitted anywhere. The privacy officer says 'no breach occurred since nothing left the organization.' Is this correct under a typical HIPAA breach-analysis framework?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Correct — unauthorized access without any external transmission or exfiltration can never constitute a reportable breach under HIPAA",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Not necessarily correct — unauthorized access/use of protected health information (PHI) by an employee outside their job function can itself constitute an impermissible use or disclosure requiring a breach risk assessment (considering factors like the nature of the PHI involved, who accessed it, whether it was actually viewed, and mitigating factors), regardless of whether the information was further transmitted externally — 'nothing left the organization' is not automatically dispositive",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This can only be a reportable breach if the employee accessed the record more than five separate times",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This is exclusively a human resources disciplinary matter with no regulatory reporting dimension whatsoever",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a common HIPAA misconception: an impermissible internal use or access to PHI (such as curiosity browsing by an employee with no legitimate treatment/payment/operations reason) can itself trigger the HIPAA breach risk assessment process, independent of whether the information was ever transmitted outside the organization. The four-factor breach risk assessment considers the nature of the PHI, who used/accessed it, whether it was actually viewed, and mitigation — 'it never left the building' is one relevant factor, not an automatic exemption from breach analysis or reporting obligations, and it is very much still relevant to compliance/regulatory reporting, not purely an HR matter."
+  },
+  {
+    "external_key": "RC-018",
+    "domain": "RC",
+    "subtopic": "Metrics",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team wants to demonstrate ROI for a new detection tool by reporting 'the tool generated 15,000 alerts this quarter, a 300% increase in detection volume.' Leadership is asked to interpret this as a sign the security program has significantly improved. What is the BEST critique of using this specific metric this way?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The metric is an excellent and sufficient way to demonstrate program improvement, since more detections always directly correlate with better security outcomes",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Raw alert volume is an output metric, not an outcome metric — a 300% increase in alerts could reflect genuinely improved detection coverage, but could equally reflect poor tuning generating more noise/false positives, without any accompanying information about true/false positive rates, mean time to respond, or actual risk reduction, the volume figure alone doesn't demonstrate the tool is actually making the organization more secure",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Alert volume metrics should never be reported to leadership under any circumstances since they have no value at all",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The only valid way to measure a detection tool's value is by its licensing cost compared to competitors",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the classic output-vs-outcome metric distinction in security reporting: alert volume is easy to measure and can look impressive, but it says nothing on its own about quality (true positive rate), efficiency (time to triage/respond), or actual risk reduction — a poorly-tuned tool generating a flood of false positives would show the same 'improvement' by this metric as a well-tuned tool catching genuinely more threats. Meaningful ROI reporting needs outcome-oriented context (precision/recall, response time, confirmed incidents prevented or caught) alongside or instead of raw volume."
   }
 ]
