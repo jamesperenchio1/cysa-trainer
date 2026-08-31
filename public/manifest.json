@@ -1,0 +1,14 @@
+{
+  "name": "CySA+ Trainer",
+  "short_name": "CySA+ Trainer",
+  "description": "Spaced-repetition drills and mock exams for CompTIA CySA+ (CS0-004)",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0d10",
+  "theme_color": "#0b0d10",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

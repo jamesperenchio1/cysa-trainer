@@ -1,0 +1,8 @@
+node_modules/
+.next/
+data/cysa.db
+data/cysa.db-*
+*.log
+.env
+.env.local
+.DS_Store

@@ -1,0 +1,16 @@
+services:
+  cysa-trainer:
+    build: .
+    container_name: cysa-trainer
+    restart: unless-stopped
+    ports:
+      # Bind only to localhost -- Cloudflare Tunnel (cloudflared) or your reverse
+      # proxy talks to this port; it's never exposed directly to the LAN/WAN.
+      - "127.0.0.1:3477:3000"
+    volumes:
+      - cysa_db_data:/app/db-data
+    environment:
+      - NODE_ENV=production
+
+volumes:
+  cysa_db_data:

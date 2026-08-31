@@ -1,0 +1,7 @@
+node_modules
+.next
+data/cysa.db
+data/cysa.db-*
+.git
+.env*
+*.log

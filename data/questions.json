@@ -1,0 +1,2510 @@
+[
+  {
+    "external_key": "SO-001",
+    "domain": "SO",
+    "subtopic": "Zero Trust / Architecture",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A zero trust rollout still allows a legacy ERP server to accept unauthenticated SNMP polling from the monitoring subnet, justified as 'read-only and internal.' Which statement BEST evaluates this exception?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "It is fully compliant with zero trust since the traffic never leaves the internal network",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "It violates zero trust's core principle of explicit verification for every request regardless of network location, even though the risk may be low enough to formally accept",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "It is acceptable because SNMP read-only community strings are considered a strong authentication mechanism",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "It is irrelevant to zero trust since zero trust only applies to user identities, not device-to-device traffic",
+        "correct": false
+      }
+    ],
+    "explanation": "Zero trust requires explicit verification for every request, including internal, device-to-device, and 'read-only' traffic \u2014 network location or perceived low risk doesn't exempt a request from the model. This may still be a reasonable *documented risk acceptance*, but that's different from claiming it's compliant."
+  },
+  {
+    "external_key": "SO-002",
+    "domain": "SO",
+    "subtopic": "Zero Trust / Architecture",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "Which of the following is the SINGLE biggest architectural gap that would prevent an organization from claiming a genuine zero trust implementation, even if it has strong MFA everywhere?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Lack of per-session, context-aware authorization decisions (device posture, location, behavior) beyond initial authentication",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "Using a single MFA provider for both cloud and on-premises resources",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "Allowing employees to use personal mobile devices for email after MFA",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Using role-based access control instead of attribute-based access control everywhere",
+        "correct": false
+      }
+    ],
+    "explanation": "Strong authentication alone is necessary but not sufficient \u2014 zero trust requires continuous, contextual authorization for every request (device posture, behavior, risk signals), not just a one-time login check. RBAC vs ABAC is an implementation detail, not a disqualifying gap."
+  },
+  {
+    "external_key": "SO-003",
+    "domain": "SO",
+    "subtopic": "Network Architecture",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A cloud workload's security group allows inbound traffic on port 443 from 0.0.0.0/0, but the application also silently listens on port 8443 with no security group rule referencing it. Which statement is MOST accurate?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Port 8443 is safe by default because no rule explicitly allows it",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The security group is a default-deny allowlist model, so 8443 should be unreachable unless the underlying OS firewall or a misconfigured rule elsewhere also permits it \u2014 this must be verified, not assumed",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Since 443 is already open to the world, 8443 poses no additional risk",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Cloud security groups only filter outbound traffic, so this configuration is irrelevant to inbound exposure",
+        "correct": false
+      }
+    ],
+    "explanation": "Security groups are typically default-deny/allowlist, so an unlisted port *should* be blocked \u2014 but 'should' isn't verification. Analysts must confirm there's no broader rule (e.g., an overly permissive range), OS-level firewall exception, or load balancer path exposing it before assuming it's safe."
+  },
+  {
+    "external_key": "SO-004",
+    "domain": "SO",
+    "subtopic": "Network Architecture",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization implements microsegmentation in its cloud environment using workload identity-based policy instead of IP-based rules. What is the PRIMARY operational problem this specifically solves that IP-based segmentation cannot?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "It removes the need for any network monitoring",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "It maintains consistent policy enforcement as workloads are dynamically created, destroyed, and rescheduled with changing IP addresses (e.g., in Kubernetes/autoscaling)",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "It automatically encrypts all data at rest",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "It eliminates the need for a CI/CD pipeline security review",
+        "correct": false
+      }
+    ],
+    "explanation": "IP-based rules break down in dynamic environments where addresses are ephemeral (containers, autoscaling groups). Identity-based microsegmentation ties policy to the workload's identity/certificate rather than a transient IP, so policy survives rescheduling."
+  },
+  {
+    "external_key": "SO-005",
+    "domain": "SO",
+    "subtopic": "Network Architecture",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A SASE deployment routes all branch office traffic through a cloud-delivered security stack before reaching the internet or internal apps. A branch office reports that a latency-sensitive VoIP application now has noticeably worse call quality. What is the MOST likely architectural cause?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "SASE cannot support any real-time traffic under any configuration",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Traffic is being backhauled through a distant cloud PoP instead of being handled by a nearby edge node, or VoIP traffic isn't configured for local breakout/QoS prioritization",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "VoIP traffic is immune to network path changes, so the SASE deployment is unrelated",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "SD-WAN and SASE are mutually exclusive, so this is expected and cannot be fixed",
+        "correct": false
+      }
+    ],
+    "explanation": "SASE's benefit depends on proximity to a nearby PoP and proper traffic steering (local breakout, QoS) for latency-sensitive apps; if VoIP is being routed to a distant PoP or not prioritized, call quality suffers. This is a configuration/architecture issue, not an inherent SASE limitation."
+  },
+  {
+    "external_key": "SO-006",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A signed, Microsoft-approved binary (`certutil.exe`) is invoked with `-urlcache -split -f` against an internal file share, immediately followed by execution of the retrieved file, under a chain of `explorer.exe -> cmd.exe -> certutil.exe`. IT confirms certutil is on the organization's approved software list for certificate operations. What is the strongest reason to still escalate this as malicious?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "certutil.exe being a signed Microsoft binary makes any use of it inherently suspicious",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The flags are being used to download-and-execute a file \u2014 a well-documented LOLBin abuse pattern that has nothing to do with certutil's approved certificate-management purpose",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Retrieval from an internal file share instead of the public internet lowers the risk to negligible",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "explorer.exe spawning cmd.exe is inherently abnormal and is itself the strongest indicator",
+        "correct": false
+      }
+    ],
+    "explanation": "The key insight is that an approved binary can still be abused for a completely different, unapproved function. -urlcache/-split is a known technique to smuggle a file download-and-execute past application allowlisting that only checks for 'is this binary approved.' Internal-source doesn't equal safe (an internal share can itself be compromised or staged), and explorer->cmd is common in normal use."
+  },
+  {
+    "external_key": "SO-007",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "Two hosts show outbound HTTPS beacons to the same external IP. Host A connects every 60 seconds \u00b1 1 second with 1.2KB payloads. Host B connects at pseudo-random intervals averaging 58 seconds, ranging from 20-140 seconds, with payload sizes varying 0.5-4KB. Which is the more sophisticated/evasive beacon pattern, and why?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Host A, because its precise timing is easier for an analyst to notice",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Host B, because jittered timing and variable payload size are deliberately designed to defeat simple threshold/interval-based detection rules that Host A's pattern would trigger",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Neither is more sophisticated since both are equally detectable by any SIEM",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Host A, because 60-second intervals are a known-safe interval used by legitimate software",
+        "correct": false
+      }
+    ],
+    "explanation": "Fixed-interval, fixed-size beacons (Host A) are actually the EASIER pattern to catch with simple rules. Real, more advanced malware adds jitter and payload-size variance specifically to blend into normal traffic noise and evade naive detection thresholds \u2014 recognizing this distinction is a common CS0-004 trap."
+  },
+  {
+    "external_key": "SO-008",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An analyst sees a burst of NXDOMAIN responses for high-entropy subdomains under one parent domain, but the query volume is only 40 queries over 24 hours (not thousands). Should this be dismissed as 'too low volume to be DNS tunneling'?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Yes \u2014 DNS tunneling always requires very high query volumes to be effective, so low volume rules it out",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "No \u2014 low-and-slow exfiltration/C2 channels deliberately use low query volume to stay under volumetric detection thresholds; volume alone should not be the deciding factor, entropy and destination pattern still matter",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Yes \u2014 NXDOMAIN responses always indicate a harmless typo or misconfigured client",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "No \u2014 but only external, government-run domains can be used for tunneling, so the destination is what disqualifies this",
+        "correct": false
+      }
+    ],
+    "explanation": "Attackers deliberately throttle tunneling/C2 channels to stay beneath naive volume-based thresholds. Relying on volume alone as a disqualifier is a common analyst mistake \u2014 entropy, NXDOMAIN ratio, and destination reputation remain meaningful regardless of raw count."
+  },
+  {
+    "external_key": "SO-009",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A host shows a process injection technique where malicious code is written into the memory space of a legitimate, already-running `svchost.exe` process rather than being dropped as a new executable to disk. What is the PRIMARY detection challenge this technique creates?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "It has no detection challenge since antivirus always scans running memory in real time by default",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Traditional file-based/signature antivirus scanning that inspects files written to disk will not see this activity, since no new malicious file is ever written \u2014 memory-focused EDR telemetry is needed instead",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "svchost.exe cannot be a target for injection since it is a protected system process",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This technique only works on Linux systems, not Windows",
+        "correct": false
+      }
+    ],
+    "explanation": "Fileless/process-injection techniques specifically evade disk-based AV scanning because there's no new file artifact to catch. This is precisely why EDR (memory/behavioral telemetry) has become essential alongside traditional signature-based AV."
+  },
+  {
+    "external_key": "SO-010",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A privileged account shows a login from an approved corporate laptop, at a normal time of day, using the correct MFA method \u2014 but the login originates from a residential IP address in a country the employee has never traveled to or worked remotely from. Which detail makes this the strongest indicator of compromise despite everything else looking normal?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The correct MFA method being used automatically rules out compromise",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Geographic/network-origin anomaly relative to the user's established baseline is a strong indicator on its own, since attackers increasingly use stolen session tokens or SIM-swap/MFA-fatigue techniques that satisfy MFA checks without the legitimate user's involvement",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Normal login time of day means this cannot be malicious",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "An approved corporate laptop fingerprint can never be spoofed or reused by an attacker",
+        "correct": false
+      }
+    ],
+    "explanation": "This question tests whether analysts over-trust MFA as a binary 'safe' signal. Techniques like session token theft, MFA fatigue/push-bombing, or SIM swapping can satisfy authentication checks while still representing a genuine compromise \u2014 geographic/behavioral baseline deviation remains meaningful even when every individual control 'passed.'"
+  },
+  {
+    "external_key": "SO-011",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 3,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "Which of the following, if observed in isolation with no other context, is the WEAKEST standalone indicator of malicious activity?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "A new scheduled task created by a non-admin user account outside change windows",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A single failed login attempt for a user who then successfully authenticates 3 seconds later with the correct password",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "LSASS being opened with PROCESS_VM_READ access by an unsigned, unrecognized binary",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "A workstation issuing 1,800 DNS queries to a single domain with random subdomains in 20 minutes, mostly NXDOMAIN",
+        "correct": false
+      }
+    ],
+    "explanation": "A single mistyped password followed by an immediate correct login is common, everyday user behavior and carries very low signal on its own. The other three are all high-confidence indicators (persistence, credential dumping, and tunneling, respectively) even without additional context."
+  },
+  {
+    "external_key": "SO-012",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An EDR shows `rundll32.exe` executing with no visible DLL argument in the default alert view. A junior analyst closes the alert as benign because 'rundll32 is a normal Windows process.' What is the correct next step BEFORE any disposition decision, and why?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Trust the junior analyst's disposition since rundll32.exe is indeed a legitimate signed binary",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Pull the full command line and actual DLL path/hash from raw EDR telemetry, since alert summary views often truncate or hide arguments \u2014 rundll32 with a hidden/obfuscated DLL argument is a well-known LOLBin persistence and execution technique",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Immediately wipe and reimage the host without further investigation",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Disable the EDR agent on that host since it is generating a false positive",
+        "correct": false
+      }
+    ],
+    "explanation": "The trap here is trusting a summary view and the binary's legitimacy without checking what it was actually told to load. rundll32 is frequently abused specifically because analysts pattern-match on 'signed Windows binary = safe' rather than inspecting the full invocation."
+  },
+  {
+    "external_key": "SO-013",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 3,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A server shows a spike in outbound traffic to multiple destination IPs on port 6667, alongside CPU usage patterns inconsistent with any known scheduled job. Port 6667 is historically associated with which category of activity in a threat-hunting context (while noting it is not proof by itself)?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Standard HTTPS web browsing traffic",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Legacy IRC (Internet Relay Chat) traffic, historically associated with botnet C2 channels, though the port alone is only a weak/legacy indicator worth correlating with other signals",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "DNS zone transfers",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "SMTP mail relay traffic",
+        "correct": false
+      }
+    ],
+    "explanation": "Port 6667 is the classic IRC port and has long historical association with botnet C2 (many legacy botnets used IRC channels for command and control). However, port number alone is a weak, easily-spoofed indicator \u2014 treat it as one data point to correlate, not standalone proof, which is the nuance this question tests."
+  },
+  {
+    "external_key": "SO-014",
+    "domain": "SO",
+    "subtopic": "Security Tools",
+    "difficulty": 3,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team wants a single capability to correlate an endpoint alert, a suspicious email delivery event, and an anomalous cloud-login event into one unified incident timeline, using data ALREADY collected by separate point tools. Which capability category is the BEST fit, distinct from simply adding another EDR agent?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "XDR (extended detection and response), which ingests and correlates telemetry across multiple existing security layers",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "A second, redundant EDR deployment on the same endpoints",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "A traditional signature-based antivirus upgrade",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "A vulnerability scanner with a larger plugin library",
+        "correct": false
+      }
+    ],
+    "explanation": "This is precisely XDR's differentiator versus EDR: correlating telemetry that already exists across multiple layers (endpoint, email, identity/cloud) into unified detections, rather than deepening visibility on just one layer."
+  },
+  {
+    "external_key": "SO-015",
+    "domain": "SO",
+    "subtopic": "Security Tools",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A SOAR playbook automatically disables a user account and revokes all active sessions the moment impossible-travel is detected, without analyst review. Two weeks later, this fires on a VP who was legitimately using a VPN exit node while traveling, causing a business disruption. What is the BEST structural fix, rather than simply disabling the playbook?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Remove SOAR automation entirely and return to fully manual response for all future alerts",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Add a risk-tiered approval step to the playbook (e.g., auto-remediate for standard users, require analyst confirmation for VIP/executive accounts or when a known corporate VPN egress is involved) rather than blanket full automation",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Permanently exempt all VP-level accounts from any impossible-travel detection going forward",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Increase the SOAR platform's licensing tier, which will automatically fix false positive rates",
+        "correct": false
+      }
+    ],
+    "explanation": "The lesson isn't 'automation is bad' or 'exempt VIPs entirely' (both create worse outcomes) \u2014 it's that automated response playbooks should be risk-tiered, adding human-in-the-loop checkpoints for higher-stakes/ambiguous cases while keeping full automation for clear-cut, lower-risk scenarios."
+  },
+  {
+    "external_key": "SO-016",
+    "domain": "SO",
+    "subtopic": "Security Tools",
+    "difficulty": 3,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "Which statement correctly distinguishes a next-generation firewall (NGFW) with IPS functionality from a standalone, dedicated IPS appliance in most modern deployments?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "An NGFW can never include IPS functionality; they are always separate devices",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "An NGFW integrates IPS (along with application awareness and other Layer 7 inspection) into a single platform, whereas a standalone IPS focuses purely on threat detection/blocking without broader firewall policy management",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "A standalone IPS always has higher throughput than any NGFW regardless of hardware",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "NGFWs only operate at Layer 2 and cannot inspect application-layer traffic",
+        "correct": false
+      }
+    ],
+    "explanation": "Modern NGFWs commonly integrate IPS as one feature within a broader Layer 7-aware platform (app control, URL filtering, IPS, etc.), while a dedicated IPS appliance is more narrowly focused \u2014 this is an architectural/integration distinction, not a capability the NGFW lacks."
+  },
+  {
+    "external_key": "SO-017",
+    "domain": "SO",
+    "subtopic": "Security Tools",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A CASB (Cloud Access Security Broker) deployed in API mode (as opposed to inline/proxy mode) has which key limitation an analyst should account for?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "It cannot see any data at all, ever, about sanctioned cloud app usage",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "It typically provides near-real-time (not truly real-time, inline) visibility and control, since it works by querying the cloud provider's API rather than sitting in the live traffic path \u2014 meaning a brief window of exposure can occur before a policy action is applied",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "It only works with on-premises applications, never SaaS",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "It replaces the need for any identity provider or SSO integration",
+        "correct": false
+      }
+    ],
+    "explanation": "API-mode CASB integrates after-the-fact via provider APIs (great for visibility and broad SaaS coverage without routing traffic through a proxy) but isn't inline, so there is inherently a short detection-to-action lag compared to proxy/inline mode, which blocks in real time but requires traffic redirection."
+  },
+  {
+    "external_key": "SO-018",
+    "domain": "SO",
+    "subtopic": "Security Tools",
+    "difficulty": 3,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization deploys deception technology consisting of fake credentials planted in a password manager vault, alongside a decoy admin share with no legitimate business purpose. A SOC alert fires from the decoy share. Which statement about this alert's reliability is MOST accurate?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "It has a meaningfully higher false-positive rate than typical SIEM correlation alerts, since legitimate users regularly access decoy resources by accident",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "It carries very high confidence, since no legitimate process or user has any valid reason to interact with a resource that serves no real business function",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "It should be ignored, since decoy/honeytoken alerts are considered unreliable by design",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "It is only useful for external attackers and will never detect insider threats",
+        "correct": false
+      }
+    ],
+    "explanation": "The core value proposition of deception technology is precisely this: since decoys have zero legitimate use, any interaction is inherently high-confidence, regardless of whether the actor is external or an insider."
+  },
+  {
+    "external_key": "SO-019",
+    "domain": "SO",
+    "subtopic": "Threat Intelligence",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A threat intel report states: 'Source: usually reliable (B). Information: confirmed by other independent sources (2).' Compared to a second report rated 'F/6' (reliability cannot be judged / cannot be judged), which report should carry more weight in a risk decision, and why?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The F/6 report, because unproven sources are inherently more exciting and often correct",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The B/2 report, because it reflects both a track record of source reliability and independent corroboration of the specific claim \u2014 this is a materially stronger basis for action than an unjudgeable source with unverifiable content",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Both should be weighted identically since all threat intel is equally speculative",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The F/6 report, because a lower letter/number always indicates higher confidence numerically",
+        "correct": false
+      }
+    ],
+    "explanation": "Under the Admiralty Code, B/2 (reliable source, independently corroborated) is a strong basis for action; F/6 (unjudged reliability, unjudged credibility) provides essentially no confidence basis at all. This tests whether the letter/number scale is understood as a confidence rating, not an arbitrary numeric ranking."
+  },
+  {
+    "external_key": "SO-020",
+    "domain": "SO",
+    "subtopic": "Threat Intelligence",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "Threat intel attributes a campaign to a known nation-state group with 'high confidence' based on TTP overlap and reused C2 infrastructure. A week later, a rival group is found to have reused the same leaked toolset. What does this scenario BEST illustrate about attribution?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Attribution based on TTPs and infrastructure is always 100% reliable once published and should never be revisited",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Shared/leaked tooling and reused infrastructure can be repurposed by other actors, meaning attribution confidence should be treated as provisional and updated as new evidence emerges, not treated as a permanent fact",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This proves threat intelligence has no value and should be disregarded entirely",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Nation-state groups never share tooling with other groups under any circumstances",
+        "correct": false
+      }
+    ],
+    "explanation": "This illustrates a core caution around attribution: TTPs and infrastructure can be copied, leaked, sold, or intentionally reused as a false flag, so attribution should be communicated with appropriate confidence levels and revisited as new evidence surfaces \u2014 not treated as immutable fact."
+  },
+  {
+    "external_key": "SO-021",
+    "domain": "SO",
+    "subtopic": "Threat Intelligence",
+    "difficulty": 3,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization only consumes a single free, community-run threat intel feed and treats every IOC in it as automatically block-worthy across all firewalls with no review. What is the MOST significant risk of this approach?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Community feeds are always completely accurate and this approach carries no risk",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Automatically actioning unvetted IOCs from a single, unvalidated source risks operational disruption from false positives (blocking legitimate infrastructure) and gives no defense-in-depth if that single feed misses something",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This approach guarantees full coverage against all current threats",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Free feeds are technically incapable of containing IP addresses or domains",
+        "correct": false
+      }
+    ],
+    "explanation": "Relying on a single, unvalidated feed with automatic action creates two risks at once: false positives causing business disruption, and a single point of failure for detection coverage. Mature threat intel programs validate/correlate across multiple sources before automated action."
+  },
+  {
+    "external_key": "SO-022",
+    "domain": "SO",
+    "subtopic": "Threat Hunting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A threat hunter's hypothesis ('adversaries may be using scheduled tasks for persistence') returns zero suspicious scheduled tasks across the environment after a thorough hunt. What is the MOST appropriate interpretation of this result?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The environment is definitely fully compromise-free with certainty",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "This specific hypothesis was not confirmed for this technique in the data reviewed; it reduces (but does not eliminate) likelihood for this specific persistence method and should prompt hunting against other techniques, not a conclusion of total safety",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The hunt was a failure and provided no value since nothing was found",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The hunting program should be discontinued since this hypothesis returned no results",
+        "correct": false
+      }
+    ],
+    "explanation": "A negative hunt result is still valuable \u2014 it reduces uncertainty about one specific technique \u2014 but it is not proof of a clean environment, since adversaries have many other possible techniques (registry run keys, WMI subscriptions, service creation, etc.). This tests against over-generalizing a single hunt's scope."
+  },
+  {
+    "external_key": "SO-023",
+    "domain": "SO",
+    "subtopic": "Threat Hunting",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "During a hunt, an analyst finds a service account performing interactive RDP logins to five servers overnight \u2014 but change management records show a legitimate, approved patch deployment was scheduled for that exact window using that same account. What should the analyst do NEXT, rather than immediately closing the finding as benign?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Immediately close the finding since a matching change record fully explains the activity with certainty",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Verify that the actual observed behavior (specific servers touched, commands run, data accessed) matches what the approved change actually authorized \u2014 attackers have been known to time malicious activity to piggyback on legitimate maintenance windows",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Escalate to a full incident regardless of the change record, since any anomaly must be treated as confirmed malicious",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Disable the service account permanently without any further verification",
+        "correct": false
+      }
+    ],
+    "explanation": "A plausible-looking legitimate explanation should still be verified against the actual observed scope of activity \u2014 a documented change window doesn't guarantee everything that happened during it was authorized. This tests against prematurely closing a finding on pattern-match alone."
+  },
+  {
+    "external_key": "SO-024",
+    "domain": "SO",
+    "subtopic": "Threat Hunting",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A hunting team is deciding between two data sources to detect PowerShell-based living-off-the-land activity: (1) Windows Security Event ID 4688 (process creation) with basic command-line auditing, or (2) PowerShell Script Block Logging (Event ID 4104). Which provides the deeper visibility specifically needed to catch obfuscated/encoded malicious scripts, and why?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Event ID 4688 alone, because process creation events always include full deobfuscated script content",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Event ID 4104 (Script Block Logging), because it captures the actual PowerShell code being executed \u2014 including code that is dynamically generated or deobfuscated at runtime \u2014 which command-line logging alone will not reveal",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Neither source provides any more insight than the other; they are functionally identical",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Event ID 4688 is deprecated and no longer exists in modern Windows versions",
+        "correct": false
+      }
+    ],
+    "explanation": "4688 shows the command line as invoked (which attackers often obfuscate/encode to evade string-matching), while Script Block Logging (4104) captures the actual code block being executed, including content deobfuscated at runtime \u2014 giving far deeper visibility into what a PowerShell-based LOLBin attack is really doing."
+  },
+  {
+    "external_key": "SO-025",
+    "domain": "SO",
+    "subtopic": "Threat Hunting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "Which best describes the relationship between the Hunting Maturity Model's 'Innovative' level and its 'Procedural' level?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Innovative organizations rely purely on manual, ad hoc hunts with no documented process, while Procedural organizations use no automation at all",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Procedural organizations follow repeatable, documented hunt processes created by others; Innovative organizations develop new hunting techniques/analytics themselves and often begin automating parts of the hunt process",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The two levels are identical in practice and differ only in naming",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Innovative is a lower maturity level than Procedural",
+        "correct": false
+      }
+    ],
+    "explanation": "The Hunting Maturity Model progresses roughly: Initial (no real hunting) -> Minimal -> Procedural (following others' documented techniques) -> Innovative (creating new techniques/analytics, increasing automation) -> Leading (highly automated). Innovative sits above Procedural, distinguished by original technique development."
+  },
+  {
+    "external_key": "VM-001",
+    "domain": "VM",
+    "subtopic": "Scanning Methodology",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A credentialed scan against a Linux server returns FEWER findings than an uncredentialed scan of the same host ran the same day. What is the MOST likely explanation, assuming both scans completed successfully?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The credentialed scan is broken and its results should be discarded",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The uncredentialed scan likely flagged version-banner-based 'possible' vulnerabilities that the credentialed scan was able to rule out by directly confirming actual installed package versions and applied patches",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Credentialed scans are always less accurate than uncredentialed scans by design",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The host must have been patched in between the two scans",
+        "correct": false
+      }
+    ],
+    "explanation": "Uncredentialed scans often infer vulnerability from service banners/version strings alone, generating more false positives. A credentialed scan can directly query installed package versions and confirm whether a patch is actually applied, often *reducing* the finding count by eliminating false positives \u2014 not because it's less thorough."
+  },
+  {
+    "external_key": "VM-002",
+    "domain": "VM",
+    "subtopic": "Scanning Methodology",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization scans its cloud environment monthly via a network-based scanner, but ephemeral containers with a median lifetime of 6 hours make up a large share of the workload fleet. What is the MOST significant limitation of this scanning approach for that fleet?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Network scanning provides perfectly adequate coverage of the ephemeral fleet regardless of container lifetime",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A monthly scan interval will almost never actually catch most ephemeral containers while they exist, creating a substantial blind spot that requires a different approach (e.g., scanning the base image/pipeline rather than the running instance)",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Ephemeral containers are inherently immune to vulnerabilities",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This limitation only affects credentialed scans, not uncredentialed ones",
+        "correct": false
+      }
+    ],
+    "explanation": "A monthly cadence against assets that live for hours is a fundamental mismatch \u2014 most instances will be created and destroyed between scans. The correct approach shifts left: scan the base image and CI/CD pipeline rather than relying on catching short-lived runtime instances."
+  },
+  {
+    "external_key": "VM-003",
+    "domain": "VM",
+    "subtopic": "Scanning Methodology",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability scanner is granted a service account with full local administrator rights on every scanned Windows host, for the stated purpose of 'ensuring maximum finding accuracy.' What is the MOST important security consideration this introduces?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no security consideration since scanning traffic is inherently trusted",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The scanning credential itself becomes a high-value target \u2014 if compromised, it would grant an attacker administrative access across the entire scanned fleet, so the credential needs equivalent protections (vaulting, least-privilege scoping, monitoring) as any other privileged account",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Local administrator rights provide no additional scan accuracy over a standard user account",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This configuration is required by every vulnerability scanning vendor with no alternative",
+        "correct": false
+      }
+    ],
+    "explanation": "Credentialed scanning genuinely needs elevated access for accuracy, but that access must be treated as a crown-jewel credential (vaulted, rotated, scoped as tightly as feasible, monitored) since compromising the scanner's service account could hand an attacker admin rights across the whole fleet \u2014 a real risk-management tradeoff, not a free accuracy win."
+  },
+  {
+    "external_key": "VM-004",
+    "domain": "VM",
+    "subtopic": "Scanning Methodology",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A scan of an OT/ICS environment using standard active scanning techniques causes a PLC to crash and disrupts a production line. What should have been done differently, and why?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Active scanning should never be used anywhere under any circumstances going forward",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A passive scanning approach (or an active scan specifically validated as safe for fragile OT devices, run during a planned maintenance window) should have been used, since many OT/ICS devices have limited processing headroom and can be destabilized by unexpected probe traffic",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The scan should have used even more aggressive settings to complete faster and reduce exposure time",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "OT/ICS devices are immune to being affected by network scans by design",
+        "correct": false
+      }
+    ],
+    "explanation": "OT/ICS environments often run fragile, resource-constrained devices never designed to handle unexpected/aggressive network probing. Passive scanning (observing traffic) or carefully validated, scheduled active scans are the standard approach \u2014 not abandoning scanning OT entirely, and not scanning more aggressively."
+  },
+  {
+    "external_key": "VM-005",
+    "domain": "VM",
+    "subtopic": "Scanning Methodology",
+    "difficulty": 3,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A scan schedule excludes a subnet because 'it's just printers and shouldn't have real vulnerabilities.' Six months later, one of those printers is found to have been used as a foothold for lateral movement. What does this scenario BEST illustrate?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Printers are inherently unhackable, so this must have been a misconfiguration unrelated to scanning",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Assumptions about an asset class's risk profile (based on function rather than actual firmware/exposed services) should not drive scan-scope exclusions \u2014 scope should be based on comprehensive asset inventory, not informal risk assumptions",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This proves vulnerability scanning has no value and should be abandoned",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Only servers and workstations can ever be used for lateral movement, so this scenario is implausible",
+        "correct": false
+      }
+    ],
+    "explanation": "Network-connected devices of any type \u2014 printers, IoT, IP cameras \u2014 run firmware/software with real vulnerabilities and are frequently used as low-visibility footholds. Excluding a device class from scanning based on informal assumptions rather than actual risk assessment is a common, costly VM program gap."
+  },
+  {
+    "external_key": "VM-006",
+    "domain": "VM",
+    "subtopic": "CVSS / Prioritization",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "Vulnerability A: CVSS 9.8 (AV:N/AC:L/PR:N/UI:N), no known exploit, on an isolated air-gapped historian server. Vulnerability B: CVSS 8.1 (AV:N/AC:L/PR:L/UI:N), EPSS score of 0.94 (94th+ percentile likelihood of exploitation in the next 30 days), on an internet-facing customer portal. Which should be prioritized first, and what is the key reasoning?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Vulnerability A, because its CVSS Base score is numerically higher and CVSS should always override other signals",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Vulnerability B, because the combination of a very high EPSS (real-world exploitation likelihood) and internet-facing exposure represents materially higher actual risk despite the lower raw CVSS score, while Vulnerability A's air-gapped isolation substantially reduces its practical exploitability",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Both are equally urgent and should be remediated simultaneously with equal resourcing",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Vulnerability A, because air-gapped systems always have higher inherent risk than internet-facing ones",
+        "correct": false
+      }
+    ],
+    "explanation": "This is exactly the kind of prioritization CS0-004 emphasizes: raw CVSS ignores real-world exploitation likelihood (EPSS) and actual reachability (exposure/isolation). A slightly lower CVSS score with a very high EPSS on an internet-facing asset is typically the more urgent real-world risk than a higher CVSS score on a genuinely isolated system."
+  },
+  {
+    "external_key": "VM-007",
+    "domain": "VM",
+    "subtopic": "CVSS / Prioritization",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability's CVSS vector includes `AC:H` (Attack Complexity: High). What does this specifically mean for prioritization, as distinct from `PR:H` (Privileges Required: High)?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "AC:H means the attacker must already have valid credentials before exploiting the vulnerability",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "AC:H means successful exploitation depends on conditions largely outside the attacker's control (e.g., winning a race condition, specific victim configuration) making reliable exploitation harder \u2014 this is a different constraint than PR:H, which is about required privilege level, not exploitation reliability",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "AC:H and PR:H are two labels for exactly the same underlying concept",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "AC:H always results in a higher CVSS score than AC:L, all else being equal",
+        "correct": false
+      }
+    ],
+    "explanation": "AC (Attack Complexity) reflects conditions beyond the attacker's control that affect exploitation reliability (timing, specific configurations); PR (Privileges Required) reflects what access level the attacker needs before attempting exploitation. Confusing these two distinct metrics is a common exam trap. Also note: AC:H actually LOWERS the score relative to AC:L, since higher complexity means less risk, not more."
+  },
+  {
+    "external_key": "VM-008",
+    "domain": "VM",
+    "subtopic": "CVSS / Prioritization",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A finding is scored using CVSS Environmental metrics that account for the organization's actual compensating controls, resulting in an Environmental score of 5.4 versus a Base score of 8.8. A compliance auditor insists only the Base score of 8.8 can be reported since 'that's the official CVE score.' Which statement correctly resolves this disagreement?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The auditor is correct; only the vendor-published Base score may ever be used for any internal risk communication",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Both scores serve different purposes: the Base score is the vendor's context-free severity rating (appropriate for public CVE tracking/comparison across organizations), while the Environmental score reflects this organization's actual risk given its specific compensating controls \u2014 internal prioritization should use the Environmental score, while compliance/external reporting may still require citing the Base score",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The Environmental score is never a legitimate CVSS component and should be disregarded entirely",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Compensating controls have no effect on CVSS scoring under any version of the standard",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding that CVSS has multiple score types for different purposes \u2014 Base (universal, vendor-set), Temporal (time-sensitive factors like exploit maturity), and Environmental (organization-specific). Both the auditor's need for a standard reference score AND the analyst's need for context-adjusted prioritization can be legitimate simultaneously, for different audiences."
+  },
+  {
+    "external_key": "VM-009",
+    "domain": "VM",
+    "subtopic": "CVSS / Prioritization",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A newly published vulnerability affects a product your organization uses, but your version is two major releases behind and the vendor's advisory only tested against the current release line. What is the MOST appropriate next step, rather than assuming the finding does or doesn't apply?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Assume the older version is unaffected since the advisory doesn't explicitly mention it",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Assume the older version is definitely affected and immediately declare a critical incident without further verification",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "Review the vendor's changelog/release notes for the vulnerable code path to determine whether it exists in the older version, or directly test/contact the vendor for clarification, before committing to a remediation priority",
+        "correct": true
+      },
+      {
+        "label": "D",
+        "body": "Ignore the advisory entirely since it doesn't name your exact version",
+        "correct": false
+      }
+    ],
+    "explanation": "Advisories often only test/document against currently supported versions, but that doesn't mean older versions are unaffected (the vulnerable code may have existed for years) or automatically affected (the vulnerable code path might have been introduced later). Verification, not assumption in either direction, is the correct step."
+  },
+  {
+    "external_key": "VM-010",
+    "domain": "VM",
+    "subtopic": "Remediation",
+    "difficulty": 3,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A critical vulnerability affects a public-facing web application. The development team says a proper code fix will take three weeks due to the complexity of the affected authentication module. What is the MOST appropriate immediate action while the permanent fix is developed?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Take the application offline entirely for three weeks with no interim mitigation needed",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Do nothing and simply wait the three weeks, since CVSS alone doesn't justify faster action",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "Deploy a virtual patch (e.g., a WAF rule or IPS signature specifically targeting the known exploit pattern) to reduce risk during the development window, while continuing to track the permanent fix",
+        "correct": true
+      },
+      {
+        "label": "D",
+        "body": "Permanently accept the risk with no further action since a fix is already planned",
+        "correct": false
+      }
+    ],
+    "explanation": "Virtual patching (WAF/IPS rules targeting the specific exploit pattern) is the standard interim risk-reduction measure for vulnerabilities that can't be immediately code-fixed, especially on internet-facing assets \u2014 it doesn't replace the real fix but meaningfully reduces exposure during the gap."
+  },
+  {
+    "external_key": "VM-011",
+    "domain": "VM",
+    "subtopic": "Remediation",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A risk acceptance was granted for a vulnerability 14 months ago with a documented 90-day review date that was never followed up on. What is the MOST significant governance failure this represents?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "None \u2014 once an exception is granted, it is permanent and needs no further action by design",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The exception process itself may have been followed correctly at approval time, but the LACK of a review/expiration enforcement mechanism means residual risk could have silently grown (e.g., new exploits, changed exposure) without anyone re-evaluating whether the original justification still holds",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This is entirely the fault of the original vulnerability scanner vendor",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Risk acceptances do not require review dates under any well-run vulnerability management program",
+        "correct": false
+      }
+    ],
+    "explanation": "A review date that's never enforced defeats the purpose of having one \u2014 risk conditions change (new exploits released, business context shifts, exposure changes), and a stale, unreviewed exception can leave an organization exposed well beyond what was originally assessed as acceptable."
+  },
+  {
+    "external_key": "VM-012",
+    "domain": "VM",
+    "subtopic": "Remediation",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A container base image update fixes a critical CVE, but the organization's CI/CD pipeline only rebuilds images on a source-code change, not on base-image updates. What operational gap does this reveal, and what's the fix?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no gap; base images never need to be rebuilt once deployed",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The pipeline needs a mechanism (e.g., scheduled/triggered rebuilds on base-image updates, or automated dependency-update tooling) to rebuild and redeploy images when the BASE image changes, not only on application code changes \u2014 otherwise base-image CVE fixes never actually reach production",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The fix is to abandon containers and move back to traditional VMs",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The fix is to manually patch each running container's filesystem in place going forward",
+        "correct": false
+      }
+    ],
+    "explanation": "This is a common real-world gap: pipelines triggered only by app code changes will never pick up base image security fixes unless explicitly configured to also rebuild on base-image updates. In-place patching of ephemeral containers doesn't scale and gets overwritten on next deploy."
+  },
+  {
+    "external_key": "VM-013",
+    "domain": "VM",
+    "subtopic": "Remediation",
+    "difficulty": 3,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "Which of the following is NOT an appropriate compensating control for a critical vulnerability on an unpatchable, EOL medical device that cannot be taken offline?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Network segmentation restricting which hosts can communicate with the device",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Enhanced monitoring/IDS signatures scoped to that device's expected traffic pattern",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "Manually lowering the recorded CVSS score in the vulnerability management tool so the finding no longer appears as critical in reports",
+        "correct": true
+      },
+      {
+        "label": "D",
+        "body": "Strict access control limiting which accounts/workstations can reach the device's management interface",
+        "correct": false
+      }
+    ],
+    "explanation": "Segmentation, targeted monitoring, and access control are all legitimate compensating controls that actually reduce risk. Altering the recorded score to make a report look better doesn't change the underlying risk at all \u2014 it's a reporting integrity violation, not a control, and this is the kind of 'looks like an option but isn't legitimate' distractor the real exam uses."
+  },
+  {
+    "external_key": "VM-014",
+    "domain": "VM",
+    "subtopic": "Compliance / Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "Under PCI DSS, an organization's quarterly external ASV scan comes back with a finding that the ASV marks as a 'failing' vulnerability, but the organization believes a compensating control fully mitigates it. What is the correct path to formally resolve this for compliance purposes?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Simply note the disagreement internally and file the scan as passing with no further action",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Submit the compensating control as part of a formal exception/attestation process with the ASV or acquiring bank as PCI DSS requires, since ASV scan results generally cannot be self-overridden by the merchant",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Switch to a different ASV until one returns a passing result with no changes made",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "PCI DSS has no mechanism for compensating controls; the vulnerability must always be fully remediated with no exceptions",
+        "correct": false
+      }
+    ],
+    "explanation": "PCI DSS does have a formal compensating control worksheet/attestation process, but it must go through the proper documented channel (ASV/acquirer), not be self-declared as resolved internally, and 'ASV shopping' for a passing result isn't a legitimate compliance strategy."
+  },
+  {
+    "external_key": "VM-015",
+    "domain": "VM",
+    "subtopic": "Compliance / Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A healthcare organization's risk analysis (required under the HIPAA Security Rule) identifies a critical vulnerability in a system that does NOT process, store, or transmit ePHI. How does this affect the organization's HIPAA-driven remediation obligation for that specific finding?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "HIPAA obligates identical urgency for every vulnerability in the environment regardless of ePHI involvement",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "HIPAA's Security Rule obligations are specifically scoped to safeguarding ePHI, so a system with no ePHI involvement falls outside HIPAA's direct remediation mandate for that finding \u2014 though it may still warrant remediation under the organization's general security policy for other reasons",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The finding can be ignored entirely with no security policy applying to it at all",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "HIPAA requires the system to be immediately decommissioned regardless of its function",
+        "correct": false
+      }
+    ],
+    "explanation": "HIPAA Security Rule obligations are scoped to protecting ePHI specifically \u2014 a vulnerability on a system genuinely outside the ePHI boundary isn't a HIPAA compliance driver for that finding, though good general security practice would still likely call for remediation under the org's own policy, just not as a HIPAA mandate."
+  },
+  {
+    "external_key": "VM-016",
+    "domain": "VM",
+    "subtopic": "Compliance / Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A regulator's rule requires reporting 'critical vulnerabilities on regulated systems' within 5 business days of discovery. An organization discovers a critical finding on a Friday evening but doesn't formally log it in their tracking system until the following Tuesday. When does the reporting clock legally begin?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Tuesday, when it was formally logged in the tracking system",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Generally, from the point of actual organizational awareness/discovery (Friday), not from when it was administratively logged \u2014 delaying formal logging does not delay the regulatory clock",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The following Monday, since weekends never count under any regulatory framework",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Whenever the organization's legal team decides is most convenient",
+        "correct": false
+      }
+    ],
+    "explanation": "Regulatory awareness clocks generally start at actual discovery/awareness, not administrative processing delays \u2014 an organization can't reset or extend a reporting deadline simply by delaying when something gets formally logged internally."
+  },
+  {
+    "external_key": "VM-017",
+    "domain": "VM",
+    "subtopic": "Compliance / Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management program reports 100% of critical findings remediated within SLA for the past four quarters. An auditor discovers the program achieved this by reclassifying difficult-to-remediate critical findings as 'high' severity instead, which carries a longer SLA. What integrity issue does this illustrate?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This is a legitimate and encouraged practice for managing SLA compliance",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Manipulating severity classification to hit a reporting metric undermines the entire purpose of risk-based prioritization and produces misleading metrics that could cause leadership to underestimate actual organizational risk",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This has no effect on actual risk since the vulnerabilities are still being tracked somewhere",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Only external auditors are capable of assigning severity ratings, so this scenario is impossible",
+        "correct": false
+      }
+    ],
+    "explanation": "This is a classic metrics-gaming problem: optimizing for the reported number instead of the underlying risk defeats the purpose of the metric entirely and can leave leadership with a dangerously false sense of security about actual exposure."
+  },
+  {
+    "external_key": "IR-001",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "During the Containment, Eradication, and Recovery phase of a NIST-based IR process, an analyst discovers a second, previously unknown compromised host while working to eradicate the first. What is the MOST appropriate action?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Ignore the second host until eradication and recovery are fully completed on the first host",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Loop back into Detection & Analysis for the newly discovered host to scope and understand it, while continuing appropriate containment across the now-expanded incident, rather than treating the phases as strictly linear and one-directional",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Declare the incident closed since the original host has been identified",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Start an entirely separate, unrelated IR process with no connection to the original incident",
+        "correct": false
+      }
+    ],
+    "explanation": "NIST's phases aren't strictly linear in practice \u2014 new discoveries during containment/eradication often require looping back to detection/analysis for the newly found scope before proceeding, all within the same overall incident, since it's very likely related to the same root cause."
+  },
+  {
+    "external_key": "IR-002",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 3,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An IR team fully eradicates malware and restores systems from clean backups, but skips a formal lessons-learned review because 'the incident is over and everyone wants to move on.' What is the MOST significant long-term risk of skipping this step?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no risk; lessons-learned reviews are a purely ceremonial step with no practical value",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Without capturing what allowed the incident to occur and how effectively the response actually performed, the same root cause and any process gaps are likely to recur in a future incident, since Preparation never gets updated with the new information",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Skipping this step guarantees the same attacker will be legally prosecuted faster",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This step is only required for incidents that involve law enforcement",
+        "correct": false
+      }
+    ],
+    "explanation": "Lessons-learned directly feeds back into the Preparation phase \u2014 skipping it means the root cause, detection gaps, and response friction points identified during this incident never get addressed, making a recurrence (or a similarly slow future response) far more likely."
+  },
+  {
+    "external_key": "IR-003",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "During short-term containment of an active compromise, the IR lead must choose between (A) immediately isolating the affected VLAN, likely disrupting a production system mid-transaction, or (B) waiting 20 minutes for pending transactions to complete before isolating. Which factor should PRIMARILY drive this decision?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Always choose option A regardless of context, since any delay in containment is unacceptable under all circumstances",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A risk-based judgment weighing the likely rate/impact of continued compromise spread during the 20-minute window against the business/data-integrity cost of an abrupt mid-transaction disruption \u2014 this is a documented, deliberate tradeoff decision, not a fixed rule",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Always choose option B regardless of context, since business continuity always outweighs security containment",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This decision should be made unilaterally by the affected business unit with no IR involvement",
+        "correct": false
+      }
+    ],
+    "explanation": "Containment decisions genuinely involve weighing active-spread risk against business impact \u2014 there's no universal 'always contain instantly' or 'always protect the transaction' rule. The IR lead (often with input from business stakeholders) makes and documents this judgment call based on the specifics of the incident."
+  },
+  {
+    "external_key": "IR-004",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 3,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A tabletop exercise reveals that no one on the IR team actually knows who has legal authority to approve paying a ransomware demand if it ever came to that. What TYPE of gap does this reveal, and what is the appropriate fix?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "A purely technical detection gap that should be fixed by buying a new EDR tool",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A governance/decision-authority gap in the IR plan \u2014 the plan should explicitly document who holds decision authority for major business decisions during an incident (ransom payment, public disclosure, shutting down production) before an actual incident forces the question under pressure",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This is not a real gap since ransom payment decisions are always made instantly by whoever is on the call",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This can only be resolved by law enforcement, never internally",
+        "correct": false
+      }
+    ],
+    "explanation": "Tabletop exercises are specifically designed to surface exactly this kind of governance gap \u2014 decision authority for major, non-technical calls (ransom payment, disclosure timing, production shutdown) needs to be pre-defined in the IR plan, not improvised during a live crisis."
+  },
+  {
+    "external_key": "IR-005",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 3,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An incident's root cause is eventually traced to a vulnerability that had a critical CVSS score and was flagged by vulnerability management five months before exploitation, but remained unpatched due to a missed internal deadline. Where should this specific finding be recorded in the incident's documentation?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "It should be omitted from the report since it reflects poorly on the vulnerability management team",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "It should be documented in root cause analysis as part of lessons learned, since understanding WHY a known, already-flagged risk went unaddressed is essential to preventing recurrence \u2014 this is exactly the kind of finding lessons-learned exists to surface",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "It is irrelevant to the incident report since the vulnerability management team is a separate department",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "It should only be shared with the CISO privately and never included in any written incident documentation",
+        "correct": false
+      }
+    ],
+    "explanation": "Root cause analysis exists precisely to surface uncomfortable but important findings like a known, already-flagged risk that went unaddressed due to a process failure \u2014 omitting it defeats the entire purpose of the lessons-learned process and all but guarantees the same gap persists."
+  },
+  {
+    "external_key": "IR-006",
+    "domain": "IR",
+    "subtopic": "Attack Frameworks",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An intrusion shows: initial phishing email delivery, a malicious macro executing a downloader, the downloader fetching a second-stage RAT, the RAT establishing a scheduled-task persistence mechanism, followed by credential dumping via LSASS access. Using the Cyber Kill Chain, which stage does the 'scheduled-task persistence mechanism' step correspond to?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Weaponization",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Installation",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Actions on Objectives",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Delivery",
+        "correct": false
+      }
+    ],
+    "explanation": "In the Cyber Kill Chain, Installation is the stage where the attacker establishes persistence (e.g., a scheduled task, registry run key, or service) after successful Exploitation \u2014 distinct from Weaponization (pairing exploit + payload before delivery) and Actions on Objectives (the attacker's ultimate goal, like exfiltration)."
+  },
+  {
+    "external_key": "IR-007",
+    "domain": "IR",
+    "subtopic": "Attack Frameworks",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "In MITRE ATT&CK terms, an adversary using a valid, stolen VPN credential to log into the corporate network (with no exploit or malware involved) is BEST classified under which tactic?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Initial Access, specifically via the Valid Accounts technique",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "Exploitation for Client Execution",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "Command and Control",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Impact",
+        "correct": false
+      }
+    ],
+    "explanation": "MITRE ATT&CK explicitly categorizes logging in with valid (often stolen/purchased) credentials as Initial Access via the 'Valid Accounts' technique \u2014 no exploit or malware is required for this technique, which is exactly why it's a common, hard-to-detect entry method."
+  },
+  {
+    "external_key": "IR-008",
+    "domain": "IR",
+    "subtopic": "Attack Frameworks",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A ransomware group exfiltrates 200GB of sensitive data over several days via a legitimate, allow-listed cloud backup client already present on the network, BEFORE deploying the actual file-encrypting payload. Why would attackers deliberately choose this sequence and method?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "It's random and has no strategic advantage over any other order or tool choice",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Exfiltrating first (via a trusted/allow-listed tool that blends into normal traffic) both maximizes double-extortion leverage before detection likely occurs at encryption time, and reduces the chance the exfiltration itself gets flagged as anomalous, compared to using an unfamiliar exfil tool",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Encryption must always occur before exfiltration under every modern ransomware playbook",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This sequence is used exclusively by nation-state actors and never by financially motivated criminal groups",
+        "correct": false
+      }
+    ],
+    "explanation": "This reflects real modern double-extortion tradecraft: exfiltrate quietly using trusted/allow-listed tools first (harder to detect, maximizes leverage before the loud, obvious encryption event likely triggers a response), THEN encrypt \u2014 encryption is often what finally gets noticed, by which point the data is already gone."
+  },
+  {
+    "external_key": "IR-009",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An analyst images a suspect drive using a write blocker, calculates a SHA-256 hash of the image, and later needs to run keyword searches across the image using forensic software that requires mounting it. What must be true of this analysis step to preserve evidentiary integrity?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The original evidence drive must be mounted directly using the forensic software",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Analysis must be performed against a working COPY of the image (verified against the original hash), never the original evidence drive or the sole master image, so the source of truth remains untouched and available for re-verification",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Hashing is only required once, at the very end of the entire investigation",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Write blockers are only necessary during the initial imaging step and serve no purpose afterward",
+        "correct": false
+      }
+    ],
+    "explanation": "Best practice is to work exclusively from verified copies for all analysis, keeping the original evidence (and often a master image) untouched and available to re-verify integrity at any point \u2014 mounting/analyzing the original risks exactly the kind of alteration chain of custody exists to prevent."
+  },
+  {
+    "external_key": "IR-010",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "During memory analysis, an analyst finds a process with a name matching a legitimate system process (`scvhost.exe` \u2014 note the transposed letters vs. the real `svchost.exe`) running from an unusual directory. What forensic technique category does spotting this specific detail represent?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Static malware analysis",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Process/masquerading detection through careful verification of process name, path, and signature against known-good baselines \u2014 attackers commonly use near-identical names to blend in with legitimate system processes",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Chain of custody documentation",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Order of volatility assessment",
+        "correct": false
+      }
+    ],
+    "explanation": "Malware frequently masquerades using names that are visually near-identical to legitimate system processes (typosquatting at the process level). Catching this requires actively verifying process name, file path, and digital signature against known-good baselines rather than trusting a name at a glance."
+  },
+  {
+    "external_key": "IR-011",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization's log retention policy keeps detailed logs for only 30 days, but forensic analysis six weeks after initial compromise determines the actual initial access occurred 45 days prior. What is the MOST direct consequence for the investigation?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "No consequence; forensic tools can always reconstruct data older than the retention window from RAM alone",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The earliest-stage evidence (initial access vector, earliest attacker activity) may be permanently unavailable, potentially leaving root cause determination incomplete or based on inference rather than direct evidence \u2014 this is a strong argument for retention policies aligned with realistic dwell-time expectations",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This has no bearing on the investigation's outcome since eradication doesn't require knowing the initial access vector",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Retention policy only affects compliance reporting, never forensic capability",
+        "correct": false
+      }
+    ],
+    "explanation": "This connects log retention policy directly to forensic capability and to the Reporting/Communication domain's concern with dwell time \u2014 if retention is shorter than realistic attacker dwell time, the earliest and often most diagnostically important evidence simply won't exist by the time it's needed."
+  },
+  {
+    "external_key": "IR-012",
+    "domain": "IR",
+    "subtopic": "Communication & Legal",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An incident involves a suspected nation-state actor and evidence of long-term persistent access to critical infrastructure control systems. Beyond internal legal counsel, which additional coordination is MOST likely appropriate given the nature of this specific incident?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "No external coordination is ever appropriate for any incident regardless of severity or sector",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Coordination with relevant government/sector-specific agencies (e.g., CISA, sector ISACs, or law enforcement) given the critical infrastructure and suspected nation-state involvement, which often carries both national security interest and potential legal reporting obligations beyond typical breach law",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Only the marketing department needs to be involved, with no other stakeholders",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This should be handled identically to a routine phishing incident with no additional escalation",
+        "correct": false
+      }
+    ],
+    "explanation": "Critical infrastructure incidents with suspected nation-state involvement typically trigger sector-specific and national-security-relevant reporting/coordination obligations (e.g., CISA, ISACs, law enforcement) well beyond a standard consumer data breach scenario \u2014 the severity and sector materially change the appropriate response."
+  },
+  {
+    "external_key": "IR-013",
+    "domain": "IR",
+    "subtopic": "Communication & Legal",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "Legal counsel instructs the IR team to label all internal incident findings as 'prepared in anticipation of litigation' and to route communications through counsel. What is the PRIMARY purpose of this instruction from an IR perspective?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "To prevent the IR team from doing any further technical investigation",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "To attempt to preserve attorney-client privilege / work-product protection over sensitive investigative findings, which can affect what must later be disclosed in litigation or regulatory proceedings \u2014 while the technical investigation itself still proceeds normally",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "To make the incident officially closed with no further action required",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This instruction has no legal or practical significance and can be safely ignored by the IR team",
+        "correct": false
+      }
+    ],
+    "explanation": "This is a real and common practice \u2014 routing sensitive findings through counsel is intended to preserve privilege protections over investigative work product, which can matter significantly in later litigation or regulatory scrutiny. It does not mean the technical investigation stops; it affects how findings are documented and communicated."
+  },
+  {
+    "external_key": "IR-014",
+    "domain": "IR",
+    "subtopic": "Communication & Legal",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A third-party SaaS vendor notifies your organization of a breach on their side that may have exposed data your organization stored with them. Your organization's own contract with the vendor is silent on incident notification timelines. What should guide your organization's OWN downstream notification obligations to your affected customers?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Since the vendor contract is silent, your organization has no notification obligation at all, regardless of any other factor",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Your organization's own regulatory/legal obligations (e.g., applicable breach notification laws based on the type of data and affected individuals' jurisdictions) still apply independently of what the vendor contract says \u2014 a silent contract doesn't erase your organization's own separate legal duty to affected individuals",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Only the vendor has any notification obligation; your organization is fully insulated by outsourcing data storage to a third party",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Notification obligations only ever apply to the original party that suffered the technical breach, never downstream data owners",
+        "correct": false
+      }
+    ],
+    "explanation": "Outsourcing data storage doesn't outsource your organization's own legal obligations to the individuals whose data you're responsible for \u2014 applicable breach notification laws are typically triggered by the exposure of covered data regardless of whose infrastructure it happened on, and a silent vendor contract doesn't erase that."
+  },
+  {
+    "external_key": "IR-015",
+    "domain": "IR",
+    "subtopic": "Communication & Legal",
+    "difficulty": 3,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "During active ransomware negotiation led by a specialized third-party negotiation firm, what is the MOST appropriate role for the internal IR/security team during that specific window?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Step back entirely and have no involvement in the incident whatsoever until negotiation concludes",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Continue technical containment, eradication scoping, and forensic investigation in parallel, since negotiation and technical response are complementary tracks \u2014 technical work should not pause just because negotiation is underway",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Personally take over negotiation from the specialized firm since IR staff are always better positioned to negotiate",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Immediately pay the ransom directly without waiting for the negotiation firm's involvement to conclude",
+        "correct": false
+      }
+    ],
+    "explanation": "Negotiation (typically handled by specialists familiar with threat actor behavior/legal considerations) and technical incident response are parallel, complementary tracks \u2014 pausing technical containment/investigation while negotiation proceeds needlessly extends exposure and delays recovery readiness."
+  },
+  {
+    "external_key": "RC-001",
+    "domain": "RC",
+    "subtopic": "Metrics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A SOC's dwell time metric improved from 30 days to 4 days after deploying a new EDR platform. However, the number of confirmed incidents reported per quarter INCREASED by 300% in that same period. What is the MOST likely, and most defensible, interpretation to present to leadership?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The organization is being attacked 300% more often because of the new EDR platform itself",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Improved detection capability is very likely surfacing incidents that were previously going undetected entirely (reflected in the old, much longer dwell time), rather than reflecting an actual 300% increase in attack volume",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The metrics are contradictory and one of them must be measured incorrectly",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Dwell time and incident count are unrelated and this correlation is coincidental with no reasonable explanation",
+        "correct": false
+      }
+    ],
+    "explanation": "This is a classic 'detection paradox' \u2014 better tooling doesn't cause more attacks, it reveals previously invisible ones. A dramatic dwell-time drop alongside a reported-incident spike right after a detection upgrade should be interpreted as improved visibility, not a genuine surge in attacker activity, and reported to leadership with that context to avoid unwarranted panic."
+  },
+  {
+    "external_key": "RC-002",
+    "domain": "RC",
+    "subtopic": "Metrics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "Which pairing of metrics, if reported TOGETHER, gives leadership the clearest signal about whether SOC analysts are being overwhelmed by alert volume, as opposed to reporting either metric alone?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Total number of firewalls deployed and total number of employees in the company",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Alert volume/false-positive rate alongside mean time to acknowledge (MTTA) new alerts \u2014 a rising false-positive rate combined with slowing MTTA together indicate genuine alert fatigue, whereas either alone could have other explanations",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Company revenue and marketing budget",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Number of vulnerability scans run per month and average scan duration",
+        "correct": false
+      }
+    ],
+    "explanation": "Neither metric alone tells the full story \u2014 a high false-positive rate alone could just mean tuning is needed without necessarily causing delays, and slow MTTA alone could stem from staffing changes unrelated to volume. Seeing BOTH move together (more noise + slower acknowledgment) is a much stronger, more defensible signal of genuine analyst overload."
+  },
+  {
+    "external_key": "RC-003",
+    "domain": "RC",
+    "subtopic": "Metrics",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management report shows 'average CVSS score of open findings' trending downward quarter over quarter. Why might this metric alone be a MISLEADING indicator of actual risk reduction?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Average CVSS score is always a perfectly accurate, complete measure of organizational risk with no blind spots",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A shrinking average could be driven simply by closing easy, low-effort, low-severity findings quickly while a small number of high-severity, hard-to-fix critical vulnerabilities linger unaddressed and drag out over many quarters \u2014 the average masks this concentration of real risk",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "CVSS scores are recalculated to decrease automatically over time regardless of remediation activity",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This metric cannot mathematically trend downward under any circumstances",
+        "correct": false
+      }
+    ],
+    "explanation": "Averages can hide exactly the risk that matters most: if the hardest, highest-severity vulnerabilities are the ones NOT getting fixed while easy ones get cleared quickly, the average can look like it's improving while the organization's actual worst-case exposure stays flat or even grows. This is why trend reporting should pair averages with severity-tier-specific SLA compliance, not rely on the average alone."
+  },
+  {
+    "external_key": "RC-004",
+    "domain": "RC",
+    "subtopic": "Stakeholder Communication",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A CFO asks 'how much financial risk does this vulnerability actually represent to us?' What is the MOST appropriate way for a security analyst to frame the answer, given that CVSS does not natively express risk in monetary terms?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Refuse to answer since CVSS cannot be converted to a dollar figure under any circumstances",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Translate technical severity and likelihood into business impact terms \u2014 potential operational disruption, likely regulatory exposure, and rough order-of-magnitude cost ranges based on similar incidents or a recognized risk-quantification approach \u2014 while being transparent about the inherent uncertainty of the estimate",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "State the CVSS score alone (e.g., '9.8') and consider the question fully answered",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Provide a single precise dollar figure with no caveats, presented as a guaranteed and certain financial outcome",
+        "correct": false
+      }
+    ],
+    "explanation": "CFOs need business-framed risk (operational, regulatory, financial exposure), not raw technical scores \u2014 but a credible answer also acknowledges uncertainty rather than presenting a speculative figure as a guaranteed fact. Frameworks like FAIR (Factor Analysis of Information Risk) exist specifically to help bridge this technical-to-financial translation."
+  },
+  {
+    "external_key": "RC-005",
+    "domain": "RC",
+    "subtopic": "Stakeholder Communication",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A technical incident report includes the line: 'The attacker likely used a zero-day, though this has not been confirmed.' A junior analyst wants to remove the word 'likely' to make the report sound more authoritative and decisive. Why should this qualifying language be preserved?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Because reports should always sound as uncertain as possible regardless of actual confidence",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Because clearly distinguishing confirmed facts from working hypotheses is essential for accurate decision-making by readers (including legal and executive stakeholders) \u2014 removing appropriate uncertainty markers to sound more authoritative can lead to decisions based on an unconfirmed claim treated as established fact",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Because using the word 'likely' has no bearing on how the report will be interpreted by any reader",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Because legal counsel is required by law to reject any report containing hedged language",
+        "correct": false
+      }
+    ],
+    "explanation": "Precision about confidence level is a core reporting discipline \u2014 stripping out appropriate hedging to sound more decisive can cause readers (especially legal, regulatory, or executive stakeholders making real decisions) to treat an unconfirmed hypothesis as an established fact, with real consequences if it later proves wrong."
+  },
+  {
+    "external_key": "RC-006",
+    "domain": "RC",
+    "subtopic": "Regulatory Reporting",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A breach affects individuals across three different US states with three different breach notification laws, each with different timelines and different definitions of what counts as 'personal information.' What is the correct approach to determining notification obligations?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Apply only the notification law of the state where the company is headquartered, regardless of where affected individuals live",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Individually evaluate obligations under EACH applicable state's law based on where affected individuals reside, since breach notification laws are generally determined by the residency of the affected individual, not the company's location \u2014 and comply with the most stringent applicable timeline/requirement where obligations overlap for the same individual",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Since the laws conflict, no notification is required from any jurisdiction until the conflict is resolved in court",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Only the state with the shortest notification deadline needs to be followed for all affected individuals nationwide",
+        "correct": false
+      }
+    ],
+    "explanation": "State breach notification laws are generally triggered by the residency of the affected individual, not the company's home state \u2014 a multi-state breach typically requires evaluating and complying with each applicable state's requirements for its respective residents, which is exactly why multi-state breaches are notoriously complex to manage."
+  },
+  {
+    "external_key": "RC-007",
+    "domain": "RC",
+    "subtopic": "Regulatory Reporting",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization determines that only 480 individuals were affected by a breach of unsecured PHI, just under HIPAA's 500-person threshold for mandatory media notification. Does this mean media notification and HHS notification can both be skipped entirely?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Yes, both HHS notification and media notification are entirely optional below any threshold",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "No \u2014 affected individuals must still be notified, and HHS must still be notified (annually for breaches under 500, rather than within 60 days as required for 500+); only the MEDIA notification requirement is specifically tied to the 500-person threshold",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Yes, HIPAA breach notification obligations only exist once a breach affects 500 or more individuals",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "No, all three notification types remain mandatory on the exact same timeline regardless of the individual count",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a precise, easy-to-get-wrong detail: the 500-person threshold specifically changes the HHS reporting TIMELINE (immediate/60-day vs. annual log) and triggers the MEDIA notification requirement \u2014 it does not eliminate the underlying obligation to notify affected individuals and HHS at all, which applies regardless of count."
+  },
+  {
+    "external_key": "RC-008",
+    "domain": "RC",
+    "subtopic": "Regulatory Reporting",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A regulator's rule requires notification 'without undue delay and in any event within 72 hours of becoming aware' of a qualifying breach. An organization becomes aware of suspicious activity at 11:00 PM Friday but doesn't confirm it meets the legal definition of a 'breach' (as opposed to a contained, unsuccessful attempt) until Monday morning. When does the 72-hour clock begin?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Friday at 11:00 PM, the moment any suspicious activity was first noticed, regardless of whether it was later confirmed as a qualifying breach",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Generally, from the point the organization has enough information to reasonably conclude a qualifying breach (as legally defined) has actually occurred \u2014 not from the first moment of raw suspicion, though organizations should document this determination timeline carefully since it will likely be scrutinized",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The clock never starts until the organization's insurance company approves the breach determination",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Monday morning by default, regardless of when awareness of the actual breach determination occurred",
+        "correct": false
+      }
+    ],
+    "explanation": "This is a genuinely nuanced, frequently tested distinction: 'awareness' generally means awareness of a qualifying breach as legally defined, not the first moment of raw suspicion \u2014 but the determination process itself needs to be reasonable and well-documented, since regulators scrutinize whether an organization dragged its feet on making that determination."
+  },
+  {
+    "external_key": "VM-018",
+    "domain": "VM",
+    "subtopic": "Scanning Methodology",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A scan is configured with an aggressive timing template to finish faster during a shortened maintenance window. Halfway through, several IoT badge readers on the scanned segment stop responding and require a physical power cycle. What does this reveal about the tradeoff that was made?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Aggressive timing templates have no relationship to target stability and this must be an unrelated coincidence",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Scan speed/timing settings directly trade off against the risk of overwhelming fragile, low-resource devices \u2014 a faster template increases the chance of destabilizing constrained IoT/embedded devices, so timing should be tuned to the FRAGILITY of the target population, not just the size of the maintenance window",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "IoT devices should never be included in any vulnerability scan under any configuration",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This proves the scanning tool itself is defective and must be replaced",
+        "correct": false
+      }
+    ],
+    "explanation": "Timing/aggressiveness settings are a real engineering tradeoff: faster scans finish sooner but send more concurrent probes, which constrained embedded/IoT devices may not handle gracefully. The window's length shouldn't be the only factor driving timing choice \u2014 the fragility of what's being scanned matters just as much."
+  },
+  {
+    "external_key": "VM-019",
+    "domain": "VM",
+    "subtopic": "CVSS / Prioritization",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A finding has a CVSS Temporal score lower than its Base score because the 'Remediation Level' metric reflects an official vendor patch now being available, and 'Report Confidence' is confirmed. How should the falling Temporal score (relative to Base) be interpreted?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The vulnerability has become less severe on the target system now that time has passed",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The Temporal metrics reflect that the SITUATION around the vulnerability has matured favorably (a fix now exists, confirmed details are known) \u2014 this generally argues for MORE urgency to apply the now-available fix, not less, even though the numeric score itself decreased",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "A decreasing Temporal score always means the finding can be safely closed with no action",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Temporal score changes are purely cosmetic and carry no operational meaning",
+        "correct": false
+      }
+    ],
+    "explanation": "This is a genuinely counterintuitive nuance: Temporal score components can move the numeric score down as remediation options mature (patch available, confirmed reporting) \u2014 but that's actually the point where action becomes easiest and most urgent to take, not a signal to deprioritize. A lower Temporal score isn't the same as 'lower priority.'"
+  },
+  {
+    "external_key": "VM-020",
+    "domain": "VM",
+    "subtopic": "Remediation",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization's patch management process requires all patches to pass a 2-week regression testing cycle before production deployment, with no exception process defined. A critical, actively-exploited-in-the-wild vulnerability is disclosed with a same-day vendor patch. What is the MOST significant process gap this scenario exposes?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Regression testing before deployment is itself an unnecessary step that should be eliminated entirely",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The absence of an expedited/emergency patching exception path for active-exploitation scenarios means the standard process, appropriate for routine patches, becomes a liability when speed is critical \u2014 mature patch management needs a defined fast-track alongside the standard cycle",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The vendor should be blamed for releasing the patch too quickly after disclosure",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This scenario has no real gap since 2 weeks is always an acceptable timeframe for every vulnerability regardless of exploitation status",
+        "correct": false
+      }
+    ],
+    "explanation": "A single rigid process for all patches is itself the gap \u2014 mature vulnerability/patch management defines a separate expedited path (abbreviated testing, compensating controls in the interim, executive sign-off) for actively-exploited critical vulnerabilities, rather than forcing every patch through the same full-length cycle regardless of urgency."
+  },
+  {
+    "external_key": "VM-021",
+    "domain": "VM",
+    "subtopic": "Compliance / Reporting",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization scopes its annual PCI DSS assessment to exclude a subnet that stores tokenized (not raw) cardholder data, reasoning that tokenization removes it from PCI scope entirely. A finding surfaces that the tokenization vendor's de-tokenization API is reachable from that subnet with weak access controls. What does this reveal about the scoping decision?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Tokenization always fully removes a system from PCI DSS scope with no further consideration required",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "If a system can reach a de-tokenization function that could reveal raw cardholder data, it may still fall within PCI DSS scope depending on how tightly that access is controlled \u2014 scoping decisions based on tokenization need to account for what the system can actually reach and do, not just what data it stores at rest",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This finding is irrelevant to PCI DSS since tokenized data is never considered cardholder data under any circumstances",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The subnet should be immediately disconnected from the network permanently with no further evaluation",
+        "correct": false
+      }
+    ],
+    "explanation": "Tokenization can reduce PCI scope, but scope isn't just about what's stored at rest \u2014 a system with a reachable path to de-tokenization (especially with weak controls) may still be in-scope, since it has effective access to the raw data via that function. This tests against an overly simplistic 'tokenized = out of scope, full stop' assumption."
+  },
+  {
+    "external_key": "IR-016",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 3,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "Twelve hours into an active incident, the IR lead is asked by an executive for a firm 'time to full resolution' estimate. The scope is still not fully understood. What is the MOST professionally appropriate response?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Provide a precise, confident timeline regardless of actual certainty, since executives always require an exact answer",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Explain that scope is still being determined, provide the best current estimate range with explicit assumptions and confidence level, and commit to a specific time for the next update \u2014 rather than fabricating false precision",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Refuse to provide any information at all until the incident is completely over",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Defer the question entirely to the marketing department",
+        "correct": false
+      }
+    ],
+    "explanation": "Giving false precision to satisfy pressure for an answer often backfires when reality diverges from the fabricated estimate, damaging credibility further. The professional approach is transparent uncertainty with a real range, clear assumptions, and a firm commitment to when the next update will come."
+  },
+  {
+    "external_key": "IR-017",
+    "domain": "IR",
+    "subtopic": "Attack Frameworks",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An adversary is observed using a technique where they modify a legitimate scheduled task's existing trigger conditions rather than creating a brand-new scheduled task. Why might an experienced adversary specifically prefer modifying an existing task over creating a new one, from a detection-evasion standpoint?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Modifying an existing task is technically impossible, so this scenario could not actually occur",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "New scheduled task creation is a commonly monitored/alerted event in many environments, whereas modification of an already-existing, previously-trusted task may not trigger the same detection rules \u2014 blending into 'normal' infrastructure rather than adding something new that stands out",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This technique has no detection-evasion benefit whatsoever compared to creating a new task",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Only new task creation is considered a MITRE ATT&CK technique; modification is not covered by any framework",
+        "correct": false
+      }
+    ],
+    "explanation": "Many detection rules specifically watch for NEW scheduled task creation events, since that's an intuitive persistence indicator. A sophisticated adversary modifying an existing, already-trusted task can blend in below that specific detection threshold \u2014 a good example of why understanding what a detection rule actually covers (and doesn't) matters for both defense and hunting."
+  },
+  {
+    "external_key": "IR-018",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A forensic analyst calculates MD5 and SHA-256 hashes for an acquired evidence image. Given that MD5 is cryptographically broken (collision attacks are feasible), why do many forensic labs still record it ALONGSIDE SHA-256 rather than dropping it entirely?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "MD5 is actually more cryptographically secure than SHA-256 and should be the primary hash used",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "MD5 is retained largely for backward compatibility/cross-referencing with older case records, tools, and legal precedent that used MD5, while SHA-256 serves as the actual cryptographically robust integrity guarantee going forward \u2014 not because MD5 alone is still considered adequate integrity protection",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Recording two hashes is purely a formality with no practical justification of any kind",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "SHA-256 cannot be used for forensic evidence under any recognized standard",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a subtle, real-world practice: MD5's collision weakness means it should never be RELIED upon alone for integrity verification, but many labs still record it for continuity with historical case data, older tooling, and established chain-of-custody documentation practices, while treating SHA-256 as the actual integrity guarantee."
+  },
+  {
+    "external_key": "IR-019",
+    "domain": "IR",
+    "subtopic": "Communication & Legal",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A company's cyber insurance policy requires using an insurer-approved incident response firm for any claim related to a ransomware incident to be honored. The internal IR team, already deep into containment, discovers this requirement only after the incident has started. What is the MOST appropriate immediate action?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Ignore the insurance requirement entirely since the internal team is already engaged and switching now would be disruptive",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Immediately notify the insurer and engage the required approved firm as soon as possible to preserve coverage eligibility, coordinating a handoff/collaboration with the internal team rather than discovering post-incident that the claim is denied on a technicality",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Wait until the incident is fully resolved before ever contacting the insurer, to avoid the appearance of needing their help",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Cancel the cyber insurance policy immediately since it created this complication",
+        "correct": false
+      }
+    ],
+    "explanation": "Missing a policy's procedural requirements (like using a pre-approved IR firm) is a common way real claims get denied, even when the underlying incident is legitimately covered. As soon as this is discovered, looping in the insurer and required firm promptly \u2014 even mid-incident \u2014 is far better than discovering a denied claim after the fact."
+  },
+  {
+    "external_key": "RC-009",
+    "domain": "RC",
+    "subtopic": "Metrics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A monthly report shows 'total number of alerts triaged' increasing steadily, presented by the SOC manager as evidence of growing team productivity. What is the MOST important caveat missing from this framing?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "No caveat is needed since alert volume is always a direct, unambiguous measure of team productivity",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Without knowing what fraction of triaged alerts were true positives requiring real action versus noise/false positives, a rising raw alert count says as much about alert volume/tuning quality as it does about team output \u2014 productivity should be paired with a quality metric, not reported as a raw count alone",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This metric should never be reported to any audience under any circumstances",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Alert triage volume has a fixed, universal 'good' threshold that applies identically to every organization",
+        "correct": false
+      }
+    ],
+    "explanation": "A rising raw count can just as easily reflect worsening tuning (more noise to sift through) as it can reflect genuine team growth \u2014 without pairing it with a quality signal (true-positive rate, MTTA, escalation accuracy), the metric alone doesn't actually demonstrate productivity and can be actively misleading if presented that way."
+  },
+  {
+    "external_key": "RC-010",
+    "domain": "RC",
+    "subtopic": "Stakeholder Communication",
+    "difficulty": 3,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability report bound for a development team lists a finding as 'SQL injection, CVSS 9.8, CWE-89.' The developers report back that they don't know where to start. What is the MOST likely reason this technically accurate report failed to be actionable?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The report contains too much technical detail and should have been simplified into pure business risk language instead",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "It's missing the specific technical detail developers actually need to act: the vulnerable endpoint/parameter, a proof-of-concept request demonstrating the injection, and the specific code location or pattern to fix \u2014 a CVSS score and CWE ID identify the CLASS of issue but not WHERE or HOW to fix it",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "SQL injection findings can never be meaningfully communicated in a written report under any circumstances",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The finding should have been assigned to the network team instead of developers",
+        "correct": false
+      }
+    ],
+    "explanation": "A CVSS score and CWE classification correctly identify the type and severity of an issue but provide zero actionable location/reproduction detail \u2014 for a report to be useful to the team actually fixing the code, it needs the specific endpoint, parameter, and ideally a proof-of-concept, matching the earlier point about tailoring depth AND type of content to the audience's actual job."
+  },
+  {
+    "external_key": "RC-011",
+    "domain": "RC",
+    "subtopic": "Regulatory Reporting",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization operating in the EU experiences a breach affecting both EU residents and US residents. GDPR's 72-hour notification requirement and a US state's 30-day requirement both technically apply to different subsets of affected individuals. What is the correct approach?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Apply only the longer, more lenient 30-day timeline to all affected individuals across both jurisdictions",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Apply each jurisdiction's specific requirement to its respective affected population \u2014 GDPR's 72-hour clock for EU residents' data and the applicable US state's 30-day requirement for its residents \u2014 since notification obligations are generally assessed per applicable law based on whose data and which jurisdiction is involved, not resolved by picking a single 'easiest' global standard",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Since the timelines conflict, no notification is legally required for either group",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Only GDPR applies globally to every affected individual regardless of residency once one EU resident is affected",
+        "correct": false
+      }
+    ],
+    "explanation": "Multi-jurisdiction breaches require assessing and complying with each applicable law for its respective affected population \u2014 there's no single global shortcut, and picking the most lenient timeline for everyone would leave the organization out of compliance with the stricter law's population-specific deadline."
+  }
+]
