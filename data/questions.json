@@ -7918,5 +7918,170 @@
       }
     ],
     "explanation": "This tests understanding why blameless post-mortem culture is widely adopted in mature security and engineering organizations: the core insight is that people are more likely to honestly and completely disclose what actually happened — including their own mistakes — when they don't fear individual punishment for the disclosure itself, which produces more accurate root-cause analysis and more effective systemic fixes than a blame-focused culture that incentivizes hiding or minimizing details. This is distinct from saying willful negligence or serious misconduct should never have employment consequences (blameless culture addresses HONEST MISTAKES within a good-faith effort, not a blanket shield from all accountability) — and the underlying rationale for honest disclosure applies regardless of incident severity, not just minor incidents."
+  },
+  {
+    "external_key": "SO-081",
+    "domain": "SO",
+    "subtopic": "Network Architecture",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization deploys a next-generation firewall (NGFW) with application-layer inspection capability but configures it using only traditional port/protocol-based rules (e.g., 'allow TCP/443 outbound'), not leveraging the application-identification features. A security architect notes this configuration significantly undersells the tool's actual protective capability. What specific risk does this configuration leave unaddressed?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no meaningful gap; port/protocol-based rules provide identical protection to application-layer rules regardless of the specific traffic actually traversing that port",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Port/protocol-only rules can't distinguish between different APPLICATIONS using the same port — an 'allow TCP/443 outbound' rule permits any traffic disguised as or tunneled over HTTPS (including unauthorized applications, disguised C2 traffic, or unsanctioned SaaS tools) as long as it uses that port, whereas application-layer identification could distinguish and selectively allow/block specific applications regardless of which port they use, closing exactly the kind of 'legitimate port, illegitimate application' gap discussed elsewhere in this context",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This configuration only creates risk for inbound traffic and has no relevance to outbound traffic filtering, which was the specific rule described",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "NGFW application-layer inspection features are purely a marketing distinction with no actual technical difference from traditional port-based filtering",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding the actual value proposition of NGFW application-layer inspection versus traditional port/protocol filtering: a port-based rule permits ANY traffic using that port/protocol combination, regardless of what application is actually generating it — meaning disguised C2 traffic, unauthorized applications, or unsanctioned tools tunneling over a commonly-open port (like 443) all pass through undetected by port rules alone. Application-layer identification can distinguish the ACTUAL application/traffic type regardless of port, enabling more precise policy enforcement (e.g., blocking a specific unauthorized application while still allowing legitimate HTTPS browsing on the same port) — configuring an NGFW with only legacy port-based rules leaves this capability entirely unused, undermining much of the tool's actual protective value."
+  },
+  {
+    "external_key": "SO-082",
+    "domain": "SO",
+    "subtopic": "Cloud Security",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A cloud security team implements automated remediation that immediately deletes any publicly-exposed storage bucket detected by their CSPM tool, without human review. A legitimate bucket hosting public marketing assets (intentionally public by design) gets automatically deleted, causing a production outage. What does this scenario illustrate about automated security remediation design?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Automated remediation should never be used for any cloud security finding under any circumstances, since this incident proves automation is fundamentally incompatible with cloud security operations",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Fully automated, irreversible remediation actions (like deletion) applied uniformly to a finding category that can have legitimate exceptions (intentionally public resources) creates significant risk of destructive false positives — effective automated remediation design should distinguish between reversible/low-risk automated actions (alerting, tagging, or quarantining with an easy rollback) versus higher-risk irreversible actions (deletion), and should incorporate allowlisting/exception mechanisms for known-legitimate cases before taking destructive action automatically",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The CSPM tool itself is fundamentally broken and should be replaced, since correctly identifying a publicly-exposed bucket is itself the actual error in this scenario",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This incident could only have been prevented by making all cloud storage buckets permanently non-public regardless of intended use case",
+        "correct": false
+      }
+    ],
+    "explanation": "This reinforces the earlier lesson about automated response safeguards with a cloud-specific, higher-stakes example: applying fully automated, IRREVERSIBLE remediation (deletion) uniformly to a finding category that legitimately has valid exceptions (some resources are meant to be public) creates serious risk of destructive false positives. Good automated remediation design distinguishes risk levels of actions (reversible/low-risk automation like alerting or quarantine-with-rollback vs. higher-risk irreversible actions like deletion, which typically warrant human review or at minimum robust allowlisting for known-legitimate exceptions) — the CSPM tool correctly identifying the public bucket wasn't the error; the uniformly destructive automated response to that finding was."
+  },
+  {
+    "external_key": "VM-070",
+    "domain": "VM",
+    "subtopic": "Scanning Methodology",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management team's scan configuration excludes a specific subnet from all scanning because it's labeled 'legacy OT/ICS network — do not scan, may cause instability.' A new team member asks how the organization maintains any vulnerability visibility into this excluded network at all. What is the BEST general approach for handling networks that are legitimately too fragile for active scanning?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Nothing further should be done; a fragile network being excluded from scanning means it should simply be accepted as permanently unassessed and untracked indefinitely",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Alternative, less invasive assessment methods should be used instead of active scanning — such as passive network monitoring/traffic analysis (observing device behavior and identifying known-vulnerable versions without sending active probes), reviewing vendor documentation and asset inventories against known CVE databases, or physical/manual configuration review during scheduled maintenance windows — to maintain SOME meaningful vulnerability visibility even where active scanning genuinely isn't safe",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The correct fix is to force active scanning of the OT/ICS network regardless of stability concerns, since vulnerability visibility should always take priority over operational stability without exception",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "OT/ICS networks are legally exempt from any vulnerability assessment requirement under all circumstances, making further consideration unnecessary",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding that a legitimate scanning exclusion (common and appropriate for fragile OT/ICS environments where active probing can cause instability or safety issues) shouldn't simply mean 'give up on visibility entirely' — alternative, less invasive methods (passive traffic monitoring, documentation/asset-inventory review against CVE databases, scheduled manual review during maintenance windows) can provide meaningful vulnerability awareness without the stability risk of active scanning. Neither permanently ignoring the network's risk posture nor forcing potentially-disruptive active scanning against a genuinely fragile environment is the right answer — the goal is finding an appropriately-scoped alternative assessment method, and there's no blanket legal exemption from vulnerability assessment for OT/ICS environments specifically."
+  },
+  {
+    "external_key": "IR-058",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization's IR plan is comprehensive and well-documented, but was written entirely by the security team without input from IT operations, legal, HR, or executive leadership. During an actual incident, the security team discovers that several assumed capabilities (like IT ops being able to isolate a network segment within minutes) don't actually match IT ops' real technical constraints. What does this illustrate about IR plan development?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "IR plans should always be written exclusively by the security team, since involving other departments introduces unnecessary complexity with no meaningful benefit",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "IR plans need to be developed WITH input and validation from the departments actually responsible for executing specific actions (IT operations, legal, HR, executive leadership) rather than written in isolation by the security team based on assumptions about other teams' capabilities — cross-functional review and tabletop exercises involving these stakeholders can surface exactly this kind of capability mismatch before it's discovered during an actual high-pressure incident",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This gap has no bearing on IR plan quality and would have occurred regardless of who was involved in writing the plan or how thoroughly it was reviewed",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct fix is to have IT operations completely rewrite and independently own the entire IR plan without any security team involvement going forward",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing the value of cross-functional IR plan development: a plan written in isolation by one team, based on assumptions about other departments' actual capabilities, risks containing inaccurate assumptions (like unrealistic timelines for actions that depend on other teams) that only surface during a real incident when it's too late to plan around them. Meaningful IR plans require validation and input from the actual stakeholders responsible for executing specific actions (IT ops for technical containment steps, legal for compliance/notification requirements, HR for personnel-related incidents, executives for major decisions) — cross-functional tabletop exercises are a standard practice specifically to surface these kinds of gaps proactively, rather than either extreme of one team owning it entirely in isolation."
+  },
+  {
+    "external_key": "RC-035",
+    "domain": "RC",
+    "subtopic": "Metrics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team reports 'number of phishing emails blocked' as a headline success metric, with a steadily increasing trend presented as evidence the email security program is working well. A skeptical reviewer asks what this number would look like if the organization were simply becoming a MORE popular phishing target over time, independent of any change in defensive effectiveness. What is the reviewer's point?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This concern is invalid; an increasing blocked-email count can only ever indicate improving defensive effectiveness, with no other plausible explanation",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A rising raw count of blocked phishing emails is consistent with EITHER improved defensive effectiveness OR simply an increase in the volume of phishing attempts being directed at the organization (e.g., due to increased visibility, a specific campaign targeting the industry, or growing employee count) — without also tracking the total volume of attempted phishing (blocked + successfully delivered) or a normalized rate (like percentage successfully blocked), the raw blocked-count alone can't distinguish between these two very different underlying explanations, one of which reflects nothing about program effectiveness at all",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This concern is only relevant for organizations in specific high-risk industries like finance or healthcare, and has no bearing on general email security reporting",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct fix is to stop measuring phishing-related metrics entirely, since no phishing metric can ever meaningfully indicate program effectiveness",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a subtle but important metric interpretation issue: a rising raw count of blocked phishing emails is ambiguous between two very different explanations — genuinely improved detection/blocking effectiveness, OR simply a rising volume of incoming attempts (which says nothing about how well the defenses are actually performing, since the SAME percentage-blocked rate applied to more attempts still produces a higher raw blocked count). Distinguishing between these requires tracking total attempt volume and/or a normalized effectiveness rate (percentage blocked, or successfully-delivered-phishing count) alongside the raw blocked figure — this reasoning applies broadly across industries, not just high-risk sectors, and doesn't mean phishing metrics are unmeasurable, just that a single raw count needs proper context to be meaningful."
   }
 ]
