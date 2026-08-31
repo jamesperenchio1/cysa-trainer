@@ -5575,5 +5575,236 @@
       }
     ],
     "explanation": "This tests critical evaluation of a specific framework's known limitation: the Cyber Kill Chain models a generally linear attack progression, which fits many traditional malware-delivery attacks well but doesn't naturally represent attacks that begin further along (e.g., using already-compromised valid credentials, skipping delivery/exploitation of a technical vulnerability entirely) or that don't follow a clean sequence, such as insider threats. This is a well-recognized critique, and many practitioners use MITRE ATT&CK's more flexible, non-sequential technique catalog alongside (not instead of) the Kill Chain specifically to cover this gap — the two frameworks are commonly used together, not as mutually exclusive alternatives."
+  },
+  {
+    "external_key": "SO-059",
+    "domain": "SO",
+    "subtopic": "Email Security",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization implements DMARC with a policy of 'p=reject' for its primary domain. A vendor partner reports that legitimate emails from the organization's marketing team, sent through a third-party email marketing platform, are being rejected by the vendor's mail server. Investigation shows the marketing platform sends 'on behalf of' the organization's domain but isn't included in the domain's SPF record or configured for DKIM alignment. What is the BEST fix?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Change the DMARC policy to 'p=none' organization-wide to stop all rejections, eliminating DMARC's anti-spoofing protection entirely as the simplest fix",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Add the third-party marketing platform's sending infrastructure to the domain's SPF record AND configure DKIM signing for that platform (so its messages achieve proper alignment), preserving 'p=reject' protection against actual spoofing while accommodating the legitimate, properly-authorized use of a third-party sender",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Instruct the marketing team to stop using the third-party platform entirely, since any third-party sending service is fundamentally incompatible with DMARC enforcement",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Ask the vendor partner to whitelist the organization's domain entirely, bypassing their own DMARC/SPF/DKIM validation for all future mail from that domain",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests proper DMARC/SPF/DKIM configuration for legitimate third-party senders: the correct fix preserves the strong 'p=reject' anti-spoofing posture while properly authorizing the legitimate third-party sender through SPF inclusion and DKIM alignment configuration — this is exactly what these mechanisms are designed to support. Weakening the DMARC policy organization-wide (to 'p=none') removes protection against actual spoofing attempts for ALL mail, not just the legitimate marketing use case, and asking a receiving vendor to bypass their own validation entirely undermines the anti-spoofing protection DMARC exists to provide for that recipient too."
+  },
+  {
+    "external_key": "SO-060",
+    "domain": "SO",
+    "subtopic": "Threat Intelligence",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A threat intelligence platform aggregates indicators from multiple open-source feeds and reports a specific IP address as malicious, citing it as a known C2 server. Investigation shows the IP is a shared hosting provider's address that has hosted thousands of different websites over time, and the malicious activity attributed to it occurred 8 months ago on a since-decommissioned VPS instance. What is the BEST characterization of blocking this IP today?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The IP should always be blocked indefinitely once flagged by any threat intelligence source, regardless of how much time has passed or what infrastructure changes have occurred",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Shared/dynamic hosting infrastructure IP addresses are commonly reassigned between different customers over time, and an 8-month-old indicator tied to a since-decommissioned instance carries significantly reduced confidence that the CURRENT occupant of that IP is still associated with the original malicious activity — indicators should be evaluated for currency/freshness and infrastructure type, not treated as permanently valid regardless of age or context",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Threat intelligence indicators never expire and age has no bearing on an indicator's ongoing validity or actionability",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This indicator should be disregarded entirely and removed from all threat intelligence feeds, since shared hosting IPs can never provide any security value",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests critical evaluation of indicator quality dimensions beyond just source — specifically indicator AGE/freshness and infrastructure type (dynamic/shared hosting vs. dedicated attacker-controlled infrastructure). Cloud/shared hosting IPs churn between customers frequently, and an old indicator tied to since-decommissioned infrastructure has much lower confidence of remaining valid today than a similar indicator on dedicated, persistent attacker infrastructure. Mature threat intelligence programs incorporate indicator aging/decay and infrastructure-type context into confidence scoring rather than treating all indicators as permanently and equally actionable — this doesn't mean the indicator has zero historical value, just that blocking based on it today needs this context."
+  },
+  {
+    "external_key": "VM-048",
+    "domain": "VM",
+    "subtopic": "Scanning Methodology",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management team runs scans using credentials with local administrator rights on Windows and root/sudo on Linux, believing broader privileges always produce more complete results. A security reviewer suggests evaluating whether a lower-privileged, purpose-built scanning account would be preferable. What is the reviewer's underlying concern?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no legitimate concern; maximum privilege scanning accounts should always be used with no consideration of the principle of least privilege",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Scanning credentials, especially domain-level admin/root accounts, represent an attractive and high-value target if compromised (e.g., via credential theft from the scanning infrastructure itself) — the reviewer is likely suggesting evaluating whether a scoped, purpose-built account with just enough privilege to perform authenticated checks (rather than full administrative rights) can achieve similar scan completeness while reducing the blast radius if the scanning credential itself is ever compromised",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Vulnerability scanning credentials have no relationship to overall security posture and can never themselves become an attack vector",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The reviewer's suggestion is only relevant for cloud environments and has no applicability to on-premises Windows/Linux scanning",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests applying least privilege thinking to the vulnerability management program's OWN operational credentials, not just the environment being assessed: broad administrative scanning credentials, if compromised (e.g., through the scanning platform itself being breached, or credential exposure), become a high-value attack path across the entire scanned environment. Purpose-built, appropriately-scoped scanning accounts (with just enough access for authenticated checks, ideally with additional protections like credential vaulting and restricted logon rights) reduce this risk while typically still achieving thorough scan results — this concern is a general security hygiene issue, not something limited to cloud environments."
+  },
+  {
+    "external_key": "VM-049",
+    "domain": "VM",
+    "subtopic": "Remediation",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability scan identifies a deprecated, vulnerable version of a JavaScript library bundled into a web application's frontend code. The development team says fixing this requires upgrading to a new major version with breaking API changes, requiring significant refactoring, and asks to defer the fix to the next planned sprint (3 weeks away). The finding is rated Medium severity because the specific vulnerable functionality isn't used by the application. What is the MOST appropriate response to this request?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Reject the deferral outright and require an emergency same-day fix regardless of severity, business impact of rushed changes, or actual exploitability given the specific usage context",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Given the confirmed Medium severity, unused vulnerable functionality, and reasonable, bounded timeline (3 weeks, next sprint) with a clear reason (avoiding a rushed breaking-change refactor), this is a reasonable candidate for a documented, time-bound acceptance/deferral rather than requiring immediate emergency remediation — risk-based vulnerability management should scale response urgency to actual severity and exploitability, not treat every finding identically regardless of context",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The finding should be permanently closed and untracked since the vulnerable functionality isn't currently used",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The team should ignore the vendor-recommended upgrade path entirely and instead attempt an unofficial community patch of the old version to avoid any refactoring work",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests proportionate, risk-based remediation response: not every finding warrants emergency urgency — a Medium-severity vulnerability in currently-unused functionality, with a reasonable and bounded timeline requested for a legitimate reason (avoiding a rushed breaking-change refactor), is a defensible case for a documented short-term deferral. This is different from ignoring the finding permanently (it should still be tracked and fixed on the agreed timeline) or from applying maximum urgency regardless of actual risk context, and using an unofficial patch instead of the vendor's supported upgrade path introduces its own maintenance and trust risks."
+  },
+  {
+    "external_key": "IR-041",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A forensic investigator needs to preserve evidence from a cloud-hosted virtual machine (rather than physical hardware). A colleague argues traditional disk-imaging procedures (physical write-blocker, bit-for-bit copy of a physical disk) don't directly apply. What is the BEST approach for preserving forensically-sound evidence in this cloud context?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Cloud-hosted virtual machines cannot be forensically preserved under any circumstances, since no physical disk is directly accessible to the investigator",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Use the cloud provider's native snapshot/image capabilities to create a forensic copy of the VM's virtual disk, document the exact process and timestamps (since a live snapshot has different integrity properties than a powered-off bit-for-bit physical image), and separately capture memory/volatile state if the instance must remain running during evidence collection — adapting sound forensic principles (documentation, hash verification, minimizing alteration) to the cloud-native tools available, rather than assuming physical-media procedures translate unchanged",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The investigator should physically travel to the cloud provider's data center and directly access the underlying physical server hardware",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Cloud forensics requires no special consideration and standard physical disk-imaging write-blocker procedures apply identically without any adaptation",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding that forensic PRINCIPLES (integrity preservation, documentation, minimizing alteration, verifiable copies) remain constant across environments, but the specific TECHNIQUES must adapt to the actual infrastructure available — cloud forensics relies on provider-native snapshot/imaging capabilities rather than physical write-blockers and direct disk access, since the investigator has no direct hardware access in a shared cloud environment. A forensic investigator needs to understand how to apply the same underlying principles using the tools actually available in a given environment, not assume one technique set (physical disk imaging) universally applies, and there is no realistic scenario where an investigator gains direct physical hardware access in a standard public cloud deployment."
+  },
+  {
+    "external_key": "IR-042",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization completes its lessons-learned meeting after a significant incident, producing a report identifying five root-cause contributing factors and recommended fixes. Six months later, only two of the five fixes have been implemented, with no formal tracking of the remaining three. What structural process improvement would BEST address this pattern?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Stop conducting lessons-learned meetings entirely, since the recommendations from them are not reliably acted upon regardless of process changes",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Integrate post-incident recommendations directly into the organization's existing project/ticket tracking system with assigned owners, due dates, and periodic status review (e.g., a recurring check-in on open post-incident action items) — treating lessons-learned output as tracked work rather than a standalone report that has no built-in mechanism to ensure follow-through",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This pattern is unavoidable and represents normal, expected behavior for any post-incident process regardless of how it's structured",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The only fix is to hold leadership personally financially liable for each unimplemented recommendation, since no process improvement can address this gap",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the same theme as an earlier lifecycle question but from a structural-fix perspective: post-incident recommendations that live only in a standalone report, disconnected from the organization's actual work-tracking systems, have no built-in mechanism ensuring follow-through. The structural fix is integrating these action items into existing project/ticket tracking with clear ownership, deadlines, and periodic review — making incomplete follow-up visible and accountable — rather than abandoning the practice of lessons-learned entirely, accepting the gap as inevitable, or reaching for an extreme and impractical accountability mechanism."
+  },
+  {
+    "external_key": "RC-025",
+    "domain": "RC",
+    "subtopic": "Stakeholder Communication",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "During an active, still-unfolding incident, a customer support team is fielding inbound customer calls asking if their data was affected, but has not been given any information or guidance by the security/IR team. Support representatives begin guessing and providing inconsistent, sometimes inaccurate answers to customers. What communication process gap does this illustrate?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Customer support should never be informed about active incidents under any circumstances until an incident is fully resolved and formally closed",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Missing internal stakeholder communication planning — customer-facing teams need pre-established communication protocols and approved, regularly-updated talking points/guidance during an active incident specifically to prevent frontline staff from guessing or improvising when directly asked by external parties, even while full details remain uncertain or under investigation",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This is exclusively a customer support training issue unrelated to the incident response communication process",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The support team should immediately confirm to all customers that their data was compromised, regardless of whether this has actually been established",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the internal-stakeholder-communication dimension of IR communications planning: frontline customer-facing teams need a defined communication protocol during incidents — approved talking points that can be updated as the investigation progresses, clear escalation paths for questions outside the approved guidance, and explicit instruction not to speculate — precisely to prevent the scenario here, where uninformed staff guess and provide inconsistent or inaccurate information to external parties. This is a communication PROCESS gap connecting the IR team to customer-facing staff, not a customer support training deficiency in isolation, and the fix is proactive planning, not withholding all information indefinitely or having staff confirm unverified claims."
   }
 ]
