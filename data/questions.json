@@ -4585,5 +4585,269 @@
       }
     ],
     "explanation": "This tests the controller/processor distinction in GDPR breach notification obligations: the data controller (the entity determining the purposes and means of processing) bears the primary duty to notify the relevant supervisory authority, generally within 72 hours of becoming aware of a qualifying breach. A data processor (acting on the controller's behalf, as in this scenario) has a distinct obligation to notify the CONTROLLER without undue delay, which then triggers the controller's own regulatory notification clock — the processor generally does not independently notify the regulator under this structure, and this obligation applies regardless of whether the cause was a deliberate attack or a technical failure."
+  },
+  {
+    "external_key": "SO-049",
+    "domain": "SO",
+    "subtopic": "Threat Intelligence",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A threat intelligence analyst produces a report attributing a recent intrusion to a specific nation-state APT group based on overlapping TTPs (tactics, techniques, procedures) with a previously documented campaign. A peer reviewer points out that the specific tools used are publicly available and used by dozens of different threat actors, and the infrastructure was hosted on a bulletproof hosting provider used by many unrelated groups. What is the peer reviewer's core criticism?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The reviewer is incorrect; any TTP overlap with a documented campaign is always sufficient for confident attribution regardless of tool/infrastructure exclusivity",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Attribution confidence should weight more heavily on characteristics that are actually distinctive to a specific actor (unique custom tooling, exclusive infrastructure, or highly specific operational patterns) rather than commodity tools and shared infrastructure used broadly across many unrelated actors — overlapping with widely-available, non-exclusive indicators provides weak evidentiary support for confident attribution to one specific group",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Attribution to nation-state actors is never possible under any circumstances and all such reports should be disregarded entirely",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The peer reviewer's concern is only valid if the tools involved are completely undocumented in any prior threat intelligence reporting",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests critical evaluation of attribution confidence in threat intelligence: strong attribution relies on distinctive, exclusive indicators (custom malware families, unique infrastructure patterns, highly specific operational tradecraft) rather than commodity tools and shared hosting used broadly across many unrelated actors. Overlap on widely-available indicators is much weaker evidence than overlap on something genuinely distinctive to one group — good attribution analysis explicitly weighs indicator exclusivity, and analysts should express appropriately calibrated confidence rather than treating any overlap as conclusive."
+  },
+  {
+    "external_key": "SO-050",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An analyst notices that a domain controller's Kerberos ticket-granting service is issuing an unusually large ticket (much larger than typical) to a specific user account, and that account subsequently accesses several servers it has never touched before. What does this pattern MOST likely indicate?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This is normal Kerberos behavior with no security relevance, since ticket size naturally varies for unrelated reasons",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "This is consistent with a 'Golden Ticket' or 'Silver Ticket' style Kerberos abuse technique, where a forged ticket (often oversized due to how it's constructed, e.g., padded group membership/PAC data) grants an attacker broad access, followed by exactly the kind of lateral movement to previously-unaccessed systems that would result from an attacker using stolen or forged credentials to explore the environment",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This can only indicate a printer driver update pushed via Group Policy and has no relation to authentication abuse",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Ticket size is not tracked or observable by any Windows or SIEM logging mechanism, so this scenario is not technically possible to detect",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognition of a known advanced Active Directory attack pattern: forged Kerberos tickets (Golden/Silver Ticket attacks) can result in anomalously large tickets due to how attackers construct the PAC (Privilege Attribute Certificate) data, and abuse of such a ticket often manifests as lateral movement to systems the compromised account has no legitimate history of accessing. This combination of anomalous ticket characteristics plus unusual access-pattern lateral movement is a recognized detection opportunity for this class of credential-forgery attack, and ticket size and access patterns are both observable through appropriate Windows/domain controller logging."
+  },
+  {
+    "external_key": "SO-051",
+    "domain": "SO",
+    "subtopic": "Security Tools",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization deploys a Data Loss Prevention (DLP) solution configured to block emails containing patterns matching Social Security Numbers. An employee's legitimate email to a payroll vendor containing several employees' SSNs is blocked, causing a delay in a time-sensitive payroll run. The employee argues DLP should simply be disabled for the payroll department. What is a MORE appropriate solution?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Disable DLP scanning entirely for the payroll department's outbound email, as the employee suggests, since payroll legitimately needs to send this type of data",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Establish a specific, auditable exception (e.g., an approved encrypted channel or a pre-authorized recipient allowlist for verified vendors, with the exception itself logged and reviewed) rather than broadly disabling DLP for an entire department — this preserves protection against accidental or malicious SSN exposure to unintended recipients while accommodating the legitimate, recurring business need",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Require the employee to manually call the vendor and read the SSNs aloud over the phone instead of using email, as the only acceptable long-term solution",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The DLP block was a false positive and no employee data should ever be considered sensitive enough to trigger protective controls",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests balancing DLP protection against a legitimate recurring business need: broadly disabling DLP for a department removes protection against accidental misdirected emails or actual malicious exfiltration from that department entirely — a far larger risk surface than the narrow, legitimate use case being disrupted. The better solution is a scoped, documented, and auditable exception (e.g., an approved encrypted channel to specific verified recipients) that accommodates the real business need while preserving the broader protective control and maintaining accountability over the exception itself."
+  },
+  {
+    "external_key": "VM-040",
+    "domain": "VM",
+    "subtopic": "Scanning Methodology",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management team performs scans using default scan policy settings that skip 'intrusive' checks (those that could potentially crash a service, like certain buffer overflow tests) to avoid disrupting production. A critical buffer-overflow vulnerability affecting a production service goes undetected for months as a result. What is the BEST way to balance this tradeoff going forward?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Always enable full intrusive scanning against production systems with no additional precautions, since detection completeness should always override any operational risk consideration",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Continue using non-intrusive scans on production indefinitely and simply accept that some vulnerability classes will never be directly verified, since intrusive testing is never worth the operational risk",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "Use non-intrusive scanning on live production for routine operations, but supplement it with either scheduled intrusive scans during dedicated maintenance windows, testing against a representative non-production/staging replica, or credentialed/version-based checks that can infer vulnerability presence without actually attempting exploitation — so genuinely dangerous vulnerability classes aren't permanently invisible to the program",
+        "correct": true
+      },
+      {
+        "label": "D",
+        "body": "Replace vulnerability scanning entirely with an intrusion detection system, since scanning methodology tradeoffs are unsolvable through configuration changes",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests balancing scan intrusiveness against production stability without accepting a permanent detection blind spot: rather than an all-or-nothing choice, effective programs combine safe, routine non-intrusive/credentialed scanning on live production with periodic intrusive testing during maintenance windows or against staging replicas that mirror production configuration, ensuring vulnerability classes that require more invasive testing to confirm aren't simply never checked at all."
+  },
+  {
+    "external_key": "VM-041",
+    "domain": "VM",
+    "subtopic": "Web App Vulnerabilities",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A penetration test report notes an application is vulnerable to XML External Entity (XXE) injection because the XML parser processes external entity references by default. The development team's fix disables DOCTYPE declarations entirely at the parser level. A security reviewer says this fix is good but recommends also verifying a specific additional configuration. What is the reviewer MOST likely checking for?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Whether the application also validates all XML against a schema, which is the only effective XXE mitigation and makes disabling DOCTYPE declarations unnecessary",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Whether external entity resolution and DTD (Document Type Definition) processing are ALSO disabled at the parser configuration level independent of DOCTYPE blocking — some XML parsers have separate settings controlling DOCTYPE declarations, external entity resolution, and DTD loading, and a fix that only addresses one setting can leave a related bypass path open depending on the specific parser and library used",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Whether the fix has been applied to the frontend JavaScript code, since XXE is exclusively a client-side vulnerability",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Whether the application uses HTTPS, since transport encryption fully prevents XXE regardless of parser configuration",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests defense-in-depth thoroughness for XXE remediation: many XML parsing libraries expose several related but distinct settings (DOCTYPE declaration handling, external general/parameter entity resolution, external DTD loading) that must often ALL be disabled to fully close XXE — disabling only one setting can leave another enabled path exploitable depending on the specific parser's default behavior and API. XXE is a server-side XML parsing vulnerability (not client-side JavaScript), and while schema validation can help, it is not a complete substitute for properly disabling dangerous parser features, and HTTPS (transport security) has no bearing on how a server parses XML content it receives."
+  },
+  {
+    "external_key": "IR-033",
+    "domain": "IR",
+    "subtopic": "Communication & Legal",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "During a ransomware incident, executive leadership asks the IR team whether paying the ransom is a viable option to quickly restore operations. The IR lead responds that this decision involves considerations beyond the technical team's authority. What factors are MOST relevant to this determination that fall outside pure technical IR scope?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "None — ransom payment decisions are purely technical and should be made unilaterally by the IR team without any other input",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Legal/regulatory considerations (e.g., whether the ransomware group is on a sanctions list, making payment potentially illegal), law enforcement guidance, insurance policy terms and requirements, and executive/board risk tolerance and business continuity priorities — these cross legal, financial, and executive decision-making domains that sit outside the IR team's technical mandate, even though the IR team provides essential input (likelihood of successful decryption, extent of backups available, technical recovery timeline estimates)",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The only relevant factor is the dollar amount of the ransom demand compared to the IT department's discretionary budget",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This decision should always default to whatever the cyber insurance provider unilaterally decides, with no other stakeholder input required",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing the proper boundaries of IR team authority in a ransomware scenario: the ransom payment decision involves legal exposure (potential sanctions violations if the threat actor is on an OFAC or similar sanctions list, which can make payment illegal regardless of business justification), law enforcement coordination, insurance policy terms, and executive risk tolerance — decisions that belong to legal counsel, executive leadership, and sometimes law enforcement, not the technical IR team alone. The IR team's role is to provide the technical inputs (recovery feasibility, backup viability, timeline estimates) that inform this broader decision, not to make the final call unilaterally."
+  },
+  {
+    "external_key": "IR-034",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A forensic analyst is examining a Windows system's Prefetch files (which record information about recently executed applications) as part of an investigation into a suspected malware execution. A colleague argues Prefetch data is unreliable because 'it only shows what ran, not when the malicious activity actually occurred.' Is this a fair characterization?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Fully fair — Prefetch files contain no timestamp information whatsoever and are therefore useless for establishing a timeline",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Not fully fair — Prefetch files DO contain valuable timestamp data (including last-run time and, in supported versions, run count and multiple last-execution timestamps), which can help establish execution timelines and frequency; while Prefetch alone doesn't capture everything an executed process DID, dismissing it as providing no timing information understates its actual forensic value as one data point among several that should be correlated",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Prefetch files are exclusively used for tracking network connections and have no relationship to application execution at all",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Prefetch analysis can only be performed on Linux systems, making this entire scenario technically impossible on Windows",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests accurate knowledge of a specific forensic artifact's actual capabilities: Windows Prefetch files do contain meaningful timestamp data (last execution time, and on newer Windows versions, run counts and multiple recent execution timestamps), making them a genuinely useful artifact for establishing when an application ran and how often — a valuable timeline-building data point, even though (like any single artifact) it should be correlated with other evidence rather than relied on exclusively. Dismissing it as containing 'no' timing value overstates its limitations; Prefetch is a Windows-specific artifact unrelated to network connection tracking."
+  },
+  {
+    "external_key": "RC-021",
+    "domain": "RC",
+    "subtopic": "Metrics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team wants to report 'Mean Time to Remediate' (MTTR) for vulnerabilities but has two very different populations: automatically-patched workstations (median 1 day) and manually-remediated legacy servers requiring change control (median 45 days). Reporting a single blended MTTR of 8 days for 'the environment.' What is the BEST critique?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The blended 8-day figure is fully sufficient and appropriately represents the organization's remediation performance across all asset types",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Blending two populations with fundamentally different remediation processes and constraints into one average produces a number that doesn't represent EITHER population accurately — it looks good enough to obscure that legacy servers are remediating far too slowly, while making automated systems look artificially worse than their actual (very fast) performance; reporting the two populations separately gives stakeholders an accurate and actionable picture",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "MTTR should never be reported for any population that includes manually remediated systems under any circumstances",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The 45-day legacy server figure should simply be excluded from all reporting since it makes the overall metric look worse",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing Simpson's-paradox-style metric blending issues in security reporting: averaging together two structurally different populations (fast-automated vs. slow-manual remediation processes) produces a composite number that misrepresents both — masking a genuine problem area (the 45-day legacy servers) behind an average that looks reasonably healthy, while also not accurately reflecting how fast the automated population actually performs. The fix is disaggregated reporting (showing both populations separately with their own context), not excluding inconvenient data or defaulting to blended figures because they're simpler to present."
   }
 ]
