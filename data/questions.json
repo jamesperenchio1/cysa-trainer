@@ -7753,5 +7753,170 @@
       }
     ],
     "explanation": "This tests recognizing the value of coordinated (not identical, but coordinated) compliance response when multiple regulatory frameworks apply to the same underlying incident: since both HIPAA-covered and PCI DSS-covered data were compromised in the SAME database/incident, siloed independent assessments risk inconsistent conclusions about scope and root cause, duplicated investigative work, and missed opportunities where a single remediation step could satisfy requirements under multiple frameworks — while still recognizing each framework has its own distinct specific requirements that must be independently satisfied (this isn't about treating the frameworks as identical, just about coordinating the response to the same underlying facts). Neither framework's applicability depends on GDPR also being in scope, and one framework's data being 'more sensitive' doesn't exempt an organization from a separately-applicable framework's own requirements."
+  },
+  {
+    "external_key": "SO-080",
+    "domain": "SO",
+    "subtopic": "Malware Analysis",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A malware sample is found to use domain generation algorithms (DGA) to compute hundreds of possible C2 domain names daily, of which the attacker only needs to register one to maintain communication. A network defender argues that blocklisting known malicious domains is a sufficient defense against this specific malware family. Why is this defense strategy insufficient on its own?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Blocklisting known domains is fully sufficient, since DGA malware can only ever generate a small, finite, and fully predictable list of domains that can be comprehensively blocklisted in advance",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "DGA-based malware generates a large, constantly-rotating pool of possible domains (often hundreds or thousands daily), making it impractical to maintain a comprehensive, up-to-date blocklist of every possible domain the algorithm might generate — more effective defenses against DGA specifically involve detecting the DGA BEHAVIOR itself (e.g., high volumes of NXDOMAIN responses for algorithmically-generated-looking domain queries) rather than trying to blocklist every individual possible domain reactively",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "DGA malware cannot be defended against by any means, making network-level defenses entirely irrelevant regardless of the specific technique used",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Blocklisting is ineffective specifically and only because DGA domains always use valid, properly-issued TLS certificates that bypass all blocklist checking mechanisms",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding why domain generation algorithms specifically defeat simple reactive blocklisting: DGA malware computes a large, rotating pool of possible domain names algorithmically (often based on date/seed values), and the attacker only needs to register a small subset to maintain communication — reactively blocklisting individual domains as they're discovered can never keep pace with a large algorithmically-generated pool. More effective defenses target the underlying BEHAVIOR pattern itself (like a host generating unusually high volumes of NXDOMAIN-resulting DNS queries with algorithmically-generated-looking names) rather than trying to maintain a comprehensive list of every specific domain the algorithm could produce — this is unrelated to TLS certificate usage specifically."
+  },
+  {
+    "external_key": "VM-068",
+    "domain": "VM",
+    "subtopic": "CVSS / Prioritization",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability affects a legacy protocol that is still technically enabled on a server but for which no client in the environment has connected in over a year (confirmed via traffic logs). The vulnerability scanner still reports it at full CVSS severity since the protocol is technically active and listening. How should this affect actual remediation prioritization?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The vulnerability should be prioritized identically to an actively-used vulnerable service, since CVSS Base Score alone should always be the sole determinant of remediation order with no consideration of actual usage",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "While the CVSS Base Score itself remains accurate (it reflects the vulnerability's characteristics under typical use), the confirmed lack of legitimate client usage actually points toward the SIMPLEST and most complete remediation: disabling the unused legacy protocol entirely (reducing attack surface) rather than merely patching it — and if disabling isn't immediately feasible, the lack of legitimate traffic doesn't reduce urgency from an ATTACKER's perspective (an attacker doesn't need to be a 'legitimate client' to exploit an enabled protocol), so risk-based prioritization should still treat active exploitability from any potential attacker as the relevant factor, not just absence of legitimate business use",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This finding should be permanently closed and untracked, since a lack of legitimate client connections in the past year definitively proves the service can never be exploited going forward",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The complete absence of legitimate client traffic conclusively proves the vulnerability scanner's finding is a false positive that should be disputed with the vendor",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests nuanced reasoning about the relationship between USAGE and EXPLOITABILITY: a lack of legitimate client connections doesn't mean the vulnerable protocol can't be reached and exploited by an attacker (who doesn't need to be an authorized/legitimate client to send traffic to an enabled, listening service) — the finding isn't a false positive, and closing it untracked would be a mistake. However, this scenario does point toward the cleanest fix: since no legitimate business need exists for this protocol, disabling it entirely eliminates the attack surface more completely than patching alone would, which is a valuable insight that usage data provides — but it doesn't mean the vulnerability can be safely deprioritized or ignored while the vulnerable protocol remains enabled and reachable."
+  },
+  {
+    "external_key": "VM-069",
+    "domain": "VM",
+    "subtopic": "Remediation",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A team remediates a critical vulnerability by applying a vendor patch to a production database server. Post-remediation verification confirms the patch is installed and the specific vulnerable function is no longer exploitable. Three weeks later, the same vulnerability reappears in a scan of the SAME server. Investigation reveals the server was restored from a pre-patch backup snapshot after an unrelated hardware failure, without anyone re-verifying the restored system's patch status. What process gap does this illustrate?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This is solely a hardware reliability issue with no relationship to vulnerability management process design",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Disaster recovery/restoration processes need to be integrated with vulnerability management verification — restoring a system from an older backup can silently reintroduce previously-remediated vulnerabilities if the restored state isn't checked against current patch/configuration baselines before returning to production, meaning DR runbooks should explicitly include a post-restoration vulnerability re-scan or patch verification step rather than assuming a restored system is automatically in the same secure state it was in before failure",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The correct fix is to eliminate all backup and disaster recovery processes entirely, since they inherently and unavoidably conflict with vulnerability remediation efforts",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This reappearance should be dismissed as a duplicate finding and closed without investigation, since the vulnerability was already confirmed remediated once previously",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing an important but often-overlooked intersection between disaster recovery/backup processes and vulnerability management: restoring a system from a backup snapshot effectively reverts it to whatever patch/configuration state existed AT THE TIME of that backup — if that snapshot predates a since-applied patch, restoration silently reintroduces the vulnerability, and without an explicit post-restoration verification step, this can go unnoticed until a routine scan (as happened here) or, worse, exploitation. Mature programs build vulnerability/patch verification into DR runbooks specifically to catch this scenario, rather than assuming restored systems automatically retain all post-backup remediation work — eliminating DR processes entirely isn't a reasonable response to this gap, and treating the reappearance as a duplicate to dismiss would miss a genuine, currently-real vulnerability."
+  },
+  {
+    "external_key": "IR-057",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A forensic analyst investigating a compromised cloud storage bucket relies entirely on the cloud provider's activity logs (e.g., API call logs showing object access) to reconstruct what data was accessed. A colleague notes this approach has an inherent limitation. What is the MOST likely limitation being referenced?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Cloud provider activity logs are entirely useless for forensic purposes and should never be relied upon under any circumstances",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Activity logs typically show WHICH API calls/actions occurred (e.g., 'GetObject' was called on a specific object by a specific identity) but the retention period, level of detail (e.g., whether actual object CONTENT or just metadata about the access is available), and default logging configuration vary significantly by provider and by whether detailed logging was proactively enabled BEFORE the incident — if detailed logging wasn't already turned on, or logs have already aged out of the retention window, the available evidence for reconstructing exactly what happened may be significantly incomplete regardless of how thoroughly the analyst reviews what does exist",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Cloud provider activity logs can only ever show failed access attempts, never successful ones, making them fundamentally unsuitable for this type of investigation",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This limitation only applies to a single specific cloud provider and has no general applicability across the cloud forensics domain",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding a genuine and common cloud forensics limitation: the completeness and usefulness of cloud provider activity logs for an investigation heavily depends on whether adequate logging (level of detail, retention duration) was proactively configured BEFORE the incident occurred — many cloud services have logging disabled by default, minimal default retention windows, or default logging that captures only coarse-grained activity rather than the detail needed for a thorough investigation. If this wasn't set up in advance, the analyst may face a genuine evidence gap no amount of careful analysis of what does exist can fully overcome — this is a widely-applicable limitation across cloud providers generally (not specific to just one), and activity logs typically do capture both successful and failed actions, not exclusively failures."
+  },
+  {
+    "external_key": "RC-034",
+    "domain": "RC",
+    "subtopic": "Stakeholder Communication",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team's incident post-mortem document uses a 'blameless' format that focuses on systemic and process failures rather than naming individual employees who made mistakes during the incident. A new manager questions why individual accountability isn't emphasized more directly. What is the BEST justification for the blameless approach?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Blameless post-mortems exist purely to avoid uncomfortable conversations and have no genuine connection to improving future incident outcomes",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A blameless format encourages honest, complete disclosure of what actually happened (including mistakes) without individuals fearing punishment for admitting errors — this produces more accurate, useful root-cause analysis and more effective systemic fixes, since people are more forthcoming about details when they don't fear individual blame, ultimately preventing similar incidents better than a culture where fear of blame incentivizes people to hide or minimize their own role in what happened",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Blameless post-mortems mean that no individual should ever face any employment consequences for any action, regardless of how severe or willfully negligent",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This format should be used only for minor incidents, and any significant incident should always default immediately to individual blame-focused analysis instead",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding why blameless post-mortem culture is widely adopted in mature security and engineering organizations: the core insight is that people are more likely to honestly and completely disclose what actually happened — including their own mistakes — when they don't fear individual punishment for the disclosure itself, which produces more accurate root-cause analysis and more effective systemic fixes than a blame-focused culture that incentivizes hiding or minimizing details. This is distinct from saying willful negligence or serious misconduct should never have employment consequences (blameless culture addresses HONEST MISTAKES within a good-faith effort, not a blanket shield from all accountability) — and the underlying rationale for honest disclosure applies regardless of incident severity, not just minor incidents."
   }
 ]
