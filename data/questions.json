@@ -7357,5 +7357,203 @@
       }
     ],
     "explanation": "This tests translating a security need into terms that support an actual financial/business decision, a core Reporting & Communication skill: 'this will improve security posture' is a vague, unquantified claim that gives a financial decision-maker no way to weigh this request against competing priorities. Effective budget justification should quantify (even approximately) the risk being addressed — likelihood, potential impact, comparative cost of inaction versus investment — giving the CFO an actual basis for the funding decision. Removing financial stakeholders from budget decisions or refusing to provide justification at all isn't a realistic or appropriate path to secured funding."
+  },
+  {
+    "external_key": "SO-076",
+    "domain": "SO",
+    "subtopic": "Cloud Security",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization uses a multi-cloud strategy (AWS and Azure) and applies identical security group/network security group rule NAMES and structures across both, assuming this ensures consistent security posture. A security review finds that a rule named 'deny-all-inbound-default' in AWS behaves as expected, but the equivalent Azure Network Security Group rule has a lower priority number than an auto-created platform default rule, causing the deny rule to be silently overridden for certain traffic. What does this scenario illustrate?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This proves that either AWS or Azure's security controls are fundamentally broken, since equivalent rule names should always guarantee identical behavior across cloud providers",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Different cloud providers have distinct underlying rule evaluation logic (e.g., priority/order-based evaluation, default/implicit rules, and how conflicts are resolved) even when configurations LOOK structurally similar or share naming conventions — assuming identical naming or structure guarantees identical effective behavior across providers is a dangerous assumption in multi-cloud environments, and each provider's specific evaluation semantics must be independently verified",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This is exclusively a documentation labeling issue with no actual difference in enforced network behavior between the two configurations",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Multi-cloud security strategies are fundamentally unworkable and organizations should always consolidate to a single cloud provider to avoid this class of issue entirely",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a genuine and common multi-cloud security pitfall: different cloud providers implement network security controls with distinct underlying mechanics — AWS Security Groups are stateful and allow-based with different default behaviors than Azure Network Security Groups, which use priority-numbered rules that interact with platform-level default rules in provider-specific ways. Assuming a rule with the same NAME or apparent structure produces identical EFFECTIVE behavior across providers is a dangerous multi-cloud assumption; each provider's specific evaluation semantics, defaults, and precedence rules must be independently understood and verified rather than assumed to be equivalent based on surface-level similarity — this is a genuine architectural risk in multi-cloud, not a reason multi-cloud is inherently unworkable, nor merely a labeling issue."
+  },
+  {
+    "external_key": "SO-077",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An analyst notices that a server's system clock was changed backward by 3 hours, and shortly after, several security event logs from that time window appear to be missing or show gaps. What is the MOST likely explanation, and why does system clock manipulation matter for log-based investigation?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This is coincidental and unrelated to any potential attacker activity; system clocks change for many benign reasons with no forensic significance whatsoever",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Clock manipulation is a known anti-forensic technique — an attacker (or malware with sufficient privilege) can roll back the system clock specifically to create confusing or misleading timestamps in logs, potentially causing log entries to appear out of chronological order, get overwritten by log rotation logic that assumes forward-moving time, or simply create timeline confusion that complicates accurate incident reconstruction — this should be treated as a suspicious indicator warranting investigation of what activity occurred around the time of the clock change, not dismissed as routine",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "System clock changes have no effect on logging systems whatsoever, since all logs are timestamped using an independent, clock-agnostic mechanism",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This can only be explained by a legitimate NTP (Network Time Protocol) synchronization event, which always and exclusively causes large multi-hour time changes",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing system clock manipulation as a specific anti-forensic technique: deliberately altering a system's clock can confuse log timestamps, potentially cause log rotation/retention logic (which often assumes forward-moving time) to behave unexpectedly and lose or overwrite entries, and generally complicate accurate incident timeline reconstruction — a known technique used to obscure the true sequence and timing of malicious activity. This warrants investigation into what happened around the time of the clock change rather than dismissal as routine; legitimate NTP synchronization typically corrects only small clock drift (seconds to a few minutes), not multi-hour jumps, making a large backward shift a notably more suspicious anomaly."
+  },
+  {
+    "external_key": "VM-064",
+    "domain": "VM",
+    "subtopic": "Remediation",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management team applies an emergency out-of-cycle patch to address an actively-exploited zero-day vulnerability, successfully stopping the immediate threat. Two weeks later, a different, unrelated application feature breaks in production, and investigation traces it to an untested side effect of the emergency patch. What does this scenario illustrate about emergency patching practices?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Emergency patches should never be applied under any circumstances, even for actively-exploited zero-day vulnerabilities, given the risk of unintended side effects",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Emergency, expedited patching for active zero-day exploitation is often the right call despite reduced testing time, but this scenario illustrates the genuine tradeoff involved — expedited deployment inherently carries higher risk of unforeseen side effects than the organization's normal, more thoroughly-tested patch cycle, which is why post-emergency-patch monitoring and a defined process for identifying and addressing side effects afterward (rather than assuming an emergency patch is 'done' once deployed) should be part of the emergency response process",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This side effect proves the original zero-day vulnerability should have simply been accepted as a risk rather than patched at all",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Unintended side effects from emergency patches are impossible to anticipate or plan for in any way, making post-patch monitoring pointless",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding the genuine risk tradeoff in emergency/expedited patching: skipping or compressing normal testing cycles to address an active zero-day threat is often the right call given the acute risk, but it does trade away some assurance against unintended side effects that fuller testing would normally catch. This is a reason to build POST-deployment monitoring and a defined follow-up process into emergency patching procedures (watching for unexpected issues after the fact, since full pre-deployment testing wasn't feasible), not a reason to avoid emergency patching altogether or to have simply accepted the original active zero-day risk instead — and while side effects can't always be fully anticipated, structured post-patch monitoring meaningfully reduces the time-to-detection when they do occur."
+  },
+  {
+    "external_key": "VM-065",
+    "domain": "VM",
+    "subtopic": "Scanning Methodology",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management team uses a scanning tool that supports both agent-based (a lightweight software agent installed on each host, reporting continuously) and agentless/network-based scanning. They currently use only network-based scanning for all assets, including laptops used by a largely remote workforce. What limitation does this create specifically for the remote laptop population?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no meaningful limitation; network-based scanning works identically regardless of whether an asset is on the corporate network or remote",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Network-based scanning requires the scanner to have direct network reachability to the target — remote laptops connecting sporadically (and often not through a network path the on-premises scanner can reach, especially if not on VPN at scan time) will be effectively unscannable for extended periods, creating a coverage gap that agent-based scanning (which reports from the endpoint itself regardless of network topology, as long as it has any internet connectivity to phone home) would address",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This limitation only affects laptops running a specific operating system, and has no bearing on scanning methodology choice generally",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The only fix for this limitation is to prohibit remote work entirely and require all devices to remain permanently on the corporate network",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding a practical, common coverage gap between scanning methodologies: network-based/agentless scanning requires the scanner to have direct network reachability to the target host, which is unreliable for remote, mobile devices that may not be connected to the corporate network (or VPN) at the specific time a scan runs — creating significant, recurring coverage gaps for exactly the population (remote workforce laptops) that may benefit most from continuous assessment given their higher exposure to varied, less-controlled networks. Agent-based scanning, which reports from the endpoint itself over any available internet connection regardless of network topology, is specifically well-suited to address this gap — and the fix isn't restricting remote work, but choosing an appropriate scanning methodology for the actual asset population."
+  },
+  {
+    "external_key": "IR-055",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "During the containment phase of an incident, the IR team implements a temporary firewall rule blocking all traffic to a specific malicious external IP address. Three months later, this 'temporary' rule is discovered still in place, now blocking traffic to an IP that has since been reassigned to a legitimate cloud service used by a business partner, causing unexplained connectivity issues. What structural gap does this illustrate?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Temporary containment measures should never be implemented during any incident, since they inevitably become permanent regardless of process design",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Missing lifecycle management for temporary/emergency changes — containment actions explicitly labeled as 'temporary' need a defined expiration/review mechanism (e.g., a tracked ticket with a scheduled review date, or automatic expiration requiring active renewal) to ensure they are actually revisited and removed once no longer needed, rather than persisting indefinitely simply because no one was responsible for following up",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This issue is exclusively the responsibility of the business partner whose service was later assigned that IP address, with no organizational process failure involved",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Firewall rules should never reference specific IP addresses under any circumstances, since all IP-based blocking is inherently unreliable long-term",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing a structural gap in managing temporary emergency changes made during incident containment: a rule explicitly intended as temporary needs a defined mechanism ensuring it's actually revisited and removed (a tracked review date, an expiration requiring active renewal, or similar) — without this, 'temporary' measures commonly persist indefinitely simply because no process exists to prompt their removal, eventually causing unintended consequences as circumstances change (like IP address reassignment, a well-known reality of internet addressing). This is a lifecycle-management/process gap for emergency changes generally, not a reason to avoid temporary containment measures altogether, an issue solely attributable to an external party, or evidence that IP-based rules are inherently unusable."
+  },
+  {
+    "external_key": "RC-032",
+    "domain": "RC",
+    "subtopic": "Metrics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team's dashboard shows 'Number of Vulnerabilities by Severity' as a bar chart that resets to zero at the start of each month, showing only newly-discovered findings for that specific month rather than a running total of all currently-open findings. A new team member argues this presentation makes the security posture look artificially better than it actually is. What is the concern?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no legitimate concern; showing only new findings per month is the single correct and complete way to represent vulnerability management performance",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A chart showing only NEW findings each month, resetting to zero, doesn't represent the actual current-state risk exposure — a large backlog of older, still-unremediated vulnerabilities from previous months is invisible in this view, potentially making the organization's true accumulated risk exposure look much lower than it actually is; a more complete picture requires also showing (or making easily accessible) the total count of currently OPEN findings regardless of discovery month, not just the new-this-month subset",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The only fix is to eliminate month-based reporting entirely and report exclusively in real time with no periodic rollup of any kind",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This concern is only valid if the monthly new-finding count itself is inaccurate; the reset-to-zero presentation choice has no bearing on the metric's honesty",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing that a metric's TIME WINDOW framing can obscure accumulated risk: showing only newly-discovered findings each period, with no visibility into the total accumulated backlog of still-open older findings, can make an organization's true current-state risk exposure look substantially better than reality if a significant backlog exists that simply isn't captured in the 'new this month' view. A complete picture needs both dimensions — new findings per period (useful for trend/velocity tracking) AND total currently-open findings regardless of discovery date (useful for understanding actual accumulated exposure) — rather than presenting only the flattering, backlog-hiding view, and this is a framing/completeness issue independent of whether the monthly count itself is calculated correctly."
   }
 ]
