@@ -7555,5 +7555,203 @@
       }
     ],
     "explanation": "This tests recognizing that a metric's TIME WINDOW framing can obscure accumulated risk: showing only newly-discovered findings each period, with no visibility into the total accumulated backlog of still-open older findings, can make an organization's true current-state risk exposure look substantially better than reality if a significant backlog exists that simply isn't captured in the 'new this month' view. A complete picture needs both dimensions — new findings per period (useful for trend/velocity tracking) AND total currently-open findings regardless of discovery date (useful for understanding actual accumulated exposure) — rather than presenting only the flattering, backlog-hiding view, and this is a framing/completeness issue independent of whether the monthly count itself is calculated correctly."
+  },
+  {
+    "external_key": "SO-078",
+    "domain": "SO",
+    "subtopic": "Threat Hunting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A threat hunter wants to prioritize which hunt hypotheses to pursue first, given limited time. One hypothesis targets a technique that is common in the specific threat actor groups known to target the organization's industry vertical, while another targets a technique that is generically popular across all threat actors but less specifically relevant to this organization's actual threat profile. Which should generally be prioritized, and why?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The generically popular technique should always be prioritized regardless of industry relevance, since overall popularity is the only factor that should influence hunt prioritization",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The industry/threat-actor-specific hypothesis should generally be prioritized, since threat hunting resources are more effectively spent addressing techniques used by adversaries who are actually likely to target this specific organization — this is the core value of incorporating relevant threat intelligence (about actor groups targeting the specific industry) into hunt prioritization, rather than treating all techniques as equally worth pursuing based on generic popularity alone",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Hunt prioritization should never consider threat actor or industry context under any circumstances, and should instead be based purely on random selection among available hypotheses",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Both hypotheses should always be given exactly equal priority regardless of any distinguishing threat intelligence context, since prioritization itself is not a legitimate part of threat hunting methodology",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the intelligence-driven prioritization principle in mature threat hunting programs: with finite hunting resources, prioritizing hypotheses based on relevant threat intelligence (what techniques are actually used by threat actors known to target this organization's specific industry/profile) produces a better return on hunting effort than treating all techniques as equally worth pursuing based on generic popularity alone. This is a core reason threat intelligence and threat hunting functions are typically closely integrated — intelligence about who is likely to target the organization and how should directly inform which hunt hypotheses get prioritized, rather than hunting being conducted with no prioritization logic at all."
+  },
+  {
+    "external_key": "SO-079",
+    "domain": "SO",
+    "subtopic": "Security Tools",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A Security Information and Event Management (SIEM) platform ingests logs from dozens of sources but a review finds that log parsing rules for one critical source (a legacy application) haven't been updated since the application's last major version upgrade 18 months ago, meaning many of that application's log fields are now parsed incorrectly or dropped entirely. What is the BEST characterization of the risk this creates?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no meaningful risk, since the SIEM is still technically ingesting SOME data from this source regardless of parsing accuracy",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Incorrectly parsed or dropped log fields mean that correlation rules, alerts, and searches relying on those specific fields may silently fail to trigger or return incomplete results — this creates a detection blind spot that isn't obvious from the SIEM simply showing 'data is flowing' from the source, since ingestion volume alone doesn't indicate whether the CONTENT is being correctly interpreted and made usable for detection logic",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This issue only affects log storage costs and has no bearing on the SIEM's detection or alerting capabilities",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "SIEM parsing rules never need to be updated after initial configuration, regardless of any changes to the underlying log source's format",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing a subtle but significant SIEM operational risk: log ingestion VOLUME (data is flowing) is a different measure than parsing ACCURACY (the data's content is being correctly interpreted into usable fields) — if parsing rules become stale relative to a log source's evolving format (e.g., after an application upgrade changes its log structure), correlation rules and detections that depend on specific fields can silently fail or produce incomplete results, without any obvious indication in a dashboard that only shows ingestion volume. This is a genuine detection blind spot requiring periodic parsing rule validation against actual current log source formats, not a storage-cost-only concern, and definitely not something that can be safely 'set once and forget' given how log formats evolve with source system changes."
+  },
+  {
+    "external_key": "VM-066",
+    "domain": "VM",
+    "subtopic": "Compliance / Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A company undergoing a SOC 2 Type II audit is asked to provide evidence that vulnerability scanning occurs 'regularly' per their documented policy. The vulnerability management team provides scan reports from only the most recent month, arguing this proves current compliance. The auditor requests reports spanning the entire audit period (12 months). What is the auditor's underlying concern?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The auditor's request is unreasonable; a SOC 2 Type II audit only ever needs to verify current-state compliance at the moment of the audit, not sustained compliance over time",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "SOC 2 Type II specifically assesses the operating EFFECTIVENESS of controls over an extended period (unlike a Type I audit, which assesses design at a single point in time) — providing only the most recent month's evidence doesn't demonstrate the control (regular scanning) was actually followed CONSISTENTLY throughout the entire audit period, and a single recent month's compliance says nothing about whether scanning lapsed for extended stretches earlier in the period",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This request is only relevant for SOC 1 audits, and has no applicability to SOC 2 Type II specifically",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct response is to generate additional scan reports retroactively for the missing months to satisfy the auditor's request regardless of whether scanning actually occurred during that period",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a specific and important SOC 2 audit-type distinction: Type II specifically evaluates whether controls operated effectively over a sustained period (typically 6-12 months), which is precisely why evidence needs to span that full period — a single recent month's compliance doesn't demonstrate the control was actually followed consistently throughout, and could mask extended earlier gaps. This distinguishes Type II from Type I (which assesses control design at a single point in time). Fabricating retroactive evidence for a period where scanning didn't actually occur would be a serious audit integrity violation, not a legitimate response to a documented gap."
+  },
+  {
+    "external_key": "VM-067",
+    "domain": "VM",
+    "subtopic": "Web App Vulnerabilities",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability scan flags an application's login page as vulnerable to 'username enumeration' because the error message differs between 'invalid username' and 'invalid password' (e.g., 'No account found' vs. 'Incorrect password'). A developer argues this is a UX improvement that helps legitimate users understand what went wrong, and shouldn't be changed. What is the security tradeoff being overlooked?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no meaningful tradeoff; distinguishing between these two error cases has zero security implications regardless of the specific wording used",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Distinct error messages let an attacker efficiently determine which usernames/emails are valid registered accounts in the system (by observing which produces the 'no account found' response versus 'incorrect password'), enabling targeted follow-up attacks like password spraying or credential stuffing against only CONFIRMED valid accounts rather than wasting attempts on non-existent ones — a generic error message ('invalid username or password') sacrifices some UX clarity specifically to prevent this enumeration capability",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This is only a legitimate security concern if the application also lacks any password complexity requirements, and is otherwise a non-issue",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Username enumeration has no relationship to any subsequent attack technique and is purely a theoretical, non-exploitable concern",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a genuine and well-documented UX-vs-security tradeoff: distinguishing 'account not found' from 'wrong password' gives an attacker a reliable oracle for confirming which usernames/email addresses correspond to actual registered accounts — critically useful reconnaissance for subsequent password spraying or credential stuffing attacks, which are far more efficient when targeted at confirmed-valid accounts rather than a mix of valid and invalid ones. A generic, identical error message for both failure cases deliberately sacrifices some user-facing clarity specifically to close this enumeration vector — this concern exists independent of the application's password complexity policy, and username enumeration is a well-documented precursor step to real, practical follow-on attacks, not merely theoretical."
+  },
+  {
+    "external_key": "IR-056",
+    "domain": "IR",
+    "subtopic": "Communication & Legal",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization's cyber insurance policy requires that the insurer's approved incident response vendor be engaged for any claimed incident, or coverage may be denied. During an active incident, the internal IR team wants to begin remediation immediately without waiting for the insurer's vendor to be engaged, citing urgency. What is the BEST way to reconcile this tension?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The internal team should always proceed immediately with full remediation regardless of insurance policy requirements, since technical urgency should override any contractual/insurance consideration in every case",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The team should take immediate, minimally-invasive containment actions that don't jeopardize evidence or coverage (isolating affected systems, preserving logs) while URGENTLY engaging the insurer and approved vendor in parallel — since the insurance policy's vendor requirement is a genuine contractual condition that could affect whether the incident's costs are covered, this consideration needs to be weighed alongside technical urgency as part of the incident response process, ideally as part of pre-incident planning (knowing policy requirements in advance) rather than being discovered mid-incident",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The team should wait entirely and take no containment action of any kind until the insurer's approved vendor is fully engaged and has begun their own independent work",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Cyber insurance policy requirements have no legitimate bearing on incident response decision-making and should be disregarded entirely by the technical team",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a real and important IR/business tension around cyber insurance requirements: many policies genuinely condition coverage on using approved vendors, and ignoring this can result in denied claims for incident costs — but this doesn't mean halting urgent containment entirely while waiting for the vendor. The pragmatic approach is taking immediate, low-risk containment steps (network isolation, evidence preservation) that don't compromise either investigation or coverage eligibility, while urgently engaging the required insurer/vendor process in parallel — and ideally, understanding these contractual requirements BEFORE an incident occurs (as part of IR preparation) so this tension doesn't have to be resolved for the first time under active incident pressure."
+  },
+  {
+    "external_key": "RC-033",
+    "domain": "RC",
+    "subtopic": "Regulatory Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization operating under both HIPAA and PCI DSS discovers a breach affecting a database that stored both patient health information AND payment card data together in the same table. The compliance team plans to run separate, siloed breach assessments for HIPAA and PCI DSS without cross-referencing findings between them. What risk does this siloed approach create?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no risk; HIPAA and PCI DSS are completely unrelated frameworks and should always be assessed in complete isolation from one another with no coordination whatsoever",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Running fully siloed assessments risks inconsistent findings about the same underlying incident (e.g., different conclusions about scope, root cause, or affected records reached independently under each framework), inefficient duplicated investigative effort, and potentially missing that a single remediation action might need to satisfy requirements under BOTH frameworks simultaneously — coordinating the assessments (while still applying each framework's distinct specific requirements accurately) produces a more consistent, efficient, and complete response than fully independent parallel efforts",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This concern is only relevant if the organization is also subject to GDPR, and has no bearing on a purely HIPAA/PCI DSS dual-compliance situation",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct fix is to treat this exclusively as a HIPAA matter and disregard PCI DSS entirely, since patient health information is inherently more sensitive than payment card data",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing the value of coordinated (not identical, but coordinated) compliance response when multiple regulatory frameworks apply to the same underlying incident: since both HIPAA-covered and PCI DSS-covered data were compromised in the SAME database/incident, siloed independent assessments risk inconsistent conclusions about scope and root cause, duplicated investigative work, and missed opportunities where a single remediation step could satisfy requirements under multiple frameworks — while still recognizing each framework has its own distinct specific requirements that must be independently satisfied (this isn't about treating the frameworks as identical, just about coordinating the response to the same underlying facts). Neither framework's applicability depends on GDPR also being in scope, and one framework's data being 'more sensitive' doesn't exempt an organization from a separately-applicable framework's own requirements."
   }
 ]
