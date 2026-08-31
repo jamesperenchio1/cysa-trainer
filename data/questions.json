@@ -6037,5 +6037,236 @@
       }
     ],
     "explanation": "This tests recognizing Goodhart's-Law-style metric gaming in security operations reporting: when a metric measures an easily-satisfiable proxy (clicking 'open') rather than the actual meaningful outcome it's intended to represent (a genuine triage decision), people will rationally optimize toward satisfying the measured proxy rather than the underlying goal — this is a metric DESIGN flaw, not purely a training/behavior issue, since well-intentioned staff will predictably respond to how a metric is actually defined. The fix is redefining the metric to measure the meaningful outcome (time to actual triage decision, not first click), not eliminating measurement of SOC responsiveness altogether."
+  },
+  {
+    "external_key": "SO-063",
+    "domain": "SO",
+    "subtopic": "Threat Hunting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A threat hunter wants to hunt for potential use of 'pass-the-hash' attacks in the environment. A colleague says this hunt is pointless because 'our EDR already has a detection rule for pass-the-hash.' What is the BEST response to this objection?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The colleague is correct; if an automated detection rule exists for a technique, there is never any additional value in proactively hunting for it",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Existing automated detections reduce but don't eliminate the value of proactive hunting for the same technique — hunting can validate the detection rule's actual effectiveness against variations of the technique, uncover instances where the specific implementation evaded the rule's exact logic, or surface historical activity predating the rule's deployment that the automated detection would never retroactively catch",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Pass-the-hash attacks cannot be detected by any automated tooling under any circumstances, making hunting the only viable detection method",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Threat hunting should only ever target techniques that have zero existing automated detection coverage, by strict definition",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding threat hunting's value even when automated detection exists: a detection rule targets a SPECIFIC implementation/signature of a technique, and hunting can validate whether the rule actually catches real-world variations, uncover cases where an attacker's specific approach evaded the rule's exact logic, or find historical activity that predates the rule's deployment (which a forward-looking detection rule would never retroactively flag). Hunting and automated detection are complementary, not mutually exclusive — hunting isn't limited only to techniques with zero existing coverage; validating and stress-testing existing detections is itself a legitimate and valuable hunt activity."
+  },
+  {
+    "external_key": "SO-064",
+    "domain": "SO",
+    "subtopic": "Security Tools",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization deploys a Network Detection and Response (NDR) tool that uses machine learning to baseline 'normal' network behavior and alert on deviations. Three months after deployment, the tool's alert volume has dropped to near zero, and the security team celebrates this as evidence the network is now well-secured. What is the MOST likely alternative explanation the team should consider?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no plausible alternative explanation; a drop in ML-based anomaly alerts always and exclusively indicates genuinely improved security posture",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The ML baseline may have adapted to include the malicious/anomalous behavior as part of its 'normal' model if that behavior was present continuously during the baselining period, or gradually incorporated slow, low-level attacker activity as it normalized into the baseline over time — a near-zero alert rate from a behavioral baselining tool can indicate baseline drift/poisoning rather than genuine security improvement, and should prompt validation (e.g., via a known-bad test, or reviewing what the current baseline actually considers 'normal')",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "NDR tools cannot experience any form of baseline drift or degradation over time by design",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "A drop in alert volume can only ever be explained by a licensing or technical malfunction of the tool itself",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a subtle but important limitation of behavioral/ML-based detection: if malicious or anomalous activity is present continuously (or introduced gradually) during or after the tool's baselining period, the model can adapt to incorporate that activity as part of its learned 'normal' behavior, causing genuinely malicious activity to stop triggering alerts — this is baseline drift/poisoning, not improved security. A dramatic drop in alerts from a behavioral tool warrants validation (e.g., testing against known indicators, reviewing what the current model considers normal) rather than uncritical celebration, since it's at least as plausible an explanation as genuine security improvement."
+  },
+  {
+    "external_key": "SO-065",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An analyst notices that a workstation's local Administrators group membership was modified to add a domain user account, and this change occurred via a Group Policy Object (GPO) update rather than a direct local administrative action. The GPO in question was modified 10 minutes earlier by an account belonging to a help desk technician who does not normally have GPO editing permissions. What should the analyst's investigation prioritize?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This should be closed immediately since GPO-based changes are inherently more trustworthy than direct local administrative changes",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Investigate how the help desk technician's account was able to modify a GPO outside their normal permission scope — this could indicate a genuine but undocumented permission grant, a misconfiguration granting excess privilege, or (most concerning) that the account itself has been compromised and is being used to escalate privilege broadly via Group Policy, which would explain both the unusual GPO edit and the unauthorized administrative access grant",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The investigation should focus exclusively on the workstation that received the change, since the GPO modification and permission anomaly are unrelated events",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "No further investigation is warranted since help desk technicians commonly have GPO editing rights as part of their standard role",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests connecting a downstream effect (unauthorized admin group membership change) to its actual root cause (an out-of-scope GPO modification by an account that shouldn't have that permission) rather than investigating the two events in isolation. GPO changes can affect many systems broadly and represent a powerful privilege-escalation and persistence mechanism if abused — an account performing an action outside its normal permission scope is a strong signal of either a permissions misconfiguration or account compromise, and Group Policy abuse for broad administrative access grants is a well-documented technique that should be investigated as a root cause connecting both anomalies, not dismissed as routine or investigated only at the symptom level."
+  },
+  {
+    "external_key": "VM-052",
+    "domain": "VM",
+    "subtopic": "CVSS / Prioritization",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A newly-published CVE affecting a widely-used library initially receives a preliminary CVSS score of 5.5 (Medium) from the NVD (National Vulnerability Database), based on limited initial information from the disclosure. Two weeks later, security researchers publish a detailed writeup demonstrating remote, unauthenticated exploitation is trivial, and NVD updates the score to 9.8 (Critical). A vulnerability management team that only re-scans and re-scores findings quarterly may miss this update for months. What does this scenario illustrate about vulnerability management process design?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "CVSS scores are permanently fixed at publication and never change, so this scenario describes an impossible situation",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "CVSS scores (and the underlying understanding of a vulnerability's exploitability) can and do change after initial publication as more information becomes available, so a vulnerability management program relying solely on infrequent, periodic re-scoring can miss significant severity escalations for extended periods — supplementing periodic scans with ongoing monitoring of severity/score changes for already-tracked vulnerabilities (via threat intelligence feeds or NVD update monitoring) helps close this gap",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This scenario only matters for vulnerabilities affecting proprietary software, and open-source library CVEs are never subject to score revisions",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct fix is to ignore all CVSS scores below 9.0 permanently, since only Critical-rated vulnerabilities are ever subject to later revision",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests awareness that vulnerability scoring is not static — initial disclosures often carry incomplete information, and scores are legitimately revised (often upward) as researchers publish deeper exploitation analysis. A vulnerability management program that only periodically re-scans/re-scores can have a significant blind spot for vulnerabilities that were initially deprioritized based on since-outdated scoring — supplementing periodic scanning with ongoing monitoring for score/severity changes on already-tracked findings (not just newly-discovered ones) is necessary to close this gap, and this applies to any CVE regardless of whether the affected software is open-source or proprietary."
+  },
+  {
+    "external_key": "VM-053",
+    "domain": "VM",
+    "subtopic": "Web App Vulnerabilities",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability assessment finds that an API endpoint properly validates and rejects malformed JSON input, correctly enforces authentication, and uses parameterized database queries. However, the endpoint has no rate limiting and accepts unlimited requests per second from a single source. Why does the assessment still flag this as a finding worth remediating?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This should not be flagged at all, since input validation, authentication, and parameterized queries together represent complete security coverage for any API endpoint",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Rate limiting addresses a different risk category (availability and abuse prevention) than the other controls mentioned (input validation, authentication, injection prevention) — without it, the endpoint remains vulnerable to denial-of-service through resource exhaustion, credential-stuffing/brute-force attacks against the authentication mechanism at unlimited speed, or automated scraping/abuse, none of which the other controls are designed to prevent",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Rate limiting is purely a performance optimization feature with no security relevance whatsoever",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This finding is only valid if the endpoint is also missing HTTPS encryption, since rate limiting has no independent security value",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing that different security controls address different risk categories, and strong coverage in one area (input validation, authN, injection prevention) doesn't compensate for a gap in another (availability/abuse prevention). Rate limiting specifically defends against denial-of-service via resource exhaustion, unlimited-speed credential stuffing/brute force against authentication, and automated abuse/scraping — none of which are addressed by validating input format, checking authentication tokens, or using parameterized queries. A genuinely thorough security posture requires controls across all relevant risk categories, not just the ones already covered."
+  },
+  {
+    "external_key": "IR-045",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization's IR plan defines specific criteria for declaring an incident (e.g., 'confirmed unauthorized access to production systems'). During an ambiguous event that doesn't clearly meet this threshold, the on-call analyst hesitates to formally declare an incident, delaying resource mobilization and executive notification by several hours while gathering more evidence, which later confirms a genuine, serious breach. What does this scenario illustrate about incident declaration criteria design?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Incident declaration criteria should never exist at all, since any threshold-based approach will always cause delays for ambiguous situations",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Rigid, binary declaration criteria can create hesitation and delay when a real situation is genuinely ambiguous — a more effective design includes a lower-threshold 'preliminary investigation' or 'potential incident' status that mobilizes SOME resources and begins tracking/documentation immediately upon reasonable suspicion, escalating to full formal declaration once the threshold is clearly met, rather than an all-or-nothing gate that discourages early action during uncertainty",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The analyst made the correct decision, and any delay in formal declaration during ambiguous situations is always the appropriate and risk-free choice",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This is purely an individual performance issue with the specific analyst and has no implications for how the IR plan's declaration criteria are structured",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a real IR program design consideration: overly rigid, binary incident-declaration thresholds can create hesitation during genuinely ambiguous situations, since analysts may be reluctant to trigger a 'formal declaration' (with its associated notifications and resource mobilization) without clear-cut confirmation — costing valuable response time exactly when speed matters. A tiered approach (a lower-threshold 'preliminary investigation'/'potential incident' status that starts documentation and limited resource mobilization immediately, escalating to full declaration once confirmed) better balances avoiding false-alarm fatigue against avoiding costly hesitation-driven delays — this is a structural IR plan design consideration, not simply an individual analyst performance issue."
+  },
+  {
+    "external_key": "RC-027",
+    "domain": "RC",
+    "subtopic": "Regulatory Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization operating in the EU processes personal data under GDPR and also holds ISO 27001 certification. After a security incident, a team member states 'we're ISO 27001 certified, so we've already satisfied our GDPR breach notification obligations.' Is this correct?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Correct — ISO 27001 certification automatically satisfies all GDPR regulatory notification requirements for any organization holding that certification",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Incorrect — ISO 27001 is an information security management system (ISMS) certification standard demonstrating a structured security program is in place; it is a distinct framework from GDPR's specific LEGAL breach notification obligations (which include specific timelines, specific supervisory authority notification requirements, and potentially data subject notification), and holding a security certification does not substitute for or automatically fulfill a separate legal/regulatory notification duty",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Incorrect, but only because ISO 27001 certification must be renewed annually to provide any GDPR-related benefit at all",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Correct, but only for organizations headquartered outside the EU, which are otherwise exempt from this requirement",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a common conflation between security management certifications and specific legal/regulatory compliance obligations: ISO 27001 certification demonstrates a structured, audited information security management system is in place, which can support GDPR compliance efforts generally (e.g., demonstrating 'appropriate technical and organizational measures'), but it is an entirely separate framework from GDPR's specific legal breach notification requirements (72-hour supervisory authority notification, potential data subject notification, specific content requirements). Holding a security certification does not automatically satisfy a distinct legal notification obligation — these are complementary but non-substitutable requirements, regardless of certification renewal timing or organizational headquarters location."
   }
 ]
