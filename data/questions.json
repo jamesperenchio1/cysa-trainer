@@ -6268,5 +6268,236 @@
       }
     ],
     "explanation": "This tests a common conflation between security management certifications and specific legal/regulatory compliance obligations: ISO 27001 certification demonstrates a structured, audited information security management system is in place, which can support GDPR compliance efforts generally (e.g., demonstrating 'appropriate technical and organizational measures'), but it is an entirely separate framework from GDPR's specific legal breach notification requirements (72-hour supervisory authority notification, potential data subject notification, specific content requirements). Holding a security certification does not automatically satisfy a distinct legal notification obligation — these are complementary but non-substitutable requirements, regardless of certification renewal timing or organizational headquarters location."
+  },
+  {
+    "external_key": "SO-066",
+    "domain": "SO",
+    "subtopic": "Malware Analysis",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An analyst reverse engineering a malware sample identifies hardcoded strings referencing a specific, uncommon foreign-language keyboard layout check and a check for the system's locale settings, with the malware refusing to execute its payload if the locale doesn't match certain expected values. What is the LIKELY purpose of this behavior?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This is a random artifact of the malware's compilation process with no intentional purpose or analytical significance",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "This is a geofencing/targeting technique — the malware author is deliberately restricting execution to systems matching specific regional/language characteristics, either to precisely target a specific victim population or, in some cases, to deliberately AVOID executing on systems in the author's own home region (a technique sometimes used by threat actors to avoid prosecution risk domestically)",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Locale and keyboard layout checks are a standard, required component of all software regardless of malicious intent and carry no analytical significance",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This behavior indicates the sample is a benign localization testing tool rather than malware, regardless of any other indicators present",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing a known malware anti-analysis/targeting technique: locale, keyboard layout, and language checks are a documented method threat actors use for geofencing — either to precisely target victims in a specific region, or notably, to explicitly AVOID executing in certain regions (a technique associated with some threat actors avoiding action against systems in their presumed home country/region to reduce legal risk). This is a deliberate, meaningful behavioral indicator worth documenting in analysis, not a random compilation artifact, a routine software requirement, or evidence the sample is actually benign — the significance of such a check depends on further context but the check itself is a recognized and purposeful technique."
+  },
+  {
+    "external_key": "SO-067",
+    "domain": "SO",
+    "subtopic": "Threat Intelligence",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A threat intelligence team produces a report using the Traffic Light Protocol (TLP), marking a specific piece of sensitive intelligence as 'TLP:RED.' An analyst wants to share a summary of this intelligence in a public industry-wide Slack channel to help other organizations. Is this appropriate?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Yes — TLP markings are purely advisory suggestions with no actual restriction on sharing, and public dissemination of any TLP-marked intelligence is always appropriate if it could help others",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "No — TLP:RED specifically restricts disclosure to only the named recipients of that specific communication, not for further dissemination in any form, including a summary or a public forum; sharing this intelligence (even summarized) in a public or wider channel violates the explicit handling restriction the source intended, and doing so can damage trust relationships with intelligence-sharing partners and discourage future sharing",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This is appropriate as long as the analyst removes all identifying details before sharing, regardless of the original TLP marking",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "TLP markings only apply to government intelligence sources and have no bearing on private-sector or industry threat intelligence sharing",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests correct understanding and respect for TLP handling restrictions: TLP:RED is the most restrictive designation, meaning the information is limited to the specific named recipients of the original communication only, with no further sharing in any form — even a sanitized or summarized version violates this restriction, since the sharing restriction is about controlling distribution of the underlying information, not just verbatim reproduction. Violating TLP restrictions damages the trust relationships that make intelligence sharing communities function, and TLP is a widely-used standard across government and private-sector threat intelligence sharing alike, not a government-exclusive convention."
+  },
+  {
+    "external_key": "VM-054",
+    "domain": "VM",
+    "subtopic": "Compliance / Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A company's vulnerability management program successfully passes an external compliance audit, but a red team engagement conducted the following month easily compromises the environment through a well-known, unpatched vulnerability that should have been caught by the very program that just passed audit. What is the MOST likely explanation for this discrepancy?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This is impossible; passing a compliance audit and being compromised through a known vulnerability can never both be true simultaneously",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Compliance audits typically verify that a program's PROCESSES exist and are documented/followed as designed (policies, scan schedules, evidence of remediation tracking) — they don't necessarily test actual real-world effectiveness against a determined adversary the way a red team engagement does; an organization can have a fully compliant, well-documented process on paper that still has genuine gaps in scan scope, remediation follow-through, or detection of the exact vulnerability an attacker actually exploits",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The compliance audit result must have been fraudulent, since no legitimate audit process could produce a passing result alongside a genuine vulnerability",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Red team engagements and compliance audits are functionally identical exercises that should always produce identical findings",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding the fundamental difference between compliance verification and adversarial security testing: compliance audits generally assess whether documented processes exist and are being followed (scan schedules maintained, remediation tickets tracked, policies in place) — a check on process maturity and consistency. A red team engagement tests actual real-world resilience against a determined, creative adversary, which can surface genuine gaps (scope blind spots, incomplete remediation, novel attack paths) that a process-focused compliance audit isn't designed to catch. 'Compliant' and 'actually secure against real attackers' are related but distinct concepts, and this discrepancy is a well-known and common finding, not evidence of fraud."
+  },
+  {
+    "external_key": "VM-055",
+    "domain": "VM",
+    "subtopic": "Remediation",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management team implements a policy requiring formal written risk acceptance (with named business owner sign-off) for any vulnerability deferred beyond its SLA. Six months later, an audit finds that 80% of all open Critical findings past SLA carry a risk acceptance signed by the SAME single IT director, who admits to signing them in bulk without individually reviewing each finding's specific technical details. What does this illustrate about the risk acceptance process?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This is fully appropriate and represents an efficient, streamlined risk acceptance process that should be continued and expanded to other risk categories",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A risk acceptance process that becomes a rubber-stamp exercise (bulk-signing without genuine case-by-case technical review) fails to achieve its actual purpose — meaningful risk acceptance requires the accepting party to actually understand and weigh the SPECIFIC risk being accepted, not merely satisfy a procedural signature requirement; this pattern suggests the process needs redesign (e.g., requiring documented justification per finding, limiting bulk-signing, or involving technical staff review before executive sign-off) to restore genuine accountability",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This finding is irrelevant since any signed risk acceptance, regardless of how it was produced, provides complete legal and organizational protection",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct fix is to eliminate the risk acceptance process entirely and require immediate remediation of all findings with no exceptions permitted under any circumstances",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing when a governance control becomes hollow/performative rather than substantively functioning as intended: a risk acceptance signature is meant to represent genuine, informed acknowledgment of a specific risk by an accountable business owner — bulk-signing without individual review defeats this purpose entirely, turning a meaningful accountability mechanism into a rubber stamp that provides false assurance the risk was actually evaluated. The fix is process redesign to ensure genuine case-by-case review (not a wholesale elimination of risk acceptance as a legitimate practice, and not the false assumption that any signature provides full protection regardless of the process quality behind it)."
+  },
+  {
+    "external_key": "IR-046",
+    "domain": "IR",
+    "subtopic": "Attack Frameworks",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team building detection coverage uses the MITRE ATT&CK Navigator tool to visualize which techniques they have detection rules for, revealing strong coverage in the Execution and Persistence tactics but almost no coverage in Exfiltration and Impact. A stakeholder argues this is fine because 'if we stop the attack early in Execution or Persistence, Exfiltration and Impact never happen anyway.' What is the flaw in this reasoning?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The stakeholder is correct, and detection coverage should always be concentrated exclusively on the earliest possible stages of an attack with no consideration for later stages",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "This reasoning assumes 100% detection effectiveness at earlier stages, which is never realistic — a sophisticated, novel, or simply lucky attack technique can bypass early-stage detections entirely, and without meaningful coverage for later stages like Exfiltration and Impact, the organization has no ability to detect and respond to an attack that DOES get past initial defenses, potentially allowing it to fully succeed undetected",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "MITRE ATT&CK does not actually include Exfiltration or Impact as tactics, making this entire scenario a mischaracterization",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Detection coverage gaps in later-stage tactics are never a meaningful security concern regardless of earlier-stage coverage strength",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests defense-in-depth reasoning applied to detection engineering: relying entirely on earlier-stage detections assumes those defenses are perfectly effective against every possible attack variation, which is an unrealistic assumption — sophisticated or novel techniques can and do bypass early detections. Meaningful coverage across the full attack lifecycle, including later stages like Exfiltration and Impact (both legitimate MITRE ATT&CK tactics), provides a critical safety net that can still catch and limit damage from an attack that successfully evades earlier controls — concentrating coverage exclusively on early stages leaves the organization blind if that first line of defense fails."
+  },
+  {
+    "external_key": "IR-047",
+    "domain": "IR",
+    "subtopic": "Communication & Legal",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "During an incident investigation, an IR analyst posts detailed technical findings, including specific IOCs and internal system names, to a public Twitter/X thread to 'warn the community' about an ongoing attack campaign, without first consulting legal or communications teams. What is the BEST characterization of this action?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This is always the correct action during any active incident, since sharing threat information publicly as quickly as possible is unconditionally the top priority regardless of other considerations",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "This is problematic even with good intentions — premature, unauthorized public disclosure during an active, unresolved incident can tip off the attacker (accelerating destructive behavior or infrastructure changes), reveal information useful for further attacks on the same organization, create legal/regulatory complications (premature public statements ahead of required formal notifications), and bypass established communication protocols specifically designed to coordinate disclosure timing with legal, PR, and executive stakeholders",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This action has no downside of any kind and should be actively encouraged as standard practice for every analyst during every incident",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Sharing threat intelligence publicly during an incident is only problematic if the analyst used their real name rather than an anonymous account",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding why incident communications require coordination even when the underlying intent (warning the community) is well-meaning: premature public disclosure during an ACTIVE, unresolved incident can alert the attacker to detection (risking destructive escalation or infrastructure changes that hinder investigation), expose additional details useful for further targeting the same organization, create legal exposure by getting ahead of required formal notification processes, and undermine the organization's ability to coordinate a controlled, accurate disclosure. This is why IR communication protocols specifically route external disclosure through legal/communications/executive review rather than leaving it to individual analyst discretion mid-incident — the anonymity of the posting account is not the relevant issue here."
+  },
+  {
+    "external_key": "RC-028",
+    "domain": "RC",
+    "subtopic": "Stakeholder Communication",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management report to engineering leadership includes a chart showing 'total open vulnerabilities' trending upward over six months. Engineering leadership interprets this as evidence the security team is falling behind, when in fact the increase is due to expanded scanning coverage (newly onboarded assets and previously-unscanned network segments) surfacing findings that existed all along but were simply undetected before. What is the BEST way to prevent this kind of misinterpretation?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Stop reporting total open vulnerability counts entirely, since any upward trend in this metric is inherently misleading regardless of context",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Provide the necessary context alongside the raw trend — explicitly noting when an increase reflects expanded scan coverage/scope rather than actual new vulnerability introduction, and ideally normalizing the metric (e.g., vulnerabilities per asset, or reporting scan coverage growth alongside finding counts) so leadership can distinguish 'we're finding more because we're looking harder' from 'our security posture is genuinely deteriorating'",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Leadership's misinterpretation is entirely their own responsibility and reflects no shortcoming in how the report itself was structured or presented",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct fix is to intentionally under-report the true vulnerability count so the trend line appears flat regardless of actual findings",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests providing adequate context to prevent a very common and understandable metric misinterpretation: an increasing raw count can result from either genuinely worsening security posture OR simply looking harder (expanded scan coverage), and these have opposite practical implications — the security team should get credit for improved coverage, not blame for an artifact of better visibility. Good reporting practice explicitly calls out the driver behind a trend (coverage expansion vs. genuine new exposure) and/or normalizes the metric so it isn't misleading, rather than either omitting the metric entirely, blaming the audience for a foreseeable misreading, or — clearly inappropriately — deliberately misrepresenting the actual data."
   }
 ]
