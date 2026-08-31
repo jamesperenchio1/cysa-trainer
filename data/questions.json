@@ -6928,5 +6928,236 @@
       }
     ],
     "explanation": "This tests separating the urgent technical containment need (access revocation, which can and should happen immediately) from the separate, more deliberate legal/HR process (termination), which benefits from a more complete investigative picture. Acting on containment immediately addresses the security urgency without needing the full investigation resolved, while rushing to formal termination before the facts are fully established risks legal exposure (wrongful termination claims if later facts don't support the initial assumption), loses potential investigative value from continued (monitored) access to the employee's cooperation, and could tip off a sophisticated actor prematurely — this measured, two-track approach is a common and defensible practice, not unnecessary caution or an all-or-nothing choice."
+  },
+  {
+    "external_key": "SO-072",
+    "domain": "SO",
+    "subtopic": "Security Tools",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization deploys deception technology (a honeypot/honeytoken system) that plants fake credentials in a specific, monitored location. Three months later, an alert fires because one of these honeytoken credentials was used to attempt authentication against a production system. A junior analyst asks why this alert should be treated with HIGHER confidence than a typical anomaly-based detection alert. What is the BEST explanation?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Honeytoken alerts should be treated with the SAME confidence level as any other anomaly-based alert, with no meaningful difference in reliability",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Honeytokens are, by design, credentials/artifacts with NO legitimate business use — unlike behavioral anomaly detection (which must distinguish malicious activity from unusual-but-legitimate behavior, inherently producing some false positive rate), any use of a honeytoken at all is inherently illegitimate since no authorized process or user should ever have a reason to use it, making a honeytoken trigger an unusually high-confidence indicator of actual malicious activity or reconnaissance",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Honeytoken alerts are inherently less reliable than behavioral detection because honeytokens can never be effectively concealed from a sophisticated attacker",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This alert should be disregarded entirely, since honeytoken credentials are purely educational tools with no genuine detection value",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding why deception technology (honeytokens/honeypots) can provide unusually high-confidence detection signal: unlike behavioral/statistical anomaly detection (which must infer maliciousness from patterns that could theoretically have a legitimate explanation, inherently carrying some false-positive risk), a honeytoken has NO legitimate use case at all by design — no authorized user or automated process has any valid reason to ever touch it. This means virtually any interaction with a honeytoken is a strong, high-confidence signal of unauthorized reconnaissance or lateral movement, which is precisely why deception technology is valued as a complementary detection layer alongside traditional behavioral analytics."
+  },
+  {
+    "external_key": "SO-073",
+    "domain": "SO",
+    "subtopic": "Zero Trust / Architecture",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A company migrating toward Zero Trust architecture implements continuous authentication/authorization re-evaluation for its internal applications rather than a single authentication event at login that then persists for an entire session. What specific risk does this design choice address that traditional 'authenticate once, trust for the whole session' models don't?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This design provides no meaningful additional protection over a traditional single-authentication session model, and exists purely to add unnecessary friction for users",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A traditional single-authentication session model creates a window where, once a session token/cookie is established, an attacker who steals or hijacks that session token can act with the full privileges of the authenticated user for the ENTIRE remaining session duration without needing to re-authenticate — continuous re-evaluation (checking user/device risk signals and re-verifying trust throughout the session, not just once at login) reduces this window and can detect/respond to a hijacked session or a change in risk posture mid-session, rather than only at the initial login moment",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Continuous re-evaluation exists solely to satisfy regulatory compliance checkbox requirements with no genuine security benefit",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This design choice specifically and exclusively addresses phishing attacks and has no relevance to any other attack vector",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the security rationale behind continuous verification in Zero Trust versus traditional session-based trust models: a single authentication event followed by trusting a session token/cookie for its entire lifetime means a stolen or hijacked session (via token theft, session fixation, or similar) grants an attacker the full authenticated user's privileges for the remaining session duration with no further checkpoint. Continuous re-evaluation of risk signals (device posture changes, behavioral anomalies, location changes, etc.) throughout the session — not just at login — narrows this exposure window and can detect and respond to a compromised session mid-stream, addressing a broader class of risks (session hijacking, changed device/context risk) beyond just the initial authentication moment or phishing specifically."
+  },
+  {
+    "external_key": "VM-060",
+    "domain": "VM",
+    "subtopic": "Scanning Methodology",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management team scans a fleet of IoT devices (smart building sensors) using standard network vulnerability scanning techniques and reports 'no vulnerabilities found' for most devices. A security architect is skeptical of this clean result. What is the MOST likely reason standard scanning approaches often underperform against embedded/IoT devices specifically?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "IoT and embedded devices are inherently immune to vulnerabilities by design, making a clean scan result fully expected and accurate",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Standard vulnerability scanners often rely on techniques (banner grabbing, known CVE-to-version matching, standard OS/service fingerprinting) that assume common protocols and well-documented software stacks — many embedded/IoT devices run proprietary, minimal, or non-standard firmware that doesn't match these detection patterns well, and can also be fragile enough that aggressive scanning techniques are deliberately avoided to prevent crashing the device, both of which can result in a false sense of security from an apparently 'clean' scan rather than genuine assurance the device has no vulnerabilities",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This clean result definitively proves the devices are fully patched and secure, and no further verification is warranted",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Standard vulnerability scanners are only capable of scanning traditional servers and workstations, and cannot technically initiate any connection to an IoT device at all",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding a real limitation of applying general-purpose vulnerability scanning to embedded/IoT devices: these devices frequently run minimal, proprietary, or non-standard firmware/protocol stacks that don't match the fingerprinting patterns (banner formats, known service signatures, standard OS version strings) that scanners rely on to identify known vulnerabilities, and scanners are often deliberately configured more conservatively against fragile embedded devices to avoid crashing them (sacrificing thoroughness for stability). This combination means a 'clean' scan result against IoT devices often reflects detection limitations rather than genuine assurance of security, warranting supplementary approaches (firmware analysis, vendor security advisories, physical/protocol-specific testing) rather than taking the clean result at face value."
+  },
+  {
+    "external_key": "VM-061",
+    "domain": "VM",
+    "subtopic": "Compliance / Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A company's vulnerability management program tracks remediation SLA compliance PER TICKET rather than per finding. A single vulnerability affecting 500 servers is opened as one ticket, remediated on 495 servers within SLA, but 5 servers are missed due to a deployment script error. The ticket is closed as 'SLA met' since the vast majority of affected assets were remediated in time. What is the flaw in this tracking approach?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This tracking approach is fully sound; closing a ticket based on majority remediation success accurately represents the organization's actual vulnerability exposure",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Per-ticket tracking that closes based on 'majority remediated' can mask genuinely still-vulnerable assets — those 5 unremediated servers remain exposed to the original vulnerability regardless of the ticket's closure status, and if remediation tracking isn't granular enough to independently verify and track EACH individual asset's actual patch status, incompletely-remediated assets can silently fall through the cracks and remain vulnerable indefinitely with no visibility into their unremediated state",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The concern is only valid if more than 50% of affected assets were missed, since a small minority of unremediated assets never represents meaningful residual risk",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This tracking approach should be changed to track by department instead of by ticket or by individual asset, which would fully resolve the underlying issue",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing a granularity flaw in remediation tracking design: closing a ticket based on 'most' affected assets being remediated obscures the fact that SOME assets remain genuinely vulnerable and exposed — the actual risk (those 5 unpatched servers) doesn't diminish just because the tracking ticket shows 'SLA met.' Meaningful vulnerability management requires tracking remediation status at the individual asset level (not just ticket-level aggregate status) to ensure incompletely-remediated findings don't silently disappear from visibility once a ticket is marked closed; the residual risk from unpatched assets exists regardless of what percentage of the total population they represent, and reorganizing by department wouldn't address the core granularity problem."
+  },
+  {
+    "external_key": "IR-052",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization experiences a security incident and, during the post-incident review, discovers that the actual sequence of events significantly deviated from the documented IR plan's assumed timeline — specifically, detection occurred much later than the plan assumed would be typical, changing which containment actions were actually still viable by the time the team responded. What does this scenario suggest about how IR plans should be evaluated and maintained?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "IR plans should be treated as immutable, one-time documents that never need revision regardless of how real incidents actually unfold in practice",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Post-incident reviews should specifically compare the plan's assumptions (detection timing, available containment options, expected attacker behavior) against what ACTUALLY happened, and use discrepancies to refine the plan's assumptions and procedures going forward — an IR plan that assumes idealized, fast detection may recommend containment actions that are no longer viable or sufficient once real-world detection delays are accounted for, and lessons learned should feed back into updating these underlying assumptions, not just fixing surface-level procedural gaps",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This discrepancy is irrelevant to IR plan quality, since real incidents are expected to never match documented plans in any respect",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The only appropriate response is to abandon structured IR planning entirely in favor of fully improvised, ad hoc incident response going forward",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a deeper lesson about IR plan maintenance: post-incident reviews shouldn't just check whether documented STEPS were followed — they should examine whether the plan's underlying ASSUMPTIONS (like expected detection speed, which containment options remain viable at various stages, typical attacker dwell time) actually held true during the real incident, and use discrepancies to meaningfully update those assumptions and the associated recommended actions. A plan built on unrealistic assumptions (e.g., assuming detection always happens quickly) can recommend containment actions that are no longer effective by the time a real, more-delayed detection occurs — this is a reason to refine planning with realistic assumptions, not to abandon structured planning altogether or dismiss the discrepancy as unimportant."
+  },
+  {
+    "external_key": "IR-053",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A forensic analyst calculates a SHA-256 hash of a forensic disk image immediately after acquisition and documents it in the chain of custody. Months later, during court proceedings, the defense requests the analyst re-verify the hash of the currently-stored evidence copy. Why is this verification step significant to the evidence's admissibility?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This step is purely a formality with no actual bearing on evidence admissibility or integrity, since hashes calculated at acquisition are considered permanently and automatically valid regardless of any later verification",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Matching the current hash against the originally-documented hash demonstrates the evidence has not been altered, corrupted, or tampered with since acquisition — this hash verification is a core mechanism for establishing evidence integrity throughout the chain of custody, and a court can reasonably question the reliability of evidence if this verification step is skipped or if the hashes don't match, since a mismatch would indicate the evidence may have been changed since its original documented state",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Hash verification is only relevant for physical evidence, not digital forensic images, and this request reflects a misunderstanding of digital evidence procedures",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This step is exclusively about demonstrating the forensic tool's own reliability, and has no relationship to the specific evidence's integrity",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding the fundamental role of cryptographic hashing in digital forensic evidence integrity: a hash value computed at acquisition serves as a fingerprint of the evidence's exact state at that moment — re-computing and matching that hash later demonstrates the evidence hasn't been altered, corrupted, or tampered with in the intervening time, which is central to establishing a defensible chain of custody. This verification IS specifically about the particular piece of evidence's integrity (not the tool's general reliability), is a standard and expected practice specifically for digital evidence (where bit-level integrity can be cryptographically verified in a way physical evidence cannot), and skipping it or finding a mismatch would appropriately raise legitimate questions about the evidence's reliability in court."
+  },
+  {
+    "external_key": "RC-030",
+    "domain": "RC",
+    "subtopic": "Regulatory Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A US-based company discovers a breach affecting customers in California, New York, and the EU simultaneously. The compliance team says 'we'll just follow California's breach notification law since it's generally considered strict, and that will automatically satisfy the other jurisdictions too.' Is this a safe assumption?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Yes — California's breach notification requirements are universally recognized as a superset of every other US state's and every international jurisdiction's requirements, making this a fully safe shortcut",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "No — each jurisdiction (different US states, and the EU under GDPR) has its own specific and potentially DIFFERENT requirements regarding notification timelines, required content, which regulators must be notified, and triggering thresholds; 'strictness' isn't a single-dimensional ranking that guarantees one jurisdiction's compliance automatically satisfies another's distinct legal requirements, so each applicable jurisdiction's specific requirements need to be independently evaluated and satisfied",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This assumption is only unsafe for the EU/GDPR portion, but is fully safe and sufficient for satisfying any US state-level requirement",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Breach notification requirements are fully standardized and identical across all US states and international jurisdictions, making jurisdiction-specific analysis unnecessary in any case",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a common but risky compliance oversimplification: US state breach notification laws (and international frameworks like GDPR) each have their own specific requirements — different notification timelines, different content requirements, different regulator notification obligations, and different triggering thresholds for what constitutes a reportable breach. There's no single jurisdiction whose compliance automatically and reliably satisfies every other jurisdiction's distinct legal requirements, whether comparing US states to each other or to GDPR — a genuinely thorough compliance response requires independently evaluating and satisfying each applicable jurisdiction's specific obligations, not assuming a 'strictest jurisdiction wins' shortcut covers everything."
   }
 ]
