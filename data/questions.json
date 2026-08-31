@@ -6730,5 +6730,203 @@
       }
     ],
     "explanation": "This tests recognizing a serious real-world consequence of a Goodhart's-Law-style volume-only performance metric: when only quantity is measured and rewarded, without any corresponding quality check, analysts are rationally incentivized to prioritize speed/volume over accuracy — precisely because that's what's actually being measured and rewarded, regardless of individual character. This directly and predictably produces worse security outcomes (more genuine threats incorrectly closed). The fix is redesigning the metric to incorporate quality (e.g., a sampled quality-review process, escalation accuracy rate, or reopened-alert tracking) alongside volume, not eliminating individual performance measurement altogether, which would remove accountability entirely rather than fixing the actual measurement flaw."
+  },
+  {
+    "external_key": "SO-070",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An analyst notices a spike in failed login attempts against a web application's login endpoint, all using different usernames but the SAME single password value repeatedly. What type of attack does this pattern MOST likely represent, and how does it differ from a typical brute-force attack?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This is a standard brute-force attack, which by definition always involves trying many different passwords against a single fixed username",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "This is a 'password spraying' attack — instead of trying many passwords against one account (traditional brute force, which risks quickly triggering account lockout policies), the attacker tries one commonly-used password against MANY different accounts, deliberately staying under per-account lockout thresholds while still having a reasonable chance of success against at least a few accounts using that common password",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This pattern indicates a credential stuffing attack, which specifically requires the attacker to already possess valid password hashes obtained from a prior breach",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This traffic pattern has no established name in security terminology and represents random, unstructured login attempts with no analytical significance",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests distinguishing between related but distinct authentication-attack patterns: password spraying specifically involves trying one (or a small number of) commonly-used password(s) across MANY different usernames, precisely to evade per-account lockout policies that would trigger from many failed attempts against a single account (the traditional brute-force pattern, which is the reverse: many passwords against one username). Credential stuffing is a related but distinct technique using previously-breached username/password PAIRS (not a single common password across accounts) — the pattern described here (one password, many usernames) specifically matches password spraying, a well-documented and named attack technique."
+  },
+  {
+    "external_key": "SO-071",
+    "domain": "SO",
+    "subtopic": "Threat Hunting",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A threat hunter builds a hunt hypothesis around 'living off the land' techniques by searching for unusual parent-child process relationships (e.g., Microsoft Word spawning PowerShell). The hunt surfaces one such instance, but investigation reveals it was caused by a legitimate, documented internal macro-based automation tool used by the finance department. What is the BEST way to characterize the VALUE of this hunt, given the negative result?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The hunt provided zero value since it didn't identify an actual malicious compromise, making it a wasted effort",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The hunt still provided meaningful value even with a benign finding: it validated that the hunting methodology and detection logic actually work as intended (successfully surfacing a genuine parent-child anomaly), it documented a legitimate exception that can now inform tuning to reduce future false positives for this specific pattern, and it improved the team's understanding of the environment's baseline behavior — all of which strengthen future hunts and detections even without finding an active compromise this time",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The hunt should have been immediately escalated as a confirmed incident regardless of the legitimate explanation discovered during investigation",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This result proves that 'living off the land' hunting hypotheses are fundamentally unsound and should never be pursued going forward",
+        "correct": false
+      }
+    ],
+    "explanation": "This reinforces the earlier lesson about threat hunting value from a different angle — a negative/benign finding still has meaningful value: it validates that the hunt's methodology and underlying detection logic actually work (the hypothesis correctly identified a genuine anomalous pattern, even though this specific instance turned out to be benign), it produces a documented legitimate exception useful for tuning future detections to reduce false positives, and it deepens the team's understanding of the environment's actual baseline behavior. Threat hunting value isn't binary (only valuable if it finds active compromise) — methodology validation and environmental knowledge-building are also genuine, valuable outcomes."
+  },
+  {
+    "external_key": "VM-058",
+    "domain": "VM",
+    "subtopic": "Web App Vulnerabilities",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security assessment finds that an application correctly implements HTTPS with a valid, properly-configured TLS certificate for all pages. However, one specific page loads a third-party analytics script via a plain HTTP URL (not HTTPS), and browsers show a 'mixed content' warning. Why is this considered a genuine security concern rather than just a cosmetic browser warning?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This is purely a cosmetic issue affecting only the browser's visual padlock indicator, with no actual security implication for users or the application",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A resource loaded over unencrypted HTTP on an otherwise-HTTPS page can be intercepted and modified in transit by an on-path attacker (e.g., on public WiFi) — since that script executes with the security context of the page that loaded it, a maliciously-modified analytics script could inject arbitrary malicious JavaScript into the page, potentially compromising the entire page's security despite the rest of the site being properly served over HTTPS",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Mixed content warnings only affect the loading speed of the page and have no relationship to security integrity",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This concern is only valid if the third-party analytics provider is known to be malicious, and is otherwise a non-issue regardless of the transport protocol used",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding why mixed content is a genuine security vulnerability, not just a browser UI nuisance: any resource (especially executable JavaScript) loaded over unencrypted HTTP is vulnerable to on-path tampering — an attacker positioned on the network (public WiFi, compromised router, etc.) can modify that unencrypted response in transit, injecting malicious code that then executes with the full trust and privileges of the HTTPS page that loaded it. This means the security of the ENTIRE page can be undermined by a single unencrypted resource, regardless of whether the specific third-party provider is currently known to be malicious — the vulnerability is about the unencrypted transport being tamperable, not about the provider's reputation."
+  },
+  {
+    "external_key": "VM-059",
+    "domain": "VM",
+    "subtopic": "Remediation",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management team identifies that a critical finding requires a specific vendor patch, and the vendor confirms the patch is available. However, applying it requires a maintenance window that conflicts with the organization's busiest sales period (the next available window is 6 weeks out). A stakeholder suggests simply applying the patch immediately during business hours and accepting the outage risk. What is the BEST way to evaluate this suggestion?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The suggestion should always be accepted immediately regardless of business context, since any available patch for a Critical vulnerability must be applied the instant it exists with zero regard for operational timing",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "This decision requires weighing the actual, current exploitability and exposure of the vulnerability (is it internet-facing, is there active exploitation in the wild, are there compensating controls available) against the concrete business cost of a disruptive change during peak revenue — if genuine urgency exists (active exploitation, high exposure), an emergency change process with appropriate risk communication to stakeholders may be justified; if not, interim compensating controls plus a scheduled fix at the next reasonable window may be the better-balanced choice, and this determination should be made deliberately with both technical and business stakeholders, not simply defaulted to either extreme",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The patch should never be applied outside of a previously-scheduled maintenance window under any circumstances, regardless of the vulnerability's actual severity or exploitation status",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This decision should be made unilaterally by the vulnerability management team without any input from business stakeholders, since patching timing is purely a technical matter",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests balanced risk-based decision-making rather than defaulting to either 'patch immediately no matter the cost' or 'never deviate from the schedule': the right approach depends on the vulnerability's actual current risk profile (real exploitability, exposure, existence of compensating controls) weighed against genuine business impact of a disruptive emergency change — a determination that should involve both technical and business stakeholders rather than being made unilaterally by either side or resolved by a blanket rule that ignores context in either direction."
+  },
+  {
+    "external_key": "IR-050",
+    "domain": "IR",
+    "subtopic": "Attack Frameworks",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An analyst is documenting an incident and notes the attacker used a technique matching MITRE ATT&CK T1548 (Abuse Elevation Control Mechanism) to bypass User Account Control (UAC) on Windows. A colleague asks whether this should also be documented under the Defense Evasion tactic, Privilege Escalation tactic, or both. What is the correct approach?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Only one tactic can ever be documented per technique, and the analyst must arbitrarily choose either Defense Evasion or Privilege Escalation but never both",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "T1548 (like several other ATT&CK techniques) is explicitly categorized under both Defense Evasion and Privilege Escalation tactics in the official framework, since UAC bypass techniques serve both purposes simultaneously — evading a security control (Defense Evasion) while also achieving elevated privileges (Privilege Escalation) — and documenting it under both accurately reflects this dual purpose rather than arbitrarily picking one",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "UAC bypass techniques are not represented anywhere in the MITRE ATT&CK framework and this scenario describes a technique outside its scope entirely",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This technique should be excluded from documentation entirely since dual-tactic techniques are considered invalid or erroneous framework entries",
+        "correct": false
+      }
+    ],
+    "explanation": "This reinforces the earlier lesson about multi-tactic technique mapping in MITRE ATT&CK with a specific, real example: T1548 (Abuse Elevation Control Mechanism, which includes UAC bypass) is indeed officially mapped to both Defense Evasion and Privilege Escalation tactics, since bypassing UAC serves both purposes at once — evading the control meant to gate elevated actions, while achieving the elevated privilege itself. Accurately documenting a technique under all applicable tactics (not arbitrarily picking just one) provides the most complete and useful record for future detection engineering and incident analysis."
+  },
+  {
+    "external_key": "IR-051",
+    "domain": "IR",
+    "subtopic": "Communication & Legal",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "During an incident involving a suspected malicious insider, HR wants to immediately terminate the employee's access and employment before the investigation concludes, citing urgency. The IR/legal team recommends a more measured approach: revoke access immediately (for containment) but delay formal termination proceedings until the investigation is further along. What is the BEST justification for this measured approach?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no legitimate justification; the IR/legal team is being unnecessarily cautious and HR's immediate full termination request should always be followed without question",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Immediate access revocation achieves the urgent containment goal (preventing further unauthorized action) without requiring the investigation to be complete, while premature termination before the investigation concludes could compromise the legal defensibility of any eventual employment action (wrongful termination risk if the investigation later reveals a different picture), limit the organization's ability to gather additional evidence or cooperation from the employee during the investigation, and potentially tip off a sophisticated insider before all relevant evidence is secured",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Employment termination decisions have no relationship to ongoing investigation status and should always be resolved as quickly as HR prefers regardless of IR/legal input",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct approach is to take no containment action of any kind until the investigation and termination decision are both fully finalized",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests separating the urgent technical containment need (access revocation, which can and should happen immediately) from the separate, more deliberate legal/HR process (termination), which benefits from a more complete investigative picture. Acting on containment immediately addresses the security urgency without needing the full investigation resolved, while rushing to formal termination before the facts are fully established risks legal exposure (wrongful termination claims if later facts don't support the initial assumption), loses potential investigative value from continued (monitored) access to the employee's cooperation, and could tip off a sophisticated actor prematurely — this measured, two-track approach is a common and defensible practice, not unnecessary caution or an all-or-nothing choice."
   }
 ]
