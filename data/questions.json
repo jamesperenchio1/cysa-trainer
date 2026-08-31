@@ -4849,5 +4849,269 @@
       }
     ],
     "explanation": "This tests recognizing Simpson's-paradox-style metric blending issues in security reporting: averaging together two structurally different populations (fast-automated vs. slow-manual remediation processes) produces a composite number that misrepresents both — masking a genuine problem area (the 45-day legacy servers) behind an average that looks reasonably healthy, while also not accurately reflecting how fast the automated population actually performs. The fix is disaggregated reporting (showing both populations separately with their own context), not excluding inconvenient data or defaulting to blended figures because they're simpler to present."
+  },
+  {
+    "external_key": "SO-052",
+    "domain": "SO",
+    "subtopic": "Zero Trust / Architecture",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization implementing Zero Trust deploys device posture checks (verifying disk encryption, up-to-date patches, and EDR agent presence) as a condition for accessing internal applications, in addition to user authentication. A stakeholder asks why user authentication alone isn't sufficient. What is the BEST justification for also requiring device posture verification?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Device posture checks are unnecessary busywork, since a valid username and password is always sufficient proof that access should be granted",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A valid user credential doesn't guarantee the DEVICE being used to authenticate is itself trustworthy — a compromised, unpatched, or unmanaged device could expose session data, harbor malware capable of credential theft/session hijacking, or otherwise compromise the security of an otherwise-legitimate authenticated session, so Zero Trust evaluates both identity AND device trust as independent conditions before granting access",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Device posture checks exist solely to enforce software licensing compliance and have no security purpose",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Device posture verification replaces the need for user authentication entirely in a mature Zero Trust deployment",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the multi-factor evaluation principle central to Zero Trust: identity (who is authenticating) and device trust (is the endpoint itself in a secure, compliant state) are independent risk factors. A legitimate user on a compromised, unpatched, or unmanaged device can still result in a compromised session — malware on the device, stolen session tokens, or an attacker who has taken control of the endpoint could all abuse a technically-valid authenticated session. Zero Trust architectures evaluate both dimensions together rather than treating valid credentials alone as sufficient proof of a trustworthy access request."
+  },
+  {
+    "external_key": "SO-053",
+    "domain": "SO",
+    "subtopic": "Network Traffic Analysis",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An analyst reviewing NetFlow data notices a workstation making thousands of connection attempts across a wide range of sequential internal IP addresses on port 445 over a short time window, with most connections failing quickly (RST). What does this traffic pattern MOST likely represent?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Routine Windows domain authentication traffic, since port 445 (SMB) is used constantly in normal Windows network operations regardless of connection pattern",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Internal network/host discovery scanning targeting SMB (port 445), likely representing either reconnaissance ahead of lateral movement (e.g., searching for vulnerable or accessible SMB shares) or an active worm-like self-propagation attempt — the sequential IP sweep pattern and high failure rate are consistent with automated scanning rather than normal application traffic",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This is expected behavior for a DHCP server renewing leases across the subnet",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This traffic pattern can only be caused by a misconfigured printer attempting to broadcast its availability",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognition of internal reconnaissance/scanning traffic patterns via flow data: a sequential sweep across a wide IP range targeting a single port (especially 445/SMB, a historically common target for lateral movement and worm propagation, as seen in incidents like WannaCry/NotPetya) with a high rate of quick failures is a classic automated port-scanning signature, distinct from normal application traffic which typically shows a much narrower, purposeful set of connections rather than a broad sweep."
+  },
+  {
+    "external_key": "VM-042",
+    "domain": "VM",
+    "subtopic": "CVSS / Prioritization",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability scoring exercise uses CVSS v3.1's Scope metric, marked 'Changed' for a specific vulnerability, meaning successful exploitation impacts resources beyond the vulnerable component's own security scope (e.g., a container escape affecting the host). How does a 'Changed' Scope typically affect the resulting Base Score compared to an otherwise-identical vulnerability with 'Unchanged' scope?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Scope has no mathematical effect on the Base Score calculation whatsoever and exists purely as descriptive metadata",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A 'Changed' Scope generally increases the resulting Base Score compared to an otherwise-identical 'Unchanged' scope vulnerability, because CVSS v3.1's formula weights impact more heavily when a vulnerability can affect resources outside its own security authority — reflecting the greater real-world severity of cross-boundary impact (like a container escape reaching the underlying host)",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "A 'Changed' Scope always caps the maximum possible Base Score at 5.0 (Medium) regardless of other metric values",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Scope exclusively affects the Environmental Score and has zero bearing on the Base Score in any CVSS version",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests specific knowledge of the CVSS v3.1 Scope metric's mathematical effect: Scope is part of the Base Score formula itself (not just descriptive metadata or an Environmental-only factor), and when Scope is 'Changed,' the formula's impact calculation is weighted differently to produce a generally higher Base Score for otherwise-comparable impact values — reflecting that a vulnerability able to affect resources beyond its own security boundary (like a sandbox escape or container breakout reaching the host) represents materially higher real-world risk than an equivalent vulnerability contained within its own component."
+  },
+  {
+    "external_key": "VM-043",
+    "domain": "VM",
+    "subtopic": "Remediation",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management team's remediation SLA policy requires all Critical findings to be patched within 15 days. A specific Critical finding affects a vendor-supplied medical device that, per FDA regulatory requirements, can only receive software changes through the vendor's formal validated update process, which the vendor states will take 90 days. The team is told they are 'in violation' of the SLA. What is the BEST characterization of this situation?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The team should bypass the vendor's validation process and apply the patch directly to meet the SLA, since regulatory constraints on medical devices are subordinate to internal remediation SLA policy",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "This represents a legitimate SLA exception scenario, not a policy failure — the SLA framework should accommodate documented cases where remediation timeline is genuinely outside the organization's control due to regulatory/vendor constraints, with formal risk acceptance and compensating controls tracked for the interim period, rather than either forcing an unsafe unauthorized modification or simply labeling the situation a policy violation with no further nuance",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The finding should simply be removed from tracking since regulatory constraints make it permanently unremediable",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "SLA policies should never apply to any vendor-supplied or regulated device under any circumstances, exempting an entire device category from vulnerability tracking",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests mature exception-handling design in vulnerability management SLA frameworks: a rigid SLA that doesn't account for genuinely externally-constrained remediation timelines (regulatory validation requirements, vendor-controlled patch processes) either forces organizations into unsafe workarounds (bypassing a regulated medical device's validated update process, which could itself be illegal/dangerous) or generates false 'violations' with no actionable path forward. Sound programs build in a formal exception/risk-acceptance process for these legitimately externally-constrained cases — with interim compensating controls and tracked timelines — rather than either forcing unsafe action, ignoring the finding permanently, or blanket-exempting whole device categories from tracking."
+  },
+  {
+    "external_key": "IR-035",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "During the preparation phase of the IR lifecycle (before any incident occurs), a security team spends significant effort creating detailed runbooks, but never actually tests them through tabletop exercises or simulations. During a real incident, the team discovers the runbook's assumed communication tool (a specific chat platform) was decommissioned six months earlier and no one updated the document. What does this scenario illustrate about IR preparation?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Documentation alone, without periodic testing/validation and maintenance, degrades in accuracy over time — the preparation phase requires not just creating runbooks but regularly exercising and updating them (e.g., via tabletop exercises) to catch exactly this kind of drift before it's discovered during an actual high-stakes incident",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "This proves that written runbooks provide no value and IR preparation should rely exclusively on ad hoc improvisation during incidents",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "The failure here is entirely attributable to the identification phase, not preparation, since the issue was only discovered during a live incident",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Runbooks referencing specific tools should never be updated once written, since consistency is more valuable than accuracy for IR documentation",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the ongoing-maintenance aspect of IR preparation: creating documentation is necessary but not sufficient — without periodic testing (tabletop exercises, simulations) and maintenance, runbooks silently drift out of sync with actual environment/tooling changes, and that drift is typically only discovered at the worst possible time (during a real incident), rather than being caught proactively. This is a preparation-phase gap (the phase responsible for ensuring readiness before an incident), not an identification-phase issue, and the lesson is 'test and maintain your documentation,' not 'documentation has no value.'"
+  },
+  {
+    "external_key": "IR-036",
+    "domain": "IR",
+    "subtopic": "Attack Frameworks",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An analyst maps an observed attack technique to MITRE ATT&CK sub-technique T1059.001 (Command and Scripting Interpreter: PowerShell). A manager asks why the team bothers tracking at the sub-technique level rather than just the parent technique (T1059). What is the BEST justification?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Sub-technique granularity provides no additional analytical or detection-engineering value over the parent technique and is purely bureaucratic overhead",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Sub-techniques capture the SPECIFIC implementation method within a broader technique category, which directly informs targeted detection logic (e.g., PowerShell-specific logging/detections differ meaningfully from cmd.exe or bash-specific ones under the same parent 'Command and Scripting Interpreter' technique), enabling more precise detection coverage tracking and gap analysis than the broader parent category alone would allow",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Sub-techniques exist exclusively for MITRE's internal documentation purposes and are never intended for use in operational security analysis",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Tracking at the sub-technique level is only useful for nation-state-level attacks and provides no value for commodity malware analysis",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding of why ATT&CK's sub-technique layer matters practically: the parent technique T1059 (Command and Scripting Interpreter) covers many different interpreters (PowerShell, cmd.exe, bash, Python, etc.) that each require different, specific detection approaches (e.g., PowerShell script block logging vs. bash history auditing). Tracking at the sub-technique level lets a security team perform meaningful detection-coverage gap analysis ('do we have detections for PowerShell-based abuse specifically?') rather than a vague, less actionable claim about the broader category — this granularity is directly useful for both commodity and advanced threat detection engineering, not just nation-state analysis."
+  },
+  {
+    "external_key": "RC-022",
+    "domain": "RC",
+    "subtopic": "Stakeholder Communication",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A CISO is preparing a presentation on the organization's security posture for the audit committee, which consists mostly of board members with financial/legal backgrounds and limited technical security expertise. The security team's draft includes detailed technical descriptions of specific vulnerability classes (e.g., 'several instances of reflected XSS and one confirmed SSRF'). What is the BEST way to adapt this content for the intended audience?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Present the technical vulnerability class names exactly as written, since audit committee members should be expected to research unfamiliar technical terms independently",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Translate the technical findings into business-risk language the audience can act on (e.g., 'these findings could allow an attacker to manipulate what customers see on our website' or 'could allow internal systems to be tricked into exposing data to an attacker'), while keeping the full technical detail available in a supporting appendix or for the technical team's own use — this respects the audience's actual expertise and decision-making needs without dumbing down or omitting substantive information",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Omit any mention of the vulnerabilities entirely from committee-level reporting, since technical findings are never appropriate for a non-technical audience",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Replace all specific findings with a single generic statement that 'security is good' regardless of what the actual findings show",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests audience-calibrated communication, a core Reporting & Communication skill: an audit committee needs to understand risk and impact in terms relevant to their oversight role (financial, legal, reputational, operational risk) rather than raw technical vulnerability class names they aren't equipped to interpret — but this means translating and contextualizing the findings, not omitting them or replacing them with a vague reassurance that doesn't reflect the actual findings. The full technical detail should remain available (in an appendix or for the technical team), preserving completeness while making the primary communication genuinely useful to its actual audience."
+  },
+  {
+    "external_key": "RC-023",
+    "domain": "RC",
+    "subtopic": "Regulatory Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A publicly-traded company subject to SEC cybersecurity disclosure rules experiences a security incident. Legal counsel determines the incident is 'material' under SEC guidance. What is the general obligation this triggers, and why does 'materiality' matter to this determination?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Materiality determinations are irrelevant to SEC disclosure requirements; ALL security incidents of any size must be publicly disclosed within a fixed timeframe regardless of impact",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A material incident (one a reasonable investor would consider important to an investment decision — considering factors like financial impact, operational disruption, or reputational harm) generally triggers a disclosure obligation (e.g., via a specific SEC filing) within a defined timeframe after the materiality determination is made; materiality is the threshold that distinguishes incidents requiring this level of public, investor-facing disclosure from those that don't rise to that significance",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Materiality only applies to accounting fraud cases and has no relevance to cybersecurity incident disclosure under SEC rules",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Once an incident is deemed material, the company has an indefinite timeframe to disclose it with no specific deadline",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding of SEC cybersecurity disclosure requirements and the materiality concept: not every security incident triggers a public disclosure obligation — the SEC's framework centers on MATERIALITY (whether a reasonable investor would find the incident important to their investment decision, based on factors like financial, operational, or reputational impact) as the threshold. Once a company determines an incident is material, a disclosure obligation with a specific defined timeframe is triggered — materiality is specifically the filter that distinguishes reportable incidents from the many smaller incidents organizations handle that don't require this level of public disclosure, and this concept is central (not exclusive) to accounting-related disclosure obligations as well as cybersecurity incident disclosure."
   }
 ]
