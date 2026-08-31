@@ -9337,5 +9337,137 @@
       }
     ],
     "explanation": "This tests understanding the distinction between legal compliance minimums and broader ethical/reputational judgment in breach response: not being legally REQUIRED to notify doesn't mean an organization is prohibited from choosing to do so voluntarily — leadership can determine that voluntary transparency serves the organization's values, trust relationships, or long-term reputational interests even beyond the legal minimum, though this is a genuine judgment call involving tradeoffs (potential unnecessary alarm to individuals, setting a precedent for future less-clear-cut incidents, interaction with legal/insurance strategy) that should be deliberately weighed rather than automatically defaulting to either 'always do the legal minimum only' or 'always over-notify.' This tension exists across virtually any jurisdiction with a defined legal threshold, and notifying regulators while deliberately withholding notification from the actually-affected individuals would be a strange and generally inappropriate combination given the different purposes those two notifications serve."
+  },
+  {
+    "external_key": "SO-094",
+    "domain": "SO",
+    "subtopic": "Cloud Security",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A company uses a Software-as-a-Service (SaaS) application and assumes the vendor is fully responsible for all security aspects since 'it's their platform.' The vendor's shared responsibility model documentation clarifies that while the vendor secures the underlying infrastructure and application code, the customer remains responsible for user access management, data classification, and configuration of sharing/permission settings. A misconfigured sharing setting the customer controls leads to a data exposure. Whose responsibility was this?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This is entirely the SaaS vendor's responsibility and fault, since any security issue affecting data hosted on their platform is automatically their sole obligation to prevent regardless of the shared responsibility model's specific terms",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Under the shared responsibility model, this falls within the CUSTOMER's designated responsibility (configuring sharing/permission settings and managing user access), even though the underlying application and infrastructure are vendor-managed — customers must understand exactly where the responsibility boundary sits for each service they use, since assuming a vendor handles 'everything' when the actual model designates specific customer-side responsibilities is a common and consequential misunderstanding that leads to exactly this kind of preventable exposure",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Responsibility in this scenario is undefined and cannot be determined by any documented framework or model",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This determination depends entirely on the specific SaaS vendor's stock price performance, which has no actual relationship to security responsibility allocation",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the shared responsibility model concept, central to cloud/SaaS security: providers and customers each bear responsibility for specific, defined aspects of security, and this division varies by service type (IaaS vs. PaaS vs. SaaS shift the line differently) — but even in SaaS, where the vendor manages the most infrastructure and application layers, customers typically retain responsibility for data classification, user access management, and configuration choices like sharing/permission settings. A customer assuming the vendor handles 'everything' when the documented model clearly assigns specific responsibilities to the customer is a common and genuinely consequential misunderstanding — this misconfigured sharing setting falls squarely within the customer's own designated responsibility, not the vendor's, regardless of the platform being vendor-hosted."
+  },
+  {
+    "external_key": "SO-095",
+    "domain": "SO",
+    "subtopic": "Threat Intelligence",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A threat intelligence report describes an adversary group's typical 'dwell time' (time between initial compromise and detection) as averaging 200+ days based on historical incident data. A security team uses this figure to argue their current detection capabilities (typically identifying compromises within 10 days) are already 'far better than needed.' What is the flaw in this reasoning?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The reasoning is sound; if historical dwell time for a given adversary group averages 200+ days, any detection capability faster than that average should be considered more than sufficient with no further improvement needed",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "An average HISTORICAL dwell time reflects how long detection took across past incidents at potentially many different organizations with varying detection maturity — it doesn't represent an acceptable target or a ceiling to complacently coast under; genuinely minimizing actual damage (data exfiltrated, lateral movement achieved, persistence established) benefits from detecting as fast as technically and economically feasible, and using a historical average of OTHER organizations' (often less mature) detection performance as a benchmark for 'good enough' risks complacency rather than continued improvement",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This concern is only valid if the security team's own detection capability is currently slower than 10 days, and is otherwise a non-issue",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Dwell time statistics have no relationship to actual incident damage or severity, making this entire comparison analytically meaningless regardless of the specific figures involved",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests critical evaluation of using an industry benchmark as a complacency-inducing target rather than a genuine improvement driver: a historical average dwell time reflects aggregate detection performance across many organizations (often with less mature capabilities than the team in question), not an aspirational target or acceptable ceiling — reasoning 'we beat the average, so we're done improving' misunderstands the actual goal, which is minimizing real damage (data exfiltrated, lateral movement, established persistence) by detecting as quickly as genuinely feasible, not by comparing favorably to a historical benchmark and stopping there. Dwell time is directly relevant to actual damage since more time typically allows more extensive compromise, making this comparison analytically meaningful, but a favorable comparison shouldn't be treated as license for complacency."
+  },
+  {
+    "external_key": "IR-069",
+    "domain": "IR",
+    "subtopic": "Attack Frameworks",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team building a purple team exercise plan wants to specifically test detection coverage for MITRE ATT&CK technique T1071 (Application Layer Protocol, used for command-and-control). A colleague suggests this single technique test is sufficient to validate the organization's overall C2 detection capability. What is the flaw in this suggestion?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The colleague is correct; successfully testing detection for a single specific technique fully and completely validates an organization's overall detection capability against that entire category of threat behavior",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "T1071 has multiple distinct SUB-techniques (e.g., Web Protocols, DNS, Mail Protocols) each representing meaningfully different C2 communication methods that may require different detection logic — successfully detecting one specific sub-technique implementation doesn't validate coverage for the others, and a genuinely thorough purple team exercise plan should test multiple relevant sub-techniques (and potentially multiple different tools/implementations of each) rather than treating a single technique-level test as representative of overall C2 detection maturity",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Purple team exercises can only test technique T1071 specifically and have no capability to test any other MITRE ATT&CK technique",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "MITRE ATT&CK does not include a technique numbered T1071, making this entire exercise scenario technically impossible to execute",
+        "correct": false
+      }
+    ],
+    "explanation": "This reinforces the sub-technique-granularity lesson from earlier questions with a purple-team-testing-specific application: T1071 (Application Layer Protocol) has multiple distinct sub-techniques representing genuinely different C2 communication methods (web protocols, DNS-based, mail-based, etc.), each of which may require different, specific detection logic to catch reliably — successfully testing and confirming detection for ONE specific sub-technique/implementation doesn't validate that the organization would also catch a different C2 method under the same parent technique. A thorough purple team plan should test multiple relevant sub-techniques and implementations rather than treating a single narrow test as representative of broader C2 detection maturity — this general testing-coverage principle applies broadly, not just to this specific technique."
+  },
+  {
+    "external_key": "RC-045",
+    "domain": "RC",
+    "subtopic": "Metrics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team's dashboard prominently features 'total number of security tools deployed' as a headline metric, showing steady growth year over year, presented as evidence of a maturing security program. A new CISO questions whether tool count is actually a meaningful indicator of program maturity. What is the CISO's underlying concern?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no legitimate concern; the total number of deployed security tools is, by itself, a fully sufficient and directly meaningful indicator of program maturity and effectiveness with no need for further context",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Tool COUNT measures acquisition/deployment activity, not actual security OUTCOME or even how well existing tools are being used — an organization can accumulate many tools while suffering from poor integration, underutilized capabilities, alert fatigue from disconnected systems, or gaps in actually operationalizing what's been purchased; a more meaningful maturity indicator would assess how effectively deployed tools are actually integrated, tuned, and translated into detection/response outcomes, not simply how many exist",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This concern is only valid if the organization has deployed fewer than five total security tools; above that threshold, tool count becomes a fully reliable maturity indicator",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct fix is to report the total dollar amount spent on security tooling instead of the tool count, which fully resolves the underlying measurement concern",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the same output-vs-outcome metric distinction seen throughout this domain, applied to security tooling specifically: the number of tools deployed measures acquisition activity, not whether those tools are actually well-integrated, properly tuned, and translating into genuine security outcomes — an organization can accumulate a large tool inventory while suffering from poor integration between disconnected systems, underutilized features, alert fatigue, and operational gaps that undermine actual effectiveness ('tool sprawl' is a well-recognized anti-pattern). A more meaningful maturity indicator assesses how effectively existing tools are actually being operationalized and translated into detection/response outcomes, not raw count — and substituting dollar spend for tool count would have the exact same underlying flaw, since it's still an input/acquisition metric rather than an outcome measure."
   }
 ]
