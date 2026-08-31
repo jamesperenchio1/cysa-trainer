@@ -9667,5 +9667,104 @@
       }
     ],
     "explanation": "This tests the well-established distinction between compliance and genuine security posture, a foundational concept for Reporting & Communication around risk framing: regulatory/compliance frameworks generally establish a MINIMUM baseline (often reflecting requirements as understood when written, and necessarily generalized across many different organizations and threat environments) — satisfying the literal minimum wording doesn't guarantee adequate protection against the organization's actual, specific threat landscape, since frameworks can't enumerate every possible risk or mandate every best practice for every environment. This gap exists across frameworks of any age (not just old ones), and the appropriate response is treating compliance as a necessary floor while pursuing genuine security maturity beyond it — not abandoning compliance efforts, which remain necessary for their own distinct legal/contractual reasons, in favor of internal standards alone."
+  },
+  {
+    "external_key": "SO-098",
+    "domain": "SO",
+    "subtopic": "Malware Analysis",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A malware family is observed using a technique where it injects code into a legitimate, already-running system process (like explorer.exe) rather than running as its own standalone, independently-named process. What is the primary benefit this technique provides to an attacker, from a detection-evasion standpoint?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This technique provides no meaningful evasion benefit whatsoever, since process injection is always immediately and automatically detected by any endpoint security tool regardless of technique sophistication",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Injecting into a legitimate, expected, commonly-running system process allows the malicious code's activity (network connections, file access, etc.) to appear to originate from a trusted, unremarkable process rather than an unfamiliar or suspiciously-named standalone executable — this can evade both automated detection rules that whitelist/trust well-known system process names and human analyst scrutiny that might quickly dismiss activity attributed to a familiar process as routine",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This technique is used exclusively to improve the malware's own performance and resource efficiency, with no relationship to detection evasion of any kind",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Process injection can only be performed against processes that are already known to be malicious, making this scenario internally contradictory",
+        "correct": false
+      }
+    ],
+    "explanation": "This ties together the process-injection theme explored in earlier questions with a clear detection-evasion rationale: injecting malicious code into a legitimate, commonly-trusted system process means the resulting activity (network connections, file operations, etc.) appears to originate from that trusted process rather than a standalone, potentially suspicious-looking executable — this can evade detection rules that implicitly or explicitly trust well-known system process names, and can also cause human analysts to more quickly dismiss activity attributed to a familiar process as routine background behavior. This is a deliberate, well-documented evasion rationale (not a performance optimization), and it's specifically injection INTO an otherwise-legitimate process, not a technique limited to already-malicious targets."
+  },
+  {
+    "external_key": "IR-072",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A forensic analyst is asked to recover deleted files from a suspect's hard drive as part of an investigation. The analyst explains that recovery success depends significantly on whether the deleted file's disk space has since been overwritten by new data. Why does simple file deletion typically NOT immediately and permanently erase data at the storage level?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Standard file deletion (moving a file to a recycle bin and emptying it, or a simple delete command) typically only removes the file system's reference/pointer to the data and marks that disk space as available for reuse — the actual underlying data often remains physically present on the storage medium until that space is overwritten by new data, which is precisely why forensic recovery tools can often retrieve 'deleted' files that haven't yet been overwritten",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "File deletion always immediately and completely erases the underlying data at the physical storage level with zero possibility of recovery under any circumstances or timeframe",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "This behavior only applies to solid-state drives (SSDs) and has no relevance to traditional mechanical hard disk drives (HDDs)",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "File recovery is only possible if the original file was specifically saved using a proprietary format, and is otherwise technically impossible regardless of overwrite status",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a foundational digital forensics concept: standard file deletion operations typically remove the file system's metadata reference/pointer to the data and mark that disk space as available for future use, without an accompanying step to actually overwrite the underlying data at that moment — the original data can often persist physically on the medium until new data happens to be written to that same space, which is exactly why forensic recovery tools can frequently retrieve 'deleted' files. This general behavior applies to traditional HDDs (though modern SSDs with TRIM/garbage collection can behave somewhat differently and often more aggressively clear deleted blocks, making the recovery window potentially shorter on SSDs) — the underlying file format has no bearing on this general recoverability principle, and deletion is emphatically not synonymous with secure, immediate erasure."
+  },
+  {
+    "external_key": "RC-048",
+    "domain": "RC",
+    "subtopic": "Stakeholder Communication",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team's incident retrospective document is written entirely in first-person, informal language and shared broadly across the company via a general internal messaging channel, including sensitive details about the specific technical vulnerability that was exploited. What communication risk does this illustrate, distinct from the earlier 'blameless post-mortem' lesson about tone toward individuals?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no meaningful risk in this specific scenario; broad internal distribution of complete, unredacted technical incident details is always fully appropriate regardless of audience or channel",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Beyond tone toward individuals, this illustrates an AUDIENCE-SCOPING and INFORMATION-SENSITIVITY risk: sharing detailed technical vulnerability information broadly (rather than to a scoped audience with a legitimate need to know) increases the risk of that sensitive detail reaching someone who could misuse it, being forwarded outside the organization, or simply being more widely known than necessary for the retrospective's actual purpose — post-incident documentation should be distributed based on genuine need-to-know for the specific technical details involved, with broader organizational lessons (without exploit-level specifics) shared more widely if appropriate",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This concern is only relevant if the messaging channel used is externally accessible; any purely internal-only distribution channel eliminates any legitimate risk regardless of content sensitivity or audience scope",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct fix is to stop producing any incident retrospective documentation at all, since any written record of a vulnerability inherently creates unacceptable risk regardless of how it's distributed",
+        "correct": false
+      }
+    ],
+    "explanation": "This introduces a distinct communication-security consideration from the earlier blameless-post-mortem lesson (which was about tone toward individuals): the RISK here is about information sensitivity and audience scoping — broadly distributing detailed technical vulnerability information (potentially including exploit-level specifics) beyond those with a genuine operational need to know increases the chance that sensitive detail is misused, leaked externally, or simply becomes more widely known than the retrospective's actual purpose requires. Good practice scopes highly technical/sensitive incident details to those who need them for remediation or learning purposes, while broader organizational lessons (without exploit-level specifics) can be shared more widely — this isn't solely about whether a channel is technically internal-only, and abandoning incident documentation entirely would eliminate a genuinely valuable practice rather than addressing the actual distribution-scoping issue."
   }
 ]
