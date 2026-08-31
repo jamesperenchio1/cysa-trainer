@@ -5113,5 +5113,236 @@
       }
     ],
     "explanation": "This tests understanding of SEC cybersecurity disclosure requirements and the materiality concept: not every security incident triggers a public disclosure obligation — the SEC's framework centers on MATERIALITY (whether a reasonable investor would find the incident important to their investment decision, based on factors like financial, operational, or reputational impact) as the threshold. Once a company determines an incident is material, a disclosure obligation with a specific defined timeframe is triggered — materiality is specifically the filter that distinguishes reportable incidents from the many smaller incidents organizations handle that don't require this level of public disclosure, and this concept is central (not exclusive) to accounting-related disclosure obligations as well as cybersecurity incident disclosure."
+  },
+  {
+    "external_key": "SO-054",
+    "domain": "SO",
+    "subtopic": "Threat Hunting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A threat hunter builds a hypothesis around potential abuse of legitimate remote access tools (like AnyDesk or TeamViewer) for unauthorized access, since these are not inherently malicious and are often allowed by policy. The hunt surfaces one endpoint with AnyDesk installed and used outside business hours by an account whose job role has no remote-support function. A colleague argues this can be closed immediately as 'the software itself is legitimate, so there's nothing to escalate.' What is the flaw in the colleague's reasoning?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The colleague is correct; software legitimacy is the only factor that matters when evaluating a hunt finding",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Legitimate/dual-use tools are frequently abused precisely because their presence alone doesn't trigger the same suspicion as malware — the CONTEXT of use (a non-support role using remote access software outside business hours, with no apparent business justification) is what makes this finding worth investigating further, not the software's legitimacy status in isolation",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This can only be a legitimate finding if the software was installed without any administrator privileges",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Remote access tools cannot be used maliciously under any circumstances once installed by a legitimate software vendor",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the 'living off the land' / dual-use tool hunting concept directly: legitimate remote access software is a well-known technique for both insider misuse and external attacker access-maintenance, precisely BECAUSE its legitimacy makes it less suspicious than obvious malware. The determining factor for a hunt finding like this is behavioral CONTEXT (who's using it, when, and whether that aligns with an expected business purpose) rather than the software's inherent legitimacy — dismissing a finding purely because the tool itself isn't malware ignores the entire premise of hunting for dual-use tool abuse."
+  },
+  {
+    "external_key": "SO-055",
+    "domain": "SO",
+    "subtopic": "Cloud Security",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A cloud environment uses a Service Control Policy (SCP) at the AWS Organizations level intended to deny all IAM users and roles from disabling CloudTrail logging. A penetration test later shows an attacker who compromised a specific account WAS able to stop CloudTrail logging in that account. Investigation reveals the SCP was correctly applied to the Organization's root, but the compromised account exists in an Organizational Unit (OU) with an explicit 'Allow' statement for CloudTrail actions, created for a legacy troubleshooting need. What does this scenario illustrate about SCP inheritance?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "SCPs applied at the Organization root always take absolute precedence and cannot be overridden by any lower-level policy under any circumstances",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "SCP evaluation works on an intersection/inheritance model where policies at different levels of the OU hierarchy combine, and an explicit Allow at a lower-level OU for actions otherwise intended to be broadly restricted can create an unintended gap in coverage — governance controls need to be reviewed for exactly this kind of OU-specific override, not just verified as 'present' at the top level",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This proves that Service Control Policies provide no actual security benefit and should not be relied upon at all",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The finding is invalid, since SCPs only apply to root-level accounts and never affect any accounts nested within organizational units",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a nuanced but real AWS Organizations SCP behavior: SCPs don't simply 'apply everywhere once set at the root' — the effective permissions for an account are the intersection of all SCPs in its inheritance chain (root, OUs, and the account itself), and a legacy or exception-purpose policy at a lower OU level can create an unintended gap in what was assumed to be a universal restriction. This is exactly why periodic governance reviews need to check the FULL effective policy for each OU/account, not just confirm a top-level control 'exists' — a single overlooked legacy exception can silently undermine an org-wide security control."
+  },
+  {
+    "external_key": "VM-044",
+    "domain": "VM",
+    "subtopic": "Scanning Methodology",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management program measures 'scan coverage' as the percentage of assets in the CMDB (Configuration Management Database) that were successfully scanned in the last cycle, reporting 96% coverage. A security architect points out this metric could still represent a significant blind spot. What is the MOST likely concern?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "96% coverage against the CMDB is definitionally complete and represents zero meaningful risk regardless of any other consideration",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Coverage measured against the CMDB only accounts for assets the organization already KNOWS about and has tracked in that system — unmanaged, shadow IT, or otherwise undiscovered assets (which are often the highest-risk category precisely because they're unmanaged) are invisible to this metric entirely, meaning true overall coverage could be meaningfully lower than 96% once untracked assets are considered",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The concern is that 96% coverage is measured in the wrong units and should be expressed as a raw number of hosts instead of a percentage",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The metric is flawed only because it doesn't account for scan duration, which is unrelated to actual coverage completeness",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a fundamental measurement blind spot in vulnerability management coverage metrics: a coverage percentage calculated against a known asset inventory (CMDB) is inherently unable to account for assets that aren't in that inventory at all — shadow IT, unmanaged devices, forgotten test servers, or unauthorized cloud resources. These unknown assets are frequently the highest-risk category specifically because they're unmanaged and unpatched, and a 96% figure measured only against known assets can create false confidence about the organization's TRUE overall exposure, which asset discovery processes (not just scan coverage against a known list) are needed to address."
+  },
+  {
+    "external_key": "VM-045",
+    "domain": "VM",
+    "subtopic": "Web App Vulnerabilities",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability scan flags a web application as vulnerable to Cross-Site Scripting (XSS) via a search parameter. The development team argues the finding is invalid because 'we use a modern JavaScript framework that automatically escapes output, so XSS is impossible here.' The security team retests and confirms the payload still executes. What is the MOST likely explanation for this discrepancy?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The security team's retest must be inaccurate, since modern JavaScript frameworks make XSS completely impossible under all circumstances by design",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Modern framework auto-escaping typically protects standard data-binding contexts (like inserting text into an element), but doesn't automatically cover every rendering context — features like 'dangerouslySetInnerHTML' (React), 'v-html' (Vue), or similar raw-HTML-insertion escape hatches, or reflecting the parameter directly into an unescaped context (like an attribute or inline script), can bypass the framework's default protections entirely if used, even in an otherwise modern, auto-escaping framework",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This can only mean the vulnerability scanner produced a false positive, since framework auto-escaping is mathematically guaranteed to prevent all XSS variants",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "XSS vulnerabilities can only occur in applications written without any JavaScript framework at all",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a nuanced but common real-world gap: modern frameworks' auto-escaping (React's JSX text interpolation, Vue's mustache syntax, etc.) protects the DEFAULT rendering path, but most frameworks also expose deliberate 'raw HTML' escape hatches (dangerouslySetInnerHTML, v-html, similar constructs) for legitimate use cases — and if user input reaches one of those paths, or is reflected into a non-default context like an HTML attribute or inline event handler without proper context-aware escaping, XSS remains fully possible despite the framework's general reputation for safety. 'We use a modern framework' is not an absolute guarantee and should never substitute for confirming how a specific vulnerable parameter is actually rendered."
+  },
+  {
+    "external_key": "IR-037",
+    "domain": "IR",
+    "subtopic": "Communication & Legal",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "During an incident investigation, the IR team obtains logs from a third-party cloud service provider showing evidence relevant to establishing the scope of a breach. The provider's terms of service state logs are only retained for 30 days, and the incident was discovered 45 days after the suspected initial compromise. What is the BEST lesson this scenario illustrates about incident response preparation?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Third-party cloud logs are never useful for incident investigations and should never be relied upon regardless of retention period",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Organizations should understand and account for third-party/vendor log retention limitations BEFORE an incident occurs — as part of IR preparation, this means either negotiating longer retention where feasible, exporting/archiving critical logs to organization-controlled storage, or at minimum documenting the limitation so the IR team knows in advance which evidence sources have a limited investigative window and can act with appropriate urgency",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This gap is solely the cloud provider's legal liability and requires no action or awareness from the affected organization",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The 45-day detection gap is irrelevant to log retention policy and has no bearing on evidence availability",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the IR preparation-phase discipline of understanding your actual evidence sources and their limitations BEFORE they matter during a live incident: third-party/vendor log retention windows are a common and often-overlooked constraint that can silently eliminate evidence needed to scope a breach if the organization doesn't proactively export/archive logs, negotiate extended retention, or at least document the limitation so investigators know where time-sensitive evidence sources exist. This isn't purely the vendor's problem — the affected organization bears responsibility for understanding its own evidence-availability landscape as part of incident response readiness."
+  },
+  {
+    "external_key": "IR-038",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A forensic analyst examining a Linux server's bash history finds no evidence of the commands the attacker likely ran, despite other evidence (file modification timestamps, network logs) confirming the attacker had shell access. What is the MOST likely explanation, and what should the analyst check next?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Bash history is tamper-proof and cannot be altered or bypassed by any user, so this must indicate the other evidence is mistaken",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Attackers commonly clear or disable bash history (e.g., via 'unset HISTFILE', 'history -c', deleting .bash_history, or redirecting HISTFILE to /dev/null) as a basic anti-forensic technique — the analyst should check for evidence of this manipulation itself (unusual environment variable settings, timestamps on the history file, or its absence entirely) and pursue alternative evidence sources like auditd logs, shell session recording tools, or process execution logs if available, rather than concluding no commands were run",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Bash history is only recorded for root-level sessions, so a compromised standard user account would never generate any history regardless of attacker action",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This gap indicates the file modification timestamps and network logs must be inaccurate, since bash history is the only reliable indicator of command execution",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests awareness of a very common anti-forensic technique and appropriate forensic follow-up: clearing or disabling bash history is one of the simplest and most frequently used steps attackers take to cover their tracks on compromised Linux systems. Rather than concluding no commands were executed (contradicted by other corroborating evidence) or doubting the other evidence sources, the correct approach is to recognize this as a likely anti-forensic action and pivot to alternative evidence — auditd (if configured), any shell session logging/recording tools in place, or process execution artifacts — since the absence of bash history evidence is itself informative, not exculpatory."
+  },
+  {
+    "external_key": "RC-024",
+    "domain": "RC",
+    "subtopic": "Metrics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security awareness program reports a declining phishing simulation click rate (from 22% to 4% over a year) as clear evidence of program success. A more careful review shows the same handful of simulated phishing templates have been reused repeatedly, and employees have simply learned to recognize those SPECIFIC templates rather than phishing indicators generally. What is the BEST critique of using this metric alone as proof of success?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The declining click rate is conclusive proof of genuine improved security awareness with no further context needed",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A declining click rate on REPEATED, recognizable templates may reflect template memorization/pattern recognition rather than genuinely improved ability to recognize novel phishing indicators in general — a more valid measure of program effectiveness would use varied, evolving simulation content and/or supplement click-rate with other indicators (like real-world reported phishing rates or performance against completely new template designs)",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Phishing simulation click rates are entirely meaningless as a security metric and should never be tracked under any circumstances",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The metric would only be valid if it showed an INCREASING click rate over time, since increasing engagement always indicates improved awareness",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a common measurement validity trap in security awareness metrics: if the same or highly similar test content is reused repeatedly, a declining click rate can reflect narrow template-pattern memorization rather than a genuine improvement in general phishing-recognition skill — employees learn to spot 'this specific email we've seen in training before' without necessarily improving at spotting phishing indicators in a NEW, unfamiliar email. Valid measurement requires varied/evolving simulation content and ideally corroborating indicators (real-world reported phishing volume, performance on entirely novel simulations) rather than relying on a single metric that can be inflated by test-specific familiarity."
   }
 ]
