@@ -9205,5 +9205,137 @@
       }
     ],
     "explanation": "This tests a practical communication-structuring principle directly relevant to Reporting & Communication: audience attention and engagement naturally decline over a long, dense presentation, so critical, decision-relevant items should be placed FIRST (often called a 'lead with the ask' or inverted-pyramid structure) rather than at the end of a flat, equally-weighted sequence where they risk being missed entirely if attention has already waned. This is a well-established structural communication principle, not something that can be dismissed as solely the audience's responsibility to power through, and the fix is restructuring for impact and prioritization, not eliminating structured executive communication altogether."
+  },
+  {
+    "external_key": "SO-092",
+    "domain": "SO",
+    "subtopic": "Malware Analysis",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A malware sample is found to check for the presence of specific files associated with popular sandboxing/analysis tools (e.g., checking for files that only exist in VMware Tools or VirtualBox Guest Additions installations) before deciding whether to execute its payload. What analysis approach BEST accounts for this evasion technique?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This technique cannot be worked around by any means, making dynamic analysis of this specific sample fundamentally impossible under any circumstances",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Analysis environments can be hardened against this specific evasion check by removing or masking the telltale artifacts (VM tools files, registry keys, hardware identifiers) the malware specifically checks for, using bare-metal analysis systems, or using sandboxes specifically designed to minimize detectable virtualization artifacts — recognizing that the sample checks for these specific indicators is itself a useful analytical finding, informing both how to work around it for this analysis and understanding the malware author's anti-analysis sophistication",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This check only affects static analysis and has no relevance whatsoever to dynamic/behavioral analysis approaches",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Sandbox-evasion checks of this type are purely theoretical and have never actually been observed in real-world malware samples",
+        "correct": false
+      }
+    ],
+    "explanation": "This reinforces the earlier sandbox-evasion theme with a specific, well-documented technique: malware checking for VM-specific artifacts (VMware Tools files, VirtualBox Guest Additions, virtualization-specific hardware/registry identifiers) before executing its payload is a real and common anti-analysis technique. Analysts can work around it by hardening analysis environments to remove or mask these telltale indicators, or by using bare-metal (non-virtualized) analysis systems or purpose-built evasion-resistant sandboxes — and identifying that a sample performs this specific check is itself valuable analytical information about the malware's anti-analysis sophistication, not something to treat as an insurmountable analysis blocker or dismiss as purely theoretical, since this technique is well-documented and observed extensively in real-world malware."
+  },
+  {
+    "external_key": "SO-093",
+    "domain": "SO",
+    "subtopic": "Network Architecture",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A network design implements 'defense in depth' by layering a perimeter firewall, an internal network segmentation firewall, host-based firewalls on individual servers, and endpoint detection agents. A stakeholder questions whether this represents unnecessary redundancy since 'the perimeter firewall should already block malicious traffic.' What is the BEST justification for this layered approach?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This layering is indeed unnecessary redundancy, and a single, sufficiently well-configured perimeter firewall provides equivalent protection to the full layered approach",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Defense in depth assumes that any SINGLE control can fail, be misconfigured, or be bypassed (e.g., a perimeter firewall doesn't help against an attacker who gains access via a phished internal user, a compromised VPN, or an insider) — each additional layer provides protection against threats that bypass or aren't addressed by the layer before it, so a failure or bypass at any one point doesn't result in complete compromise, which is the core rationale for layering multiple, different types of controls rather than relying on any single control being perfectly effective",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This layered approach is only justified for organizations with unlimited security budgets, and represents poor resource allocation for any organization with real financial constraints",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Defense in depth exists purely to satisfy compliance checklist requirements, with no genuine technical security rationale behind the practice",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the foundational defense-in-depth principle directly: no single security control can be assumed to be perfectly effective or unbypassable — a perimeter firewall provides no protection against threats that don't cross that specific boundary (a phished internal user, a compromised remote access session, an insider threat, or any control failure/misconfiguration at that layer). Layering multiple, DIFFERENT types of controls (network segmentation, host-based controls, endpoint detection) means a failure or bypass at any single layer doesn't result in complete compromise, since subsequent layers provide independent protection — this is a foundational, technically well-justified security architecture principle, not merely a compliance formality, and while resource constraints are a legitimate consideration in HOW MUCH layering an organization implements, the underlying principle applies regardless of budget size."
+  },
+  {
+    "external_key": "IR-068",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A forensic analyst examining Windows Event Logs notices that the Security event log's earliest entry is only 2 days old, despite the server having been running continuously for over a year. What is the MOST likely explanation, and why does it matter for the investigation?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This is normal and expected behavior; Windows Security event logs are technically incapable of retaining more than 2 days of history under any configuration",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "This is most likely explained by either the log reaching its configured maximum size and rolling over (overwriting oldest entries first, per default log rotation behavior) or a deliberate log-clearing action (a known anti-forensic technique attackers use to remove evidence of their activity) — determining which explanation applies matters significantly, since a log clearing action itself would be a significant investigative finding (and Windows separately logs the specific 'log was cleared' event, which should be checked for), while simple size-based rollover would suggest a log retention/sizing configuration issue rather than evidence of tampering",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This finding is entirely unrelated to the investigation and should be disregarded without further inquiry, since event log retention has no bearing on incident timeline reconstruction",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This can only be explained by a Windows Update rollback, which is the sole possible cause of Security event log truncation of any kind",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing log retention gaps as a significant forensic finding requiring investigation rather than dismissal: a Security event log with unexpectedly limited history could indicate either benign log rotation (the log reached its configured maximum size and began overwriting oldest entries, a sizing/retention CONFIGURATION issue) or deliberate log clearing (a well-known anti-forensic technique, and notably, Windows itself logs a specific event ID when the Security log is cleared, which is a critical piece of evidence to check for specifically). Distinguishing between these explanations meaningfully affects the investigation's conclusions — one suggests a configuration gap to fix going forward, the other suggests active evidence tampering by an attacker — making this a genuinely significant finding, not something to disregard."
+  },
+  {
+    "external_key": "RC-044",
+    "domain": "RC",
+    "subtopic": "Regulatory Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization discovers a breach and, after consulting legal counsel, determines the specific incident does NOT meet the legal threshold requiring regulatory notification under applicable law. A board member argues the organization should notify affected individuals anyway, 'to be safe and transparent.' What tension does this scenario illustrate?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no legitimate tension; if a legal notification threshold isn't met, notifying anyway would always constitute an inappropriate and legally prohibited action",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "This illustrates the distinction between the LEGAL MINIMUM notification obligation (what's strictly required under applicable law) and a broader ETHICAL/REPUTATIONAL judgment about transparency and trust with affected individuals — an organization can legally choose to notify beyond what's strictly required if leadership determines this better serves trust, ethical obligations, or long-term reputational interests, even when not legally mandated, though this decision should still be made deliberately (considering factors like potential unnecessary alarm, precedent-setting for future incidents, and any interplay with insurance/legal strategy) rather than automatically defaulting to either extreme",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This tension only exists in jurisdictions with no defined legal breach notification threshold at all, and would not arise under any specific statutory framework",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct resolution is to notify regulators (even though not legally required) while deliberately NOT notifying the actually-affected individuals themselves",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding the distinction between legal compliance minimums and broader ethical/reputational judgment in breach response: not being legally REQUIRED to notify doesn't mean an organization is prohibited from choosing to do so voluntarily — leadership can determine that voluntary transparency serves the organization's values, trust relationships, or long-term reputational interests even beyond the legal minimum, though this is a genuine judgment call involving tradeoffs (potential unnecessary alarm to individuals, setting a precedent for future less-clear-cut incidents, interaction with legal/insurance strategy) that should be deliberately weighed rather than automatically defaulting to either 'always do the legal minimum only' or 'always over-notify.' This tension exists across virtually any jurisdiction with a defined legal threshold, and notifying regulators while deliberately withholding notification from the actually-affected individuals would be a strange and generally inappropriate combination given the different purposes those two notifications serve."
   }
 ]
