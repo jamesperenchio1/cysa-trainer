@@ -9469,5 +9469,104 @@
       }
     ],
     "explanation": "This tests the same output-vs-outcome metric distinction seen throughout this domain, applied to security tooling specifically: the number of tools deployed measures acquisition activity, not whether those tools are actually well-integrated, properly tuned, and translating into genuine security outcomes — an organization can accumulate a large tool inventory while suffering from poor integration between disconnected systems, underutilized features, alert fatigue, and operational gaps that undermine actual effectiveness ('tool sprawl' is a well-recognized anti-pattern). A more meaningful maturity indicator assesses how effectively existing tools are actually being operationalized and translated into detection/response outcomes, not raw count — and substituting dollar spend for tool count would have the exact same underlying flaw, since it's still an input/acquisition metric rather than an outcome measure."
+  },
+  {
+    "external_key": "SO-096",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An analyst notices that a workstation's local hosts file has been modified to redirect a well-known banking domain to a local/private IP address serving a fake login page. What class of attack does this represent, and why is the hosts file specifically an attractive target for it?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This has no established name in attack terminology and represents a random, unstructured configuration error unrelated to any deliberate attack technique",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "This is a form of DNS/hosts-file-based pharming or phishing redirection — the hosts file is attractive to attackers because operating systems consult it BEFORE querying any DNS server, meaning a malicious entry silently and completely intercepts traffic to the targeted legitimate domain for that specific machine, is invisible to the user (since the browser address bar still shows the legitimate domain name), and bypasses any network-level DNS filtering/monitoring entirely since no actual DNS query for that domain is ever made",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This attack technique can only succeed if the user's browser doesn't support HTTPS, and is otherwise fully prevented by transport encryption regardless of hosts file content",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Hosts file modification requires no elevated privileges of any kind and can be performed by any unprivileged process or user account on the system",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing hosts-file manipulation as a specific, well-documented local redirection/pharming technique: because operating systems check the local hosts file BEFORE performing any DNS lookup, a malicious entry completely and silently redirects traffic for the targeted domain on that specific machine — the browser's address bar still displays the legitimate domain name (making it deceptively convincing to the user), and since no actual DNS query is made for the redirected domain, network-level DNS monitoring/filtering solutions never see anything to flag. This technique doesn't inherently defeat HTTPS on its own (though a convincing fake page might also present its own certificate warning, which a user might dismiss), and modifying the hosts file typically DOES require elevated/administrative privileges on the host, since it's a protected system file location on modern operating systems."
+  },
+  {
+    "external_key": "IR-070",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization's IR metrics show 'Mean Time to Contain' has improved significantly over the past year. A deeper review reveals this improvement coincides with the security team increasingly classifying ambiguous or borderline events as 'not an incident' rather than declaring and formally tracking them, specifically to avoid negatively impacting this metric. What does this scenario illustrate?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This is a genuine and fully valid improvement in incident response capability with no concerning underlying dynamic to investigate further",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "This is a form of metric gaming through selective classification — by systematically avoiding formal incident declaration for borderline cases (rather than genuinely improving containment speed for events that ARE declared), the team can improve a reported metric without any actual improvement in real containment capability, and may be leaving genuinely concerning events under-investigated specifically to protect their metrics, which is a serious and dangerous incentive misalignment",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This concern is only valid if the specific metric in question is reviewed by external auditors; internal-only metric reporting is exempt from this kind of scrutiny",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct fix is to eliminate Mean Time to Contain as a tracked metric entirely, since any metric related to containment speed is inherently ungameable in any other configuration",
+        "correct": false
+      }
+    ],
+    "explanation": "This reinforces the Goodhart's-Law metric-gaming theme running throughout this domain with a particularly dangerous IR-specific example: selectively declining to formally classify and track borderline/ambiguous events as incidents — specifically to keep them out of a metric's denominator — can produce an improving reported metric while providing zero genuine improvement in actual response capability, and worse, may leave genuinely concerning events under-investigated purely to protect the metric's appearance. This is a serious incentive misalignment worth actively investigating and correcting (e.g., via independent review of incident classification decisions), not something to accept as valid improvement, dismiss as only relevant under external audit scrutiny, or address by eliminating the underlying metric (which could be redesigned with better safeguards, such as independent classification review, rather than abandoned outright)."
+  },
+  {
+    "external_key": "RC-046",
+    "domain": "RC",
+    "subtopic": "Stakeholder Communication",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team is asked by a product engineering team to review a new feature before launch. The security team identifies a moderate-severity issue but the engineering team argues the launch timeline is fixed and cannot accommodate a fix. What communication approach BEST balances the security concern with the legitimate business timeline constraint?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The security team should unilaterally block the launch entirely regardless of the business timeline constraint or any interim mitigation options, since any identified security issue must always take absolute precedence over any business deadline",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Clearly communicate the specific risk (what could go wrong, and its plausible business impact) alongside concrete options — a scoped interim mitigation that could ship within the existing timeline, a documented and time-bound risk acceptance if leadership decides to proceed as-is, or a narrowly-targeted timeline adjustment addressing just the specific gap — giving the actual decision-makers (who own both the security and business tradeoffs) the information needed to make an informed choice, rather than either unilaterally blocking the launch or silently approving it without flagging the concern clearly",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The security team should silently approve the launch without documenting or communicating the identified issue at all, to avoid creating friction with the engineering team",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct approach is to escalate the disagreement directly and immediately to the CEO, bypassing the specific engineering team leadership and any intermediate risk-acceptance process entirely",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the security team's role as an informed-decision-enabler rather than either an absolute blocker or a silent approver, a recurring theme in effective security-business communication: the constructive path is clearly communicating the specific risk and its plausible impact, alongside concrete actionable options (interim mitigation, documented risk acceptance, or a narrowly-scoped timeline adjustment) — equipping the actual accountable decision-makers to make an informed tradeoff, rather than unilaterally overriding business timelines, silently suppressing a genuine finding to avoid friction, or immediately escalating to the most senior possible level without first working through the normal risk communication and acceptance process at the appropriate level."
   }
 ]
