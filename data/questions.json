@@ -6499,5 +6499,236 @@
       }
     ],
     "explanation": "This tests providing adequate context to prevent a very common and understandable metric misinterpretation: an increasing raw count can result from either genuinely worsening security posture OR simply looking harder (expanded scan coverage), and these have opposite practical implications — the security team should get credit for improved coverage, not blame for an artifact of better visibility. Good reporting practice explicitly calls out the driver behind a trend (coverage expansion vs. genuine new exposure) and/or normalizes the metric so it isn't misleading, rather than either omitting the metric entirely, blaming the audience for a foreseeable misreading, or — clearly inappropriately — deliberately misrepresenting the actual data."
+  },
+  {
+    "external_key": "SO-068",
+    "domain": "SO",
+    "subtopic": "Network Architecture",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization's VPN solution grants remote employees full Layer 3 network access to the entire internal network upon successful authentication, rather than access limited to specific applications/resources. A security architect recommends migrating to a Zero Trust Network Access (ZTNA) model instead. What is the KEY architectural difference driving this recommendation?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "ZTNA and traditional VPN access are functionally identical in terms of network exposure and this recommendation would provide no meaningful security benefit",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Traditional full-network-access VPN grants broad network-level reachability once authenticated, meaning a compromised VPN credential or endpoint gives an attacker a broad foothold across the internal network; ZTNA instead grants per-application/per-resource access based on continuous verification, so a compromised session is limited to only the specific resources it was explicitly granted rather than the entire internal network",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "ZTNA eliminates the need for any authentication whatsoever, making it fundamentally less secure than traditional VPN",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The only difference between ZTNA and VPN is connection speed, with no security implications either way",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the core architectural distinction between traditional network-level VPN access and application-level ZTNA: full-network VPN access effectively places a remote user's device on the internal network at Layer 3, meaning a compromised credential or endpoint grants broad reachability across internal systems — the classic 'flat network' risk. ZTNA instead grants scoped, per-application access based on continuous identity/device verification, meaning even a compromised session is limited to specifically-authorized resources rather than the entire internal network, significantly reducing the blast radius of a single compromised credential or session."
+  },
+  {
+    "external_key": "SO-069",
+    "domain": "SO",
+    "subtopic": "Cloud Security",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A serverless function has environment variables containing a database connection string with embedded credentials. A security review flags this as a risk even though the cloud provider encrypts environment variables at rest and access to view them requires specific IAM permissions. What residual risk does the reviewer likely have in mind?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no residual risk; encryption at rest and IAM-gated access fully eliminate any concern about credentials stored in environment variables",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Encryption at rest and IAM-gated console access protect against unauthorized VIEWING of the variables through the cloud console/API, but the running function's OWN code/process has the credentials available in plaintext in memory during execution — if the function itself is compromised (e.g., via a vulnerable dependency or injection flaw), an attacker with code execution inside that function can access the plaintext credentials directly, regardless of how well they're protected at rest or via IAM controls on the console",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The only residual risk is a compliance documentation gap with no actual technical security implication",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This concern is only valid for functions that don't use HTTPS for their outbound connections",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding that at-rest encryption and access-control gates protect against a SPECIFIC threat model (unauthorized external viewing) but not against a compromised runtime environment: a function's own process has plaintext access to its environment variables during execution, by necessity — if an attacker achieves code execution WITHIN that function (e.g., via a vulnerable dependency, injection vulnerability, or supply-chain compromise), they can read those credentials directly from the running process's memory, entirely bypassing the at-rest encryption and IAM console-access protections. This is why secrets management best practice often recommends dedicated secret-fetching mechanisms with short-lived credentials rather than long-lived secrets baked into environment variables, regardless of unrelated considerations like outbound HTTPS usage."
+  },
+  {
+    "external_key": "VM-056",
+    "domain": "VM",
+    "subtopic": "Scanning Methodology",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management team's scanning tool reports significantly different results for the same host depending on whether the scan is run during business hours (many findings suppressed) versus after hours (full findings reported). Investigation reveals a host-based firewall/security agent on the target actively rate-limits or blocks scan traffic during business hours to preserve system performance for end users. What is the BEST way to characterize this discovery?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This behavior should be considered fully acceptable and requires no further investigation, since after-hours scanning already captures a complete result",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "This reveals that a host-level control (rate-limiting/blocking scan traffic) is inadvertently causing INCOMPLETE vulnerability visibility during a significant portion of the day — while running scans after-hours does provide complete results in this case, this should prompt broader review of whether other unknown environmental factors (time-of-day-dependent controls, load balancers, WAFs, or other network conditions) might be causing similarly incomplete results in scans the team currently assumes are comprehensive",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This proves the scanning tool itself is fundamentally defective and must be replaced regardless of the actual root cause identified",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The host-based security agent causing this behavior should be immediately and permanently disabled to prevent any future scan interference",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a deeper vulnerability management maturity lesson: discovering ONE instance of environmental interference with scan completeness (in this case, time-of-day-dependent rate limiting) should prompt broader skepticism about whether similar, currently-undiscovered interference might be silently degrading OTHER scans the team currently trusts as complete — network conditions, load balancers, WAFs, or other security controls could all similarly and invisibly suppress scan results in ways that aren't as easily discovered as this business-hours/after-hours discrepancy happened to be. This isn't about the scanning tool being defective, and permanently disabling a legitimate host security control isn't the appropriate fix — the fix is broader awareness and periodic validation of scan completeness assumptions."
+  },
+  {
+    "external_key": "VM-057",
+    "domain": "VM",
+    "subtopic": "CVSS / Prioritization",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability with CVSS Attack Vector: Network (AV:N) and User Interaction: Required (UI:R) is compared against one with Attack Vector: Local (AV:L) and User Interaction: None (UI:N), with otherwise similar impact metrics. A junior analyst assumes the Network-vector vulnerability is automatically more dangerous since 'network attacks are always worse than local ones.' Is this a safe generalization?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Yes, completely — Attack Vector is the only metric that matters for comparing vulnerability severity, and Network vector always outranks Local vector regardless of any other factor",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "No — Attack Vector and User Interaction are separate, independent metrics that combine (along with Attack Complexity and Privileges Required) into the overall exploitability assessment; a Network-vector vulnerability requiring user interaction can, in practice, be harder to reliably exploit than a Local-vector vulnerability requiring none, since UI:N means an attacker (who has already achieved local access through some other means) can trigger it without needing to trick or wait for a victim to perform an action at all",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This comparison is meaningless, since CVSS never considers Attack Vector and User Interaction as related metrics in the same scoring calculation",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Local-vector vulnerabilities are always automatically more severe than Network-vector vulnerabilities regardless of any other metric value",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests avoiding an oversimplified single-metric shortcut when comparing CVSS-scored vulnerabilities: while Network attack vector is generally associated with broader remote exploitability, it isn't automatically 'worse' when paired with a requirement for user interaction (UI:R, meaning a victim must be tricked into performing some action, like clicking a link) compared to a Local-vector vulnerability with no interaction requirement (UI:N) — the latter can be reliably and automatically triggered by an attacker who has already obtained some level of access, without depending on a victim's unpredictable behavior. All the exploitability sub-metrics (Attack Vector, Attack Complexity, Privileges Required, User Interaction) combine together, and reducing comparison to a single metric in isolation produces an oversimplified and potentially incorrect severity assessment."
+  },
+  {
+    "external_key": "IR-048",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization's IR runbook for a ransomware scenario specifies immediately powering off all affected systems to 'stop the spread.' During an actual incident, the IR lead instead chooses to isolate systems from the network (disabling network interfaces) while keeping them powered on. A colleague questions this deviation from the documented runbook. What is the BEST justification for this decision?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The IR lead made an error and should always follow the documented runbook exactly regardless of any other consideration, including evidence preservation",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Powering off a system immediately destroys volatile memory (RAM) contents, which can contain critical forensic evidence (encryption keys in memory, active malware processes, network connection details) that would otherwise help with both investigation and potentially even decryption/recovery efforts — network isolation (disabling interfaces while keeping the system running) achieves the containment goal (stopping further spread/communication) while preserving this volatile evidence for later forensic capture, representing a more forensically-sound approach to the same containment objective",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Network isolation is functionally identical to powering off a system, so this decision has no meaningful practical difference either way",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This decision was inappropriate specifically because runbooks should never be deviated from once written, regardless of new information or better available techniques",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a well-known IR/forensics tension and best practice refinement: while historically 'pull the plug' was common guidance, it's now widely recognized that powering off a system destroys volatile memory evidence (which can contain encryption keys, active process information, and network artifacts valuable for both investigation and sometimes decryption). Network isolation (disabling network interfaces while leaving the system running) achieves the same core containment goal — stopping further spread and command-and-control communication — while preserving that volatile evidence for capture. Skilled IR leads appropriately deviate from static runbooks when a better-informed, more forensically-sound technique achieves the same objective, rather than rigidly following documentation that may not reflect current best practice."
+  },
+  {
+    "external_key": "IR-049",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A forensic analyst finds that a suspect's laptop has full-disk encryption enabled, and the laptop was seized while powered off. The analyst notes this significantly limits available forensic options compared to if the laptop had been seized while unlocked and running. Why does the power state at seizure matter this much for an encrypted device?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Power state at seizure is irrelevant to forensic analysis of an encrypted device; encryption status alone determines what evidence is recoverable regardless of whether the device was on or off",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A running, unlocked encrypted device has its encryption key held in memory (RAM) to allow ongoing access to the decrypted filesystem — capturing that live memory (before shutdown) can potentially yield the encryption key itself, enabling full decrypted access to the disk; once powered off, the key is typically cleared from memory and the disk reverts to its encrypted, generally inaccessible state without the original credentials, making live-system memory capture a critical, time-sensitive opportunity that a properly-seized powered-off device has already lost",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Full-disk encryption only affects data written after the encryption was enabled, so a powered-off encrypted device still exposes all historical data regardless of key availability",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This scenario has no practical forensic implications, since law enforcement can always compel decryption regardless of technical factors",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding a critical, time-sensitive forensic consideration for encrypted devices: while a system is running and unlocked, its encryption key typically resides in volatile memory (RAM) to enable ongoing decrypted access — capturing that live memory before the system is powered down or locked can potentially recover the key itself, unlocking full access to otherwise-inaccessible encrypted data. Once a device is powered off, that key is generally cleared, and the disk reverts to its fully-encrypted state, making memory acquisition a genuinely critical and time-sensitive opportunity in live-system forensics. Legal compulsion to decrypt is a separate, non-technical consideration and doesn't change the underlying technical reality of what's recoverable from the device itself."
+  },
+  {
+    "external_key": "RC-029",
+    "domain": "RC",
+    "subtopic": "Metrics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A SOC dashboard prominently displays 'number of alerts closed today' as a key performance indicator for individual analysts, without any quality review of the closure decisions. Over time, analysts closing the most alerts per day receive the most favorable performance reviews. A subsequent audit finds the highest-closure analysts also have the highest rate of incorrectly-closed (actually malicious) alerts. What does this scenario illustrate about performance metric design?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This is expected and acceptable; alert closure volume is always the single best indicator of individual analyst performance regardless of closure accuracy",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A metric measuring pure VOLUME without any accompanying QUALITY measure creates a perverse incentive — analysts rationally optimize for whatever is actually being measured and rewarded (closing alerts quickly) rather than the true underlying goal (correctly identifying and escalating genuine threats), and this misalignment can directly harm security outcomes by rewarding exactly the behavior (rushed, low-quality triage) that lets real threats slip through as false closures",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This finding is unrelated to the metric itself and reflects only the individual moral character of the specific analysts involved",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct fix is to eliminate all individual performance metrics for SOC analysts and rely purely on team-wide aggregate reporting with no individual accountability",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing a serious real-world consequence of a Goodhart's-Law-style volume-only performance metric: when only quantity is measured and rewarded, without any corresponding quality check, analysts are rationally incentivized to prioritize speed/volume over accuracy — precisely because that's what's actually being measured and rewarded, regardless of individual character. This directly and predictably produces worse security outcomes (more genuine threats incorrectly closed). The fix is redesigning the metric to incorporate quality (e.g., a sampled quality-review process, escalation accuracy rate, or reopened-alert tracking) alongside volume, not eliminating individual performance measurement altogether, which would remove accountability entirely rather than fixing the actual measurement flaw."
   }
 ]
