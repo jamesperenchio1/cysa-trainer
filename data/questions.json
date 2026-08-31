@@ -8809,5 +8809,137 @@
       }
     ],
     "explanation": "This reinforces the audience-calibration theme running throughout Reporting & Communication with a specific business-stakeholder example: leading with technical jargon (CVE identifiers, CVSS scores) that the audience isn't equipped to interpret is a common way for a legitimately important security recommendation to get dismissed, not because the underlying risk isn't real, but because the communication didn't translate it into terms the decision-maker could actually evaluate. Reframing in concrete business-relevant terms — what could actually happen, and how the proposed control addresses it — respects the audience's decision-making needs and is far more likely to produce buy-in than either blaming the stakeholder for not understanding jargon, bypassing them entirely, or immediately escalating over their head rather than first attempting clearer communication."
+  },
+  {
+    "external_key": "SO-089",
+    "domain": "SO",
+    "subtopic": "Zero Trust / Architecture",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization piloting Zero Trust deploys micro-segmentation for its data center, restricting server-to-server communication to only explicitly-allowed pairs. A stakeholder argues this level of granular control is 'overkill' compared to traditional perimeter-based segmentation (a few large network zones). What is the BEST justification for micro-segmentation's finer granularity?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Micro-segmentation provides no meaningful additional security benefit over traditional large-zone perimeter segmentation, and the added operational complexity is never justified",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Traditional large-zone segmentation still allows broad lateral movement once an attacker compromises ANY single host within that zone, since all hosts within the same zone typically trust each other by default — micro-segmentation limits this lateral movement to only the specific, explicitly-authorized communication paths, meaning a compromised host provides the attacker access to a much smaller, defined set of other systems rather than the entire zone, significantly reducing the practical blast radius of any single compromise",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Micro-segmentation is only relevant for organizations with fewer than 10 total servers, and provides no benefit at data center scale",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The only purpose of micro-segmentation is regulatory compliance checkbox satisfaction, with no genuine technical security benefit",
+        "correct": false
+      }
+    ],
+    "explanation": "This reinforces the Zero Trust lateral-movement-limiting theme from earlier questions, applied specifically to micro-segmentation versus traditional large-zone network segmentation: within a traditional large trust zone, once an attacker compromises any single host, they typically have broad reachability to every other host in that same zone (which implicitly trust each other) — a much larger blast radius than intended. Micro-segmentation restricts communication to specific, explicitly-authorized pairs, meaning a compromised host's usefulness to an attacker for lateral movement is limited to only the deliberately-permitted paths, meaningfully reducing the practical impact of any single compromise — this benefit scales WITH environment size and complexity (making it more, not less, valuable at data center scale) and reflects a genuine technical security improvement, not merely a compliance formality."
+  },
+  {
+    "external_key": "VM-076",
+    "domain": "VM",
+    "subtopic": "CVSS / Prioritization",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management team notices that a specific finding has had its CVSS score revised THREE separate times by different sources (the original vendor advisory, NVD, and a third-party research firm), with scores ranging from 6.5 to 9.1 for the same underlying vulnerability. A stakeholder asks which score should be considered authoritative for internal prioritization. What is the BEST approach?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The team should always use whichever score is lowest among the available sources, since this minimizes required remediation urgency and resource expenditure",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Rather than treating any single external source as automatically authoritative, the team should understand WHY the scores differ (e.g., different assumptions about attack vector, scope, or environmental context used by each scorer) and apply the score (or a locally-adjusted assessment) that most accurately reflects THIS organization's actual deployment context and exposure — since scoring discrepancies often stem from different scorers making different assumptions about how the vulnerability is typically deployed or used, which may or may not match this specific environment",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The team should always use whichever score is highest among the available sources, regardless of whether the assumptions behind that score actually match this organization's specific deployment context",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "CVSS scoring discrepancies between different sources for the same vulnerability are technically impossible, meaning this scenario could not actually occur",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding that CVSS scores can legitimately differ between sources because different scorers may make different assumptions about the vulnerability's typical deployment context, attack vector applicability, or scope — rather than blindly defaulting to the lowest score (which risks underestimating real risk) or the highest score (which risks over-prioritizing based on assumptions that may not apply to this specific environment), a mature vulnerability management program investigates WHY the discrepancy exists and applies the assessment that most accurately reflects the organization's own actual deployment and exposure context, potentially performing its own environmental scoring adjustment rather than simply picking a source based on convenience or a blanket high/low default rule."
+  },
+  {
+    "external_key": "IR-065",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A forensic analyst investigating a compromised container-based application notices that the specific container instance involved in the incident has already been terminated and replaced (a normal part of the orchestration platform's auto-scaling/self-healing behavior) before forensic imaging could occur. What does this scenario illustrate about forensic readiness in containerized environments specifically?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Containerized environments are fundamentally impossible to forensically investigate under any circumstances, making this entire incident uninvestigable",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Container orchestration platforms' normal self-healing/auto-scaling behavior (terminating and replacing unhealthy or scaled-down instances) can inadvertently destroy forensic evidence far faster than in traditional server environments, meaning forensic readiness for containerized environments needs specific proactive measures — such as configured logging/telemetry export BEFORE termination, container image/filesystem snapshotting triggers tied to security alerts, or orchestration-level holds preventing automatic termination of instances flagged for investigation — rather than relying on standard post-incident imaging procedures designed for longer-lived traditional infrastructure",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This issue only affects investigations of container orchestration platforms specifically manufactured by a single vendor, and has no broader applicability",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct fix is to disable all auto-scaling and self-healing behavior permanently across the entire production environment to prevent any possibility of evidence loss",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding a forensic readiness gap specific to modern containerized/cloud-native infrastructure: the normal, expected self-healing behavior of container orchestration platforms (automatically terminating and replacing unhealthy instances) operates on a timescale that can easily outpace traditional incident response and forensic imaging workflows designed for longer-lived server infrastructure, inadvertently destroying evidence before it can be captured. This requires PROACTIVE forensic readiness measures specific to this architecture — automated logging/telemetry export, snapshot triggers tied to security alerts, or orchestration-level mechanisms to hold a flagged instance from automatic termination — built in as part of the platform's design, rather than assuming traditional post-incident forensic procedures will work unmodified; this is a general concern across container orchestration platforms broadly, not a single-vendor issue, and permanently disabling auto-scaling/self-healing across all production workloads is an impractical, disproportionate response to this specific concern."
+  },
+  {
+    "external_key": "RC-041",
+    "domain": "RC",
+    "subtopic": "Regulatory Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization's compliance team argues that since they have never actually been fined or penalized for any compliance gap, their current security/compliance posture must be adequate. What is the BEST critique of this reasoning?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This reasoning is fully sound; an absence of past penalties definitively and conclusively proves current compliance posture is adequate and requires no further evaluation",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Absence of enforcement action is not the same as actual compliance — regulatory enforcement is often reactive (triggered by a complaint, breach, or audit) and inconsistent in practice, meaning genuine compliance gaps can exist undetected for extended periods without ever resulting in a fine, especially if no triggering event (like a breach or complaint) has yet occurred; using 'we haven't been fined' as the primary evidence of adequate compliance mistakes lack of caught violations for actual conformance with requirements",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This reasoning is only flawed for organizations operating in heavily-regulated industries like healthcare or finance, and is fully valid for any organization in a less-regulated industry",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct response is to deliberately seek out and provoke a regulatory investigation, since only an actual enforcement action can definitively establish current compliance status",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a common but flawed compliance reasoning pattern: enforcement is generally reactive (often triggered by a specific complaint, breach, or scheduled audit) and inconsistent, meaning an organization can have genuine, significant compliance gaps that simply haven't yet been discovered or triggered enforcement — the absence of a fine reflects the absence of DETECTED and PENALIZED non-compliance, not necessarily the absence of actual non-compliance. Genuine compliance assessment requires proactive internal/external audit against the actual applicable requirements, not inference from a lack of past penalties — this reasoning flaw applies across industries generally (not exclusively heavily-regulated sectors), and deliberately provoking an investigation would obviously be an inappropriate and counterproductive response to this concern."
   }
 ]
