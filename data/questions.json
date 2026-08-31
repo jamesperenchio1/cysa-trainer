@@ -8413,5 +8413,137 @@
       }
     ],
     "explanation": "This reinforces the overlapping-regulatory-framework theme from earlier questions with a sector-specific example: FERPA governs the privacy and handling of student education records specifically, but this doesn't automatically mean it preempts or supersedes a SEPARATE state breach notification law's own requirements — these are often independent legal obligations that both need to be evaluated and satisfied unless a specific, legally-confirmed preemption relationship exists. Compliance teams should verify this kind of interaction with legal counsel rather than assuming one framework's silence on a particular requirement (like AG notification) means no such requirement exists under a DIFFERENT, separately-applicable law — this determination depends on the actual specific legal relationship between the frameworks involved, not a blanket rule based on data type or institutional ownership type alone."
+  },
+  {
+    "external_key": "SO-086",
+    "domain": "SO",
+    "subtopic": "Malware Analysis",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A malware sample uses a technique where it splits its malicious payload across multiple seemingly-innocuous files, none of which individually contains anything flagged as malicious by static analysis or antivirus signatures, but which reassemble into functional malicious code only when all pieces are combined at runtime. What broader category of evasion technique does this represent, and why is it effective?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This technique has no established name or category in malware analysis and represents an entirely novel, previously undocumented approach with no defensive implications",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "This is a form of fragmentation/staging evasion — by splitting malicious functionality across multiple components that are each individually benign-looking, the technique defeats detection methods that analyze files in isolation (static signatures, single-file antivirus scanning), since no single artifact triggers a match; effective defenses against this class of technique require analyzing BEHAVIOR at runtime (when the pieces actually combine and execute) or examining relationships/correlations between multiple files rather than relying solely on single-file static analysis",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This technique can only be effective against email-based delivery and has no relevance to any other malware delivery or execution method",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Splitting a payload across multiple files makes a sample technically incapable of executing any malicious functionality under any circumstances",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing a category of evasion technique (payload fragmentation/staging) and the general principle it illustrates: any detection approach that examines artifacts in isolation is vulnerable to techniques that split malicious functionality across multiple individually-benign-looking pieces, since no single piece triggers a signature match. This reinforces why runtime/behavioral analysis (observing what happens when components actually combine and execute) and correlation-based analysis (examining relationships between multiple files/events rather than single artifacts alone) are necessary complements to static, single-file signature-based detection — this general evasion category isn't specific to any one delivery mechanism like email, and the technique is specifically designed to still achieve full malicious functionality once assembled, not to be permanently non-functional."
+  },
+  {
+    "external_key": "VM-074",
+    "domain": "VM",
+    "subtopic": "Remediation",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management team applies patches to a fleet of servers using an automated patch management tool. Verification scans afterward show the patches were successfully installed, but a manual review months later discovers that the automated tool's own logs show several patch installations actually FAILED silently, while the tool's dashboard incorrectly reported them as successful due to a bug in its own status-reporting logic. What does this illustrate about relying on a single verification method?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This scenario is impossible; automated patch management tools cannot have bugs in their own status reporting, making this description technically implausible",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Relying on a single tool's self-reported success status as the sole verification mechanism creates a single point of failure — if that tool has a bug or blind spot in its OWN status reporting, the organization has no independent check to catch the discrepancy, which is exactly why independent verification methods (like a separate vulnerability scan confirming the specific CVE is actually resolved, rather than just trusting the patch tool's own 'installation successful' status) provide meaningful additional assurance beyond a single tool's self-report",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The correct fix is to stop using any automated patch management tooling entirely and revert to fully manual patch installation and verification for every single server going forward",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This finding is irrelevant to vulnerability management practice, since patch management tool reliability is exclusively a vendor support/licensing issue with no operational implications",
+        "correct": false
+      }
+    ],
+    "explanation": "This reinforces the theme of independent verification as a check against a single source's self-reported status: trusting a single tool's own status reporting as the sole verification of remediation success creates a blind spot if that tool has bugs affecting its OWN reporting logic — an independent verification method (such as a separate vulnerability scan actually confirming the specific vulnerability/CVE is resolved, rather than just trusting the patch tool's self-reported 'success' status) provides a meaningful cross-check that catches exactly this kind of tool-level reporting bug. This isn't a reason to abandon automation and revert to fully manual processes (which introduces its own scale and consistency problems), and it's a genuine, plausible failure mode worth designing verification processes around, not an implausible scenario or a purely vendor-support concern."
+  },
+  {
+    "external_key": "IR-061",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A forensic analyst preparing to testify about their findings in a legal proceeding is asked by opposing counsel to explain the specific forensic tool and methodology used to extract data from a mobile device. The analyst is unable to explain the underlying technical process, having simply followed the tool's automated workflow without understanding what it does internally. Why does this create a problem for the analyst's testimony?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no problem; forensic tools are always considered fully reliable and self-explanatory regardless of whether the analyst understands their internal methodology",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Courts (and the standards governing expert/forensic testimony, such as Daubert or Frye in various US jurisdictions) generally require that a forensic examiner be able to explain and defend the reliability and validity of the methodology used, not merely that a tool produced a result — an inability to explain HOW a tool works, what it actually does internally, and why its output should be considered reliable can undermine the admissibility or credibility of the analyst's findings and testimony, regardless of whether the underlying tool itself is generally considered reputable",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This concern only applies to criminal proceedings and has no relevance to civil litigation or internal corporate investigations",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct fix is for the analyst to simply defer all technical questions to the tool vendor's marketing materials during testimony, which fully satisfies any legal standard for methodology explanation",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests understanding why forensic methodology understanding matters beyond just using a tool that produces results: legal standards for expert/scientific testimony (like the Daubert standard in US federal courts, and similar frameworks elsewhere) generally require that an examiner can explain and defend WHY a methodology is reliable, not simply that a reputable tool was run and produced output — an analyst who can't explain the underlying process undermines the defensibility of their findings under cross-examination, regardless of the tool's general reputation. This concern applies broadly across legal contexts (not just criminal proceedings specifically), and deferring to vendor marketing materials during testimony would not satisfy this standard, since it doesn't demonstrate the ANALYST's own understanding of the methodology they applied."
+  },
+  {
+    "external_key": "RC-038",
+    "domain": "RC",
+    "subtopic": "Metrics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team wants to demonstrate the value of their security awareness training program using 'percentage of employees who completed the training' as the primary success metric, currently at 98%. A skeptical board member asks what this metric actually demonstrates about whether the training changed employee BEHAVIOR. What is the reviewer's underlying point?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Completion rate is a fully sufficient metric on its own; if 98% of employees clicked through the training, this necessarily and directly demonstrates the training successfully changed their security-related behavior",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Training COMPLETION (an input/activity metric — did people click through the modules) is a fundamentally different measure than training EFFECTIVENESS (an outcome metric — did it actually change behavior, like reduced susceptibility to phishing simulations, improved incident reporting rates, or fewer risky security practices observed) — a high completion rate alone says nothing about whether the content was actually absorbed, retained, or translated into changed behavior, and a genuinely useful program evaluation needs outcome-based measures alongside (not instead of) completion tracking",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This concern is only relevant for programs with completion rates below 80%; any program achieving above that threshold has definitively proven effectiveness regardless of any other consideration",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct fix is to eliminate completion rate tracking entirely, since it provides no value whatsoever toward evaluating a security awareness program",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the same output-vs-outcome metric distinction seen in earlier RC questions, applied to security awareness training specifically: completion rate measures an ACTIVITY (did people click through the required modules) rather than an OUTCOME (did their actual behavior change — measured via things like phishing simulation click rates over time, incident reporting behavior, or observed practice changes). A high completion percentage is easy to achieve and easy to report, but doesn't by itself demonstrate the training worked — meaningful program evaluation needs behavioral outcome measures alongside completion tracking (which still has SOME value, e.g., confirming baseline exposure to the material), not a replacement of one metric with the other or an arbitrary completion-rate threshold treated as proof of effectiveness."
   }
 ]
