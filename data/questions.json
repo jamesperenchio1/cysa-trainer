@@ -9766,5 +9766,137 @@
       }
     ],
     "explanation": "This introduces a distinct communication-security consideration from the earlier blameless-post-mortem lesson (which was about tone toward individuals): the RISK here is about information sensitivity and audience scoping — broadly distributing detailed technical vulnerability information (potentially including exploit-level specifics) beyond those with a genuine operational need to know increases the chance that sensitive detail is misused, leaked externally, or simply becomes more widely known than the retrospective's actual purpose requires. Good practice scopes highly technical/sensitive incident details to those who need them for remediation or learning purposes, while broader organizational lessons (without exploit-level specifics) can be shared more widely — this isn't solely about whether a channel is technically internal-only, and abandoning incident documentation entirely would eliminate a genuinely valuable practice rather than addressing the actual distribution-scoping issue."
+  },
+  {
+    "external_key": "SO-099",
+    "domain": "SO",
+    "subtopic": "Endpoint Detection",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An EDR platform's behavioral engine flags a process for 'suspicious credential access behavior' (attempting to read the memory of the LSASS process, a common technique for harvesting Windows credentials). Investigation reveals the process is a legitimate, digitally-signed enterprise backup agent performing a documented, vendor-supported credential-caching function required for its backup operations. What is the BEST way to handle this finding going forward?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Immediately and permanently disable ALL EDR detection rules related to LSASS memory access across the entire environment, since this single confirmed false positive proves the underlying detection logic itself is fundamentally flawed",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Create a narrowly-scoped exception tied to the SPECIFIC verified backup agent (by binary hash, publisher signature, or similarly specific identifier) rather than broadly disabling the underlying LSASS-access detection capability — LSASS credential dumping remains one of the most common and dangerous real-world attack techniques (e.g., via tools like Mimikatz), so preserving detection for any OTHER, unverified process attempting the same behavior is essential even after confirming this one specific legitimate case",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This finding should simply be ignored without any exception being created or documented, and the identical alert should be manually dismissed individually every time it recurs going forward",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The backup agent vendor should be required to completely redesign their product to avoid any LSASS interaction whatsoever, since no legitimate software should ever need this type of access under any circumstances",
+        "correct": false
+      }
+    ],
+    "explanation": "This reinforces the earlier EDR-tuning lesson (RMM tool exception) with a specific, high-stakes example: LSASS memory access is one of the most consequential techniques to detect, since it's central to credential-dumping attacks (Mimikatz and similar tools) — broadly disabling this entire detection category because one specific, verified legitimate tool triggers it would create a dangerous blind spot for any actual attacker using the same technique. A properly scoped exception (tied to the specific verified binary/publisher) eliminates the noise from this one confirmed legitimate case while preserving full detection capability for everything else — manually dismissing the recurring alert indefinitely without a formal exception is inefficient and error-prone, and requiring a legitimate vendor to redesign a documented, supported product feature is an impractical response to what is properly a detection-tuning problem, not a vendor product flaw."
+  },
+  {
+    "external_key": "SO-100",
+    "domain": "SO",
+    "subtopic": "Network Architecture",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A network architecture review finds that a critical internal application server can be reached directly from the general corporate user VLAN with no intermediate network boundary, justified as 'employees need access to this application for their jobs.' A security architect recommends adding a dedicated application-tier segment between the user VLAN and this server, even though users would still ultimately be granted access to the application. What is the value of this additional segmentation given that access is still ultimately permitted either way?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no meaningful value; since users are granted access to the application either way, adding an intermediate network segment provides no security benefit regardless of configuration",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Adding an application-tier boundary allows access to be restricted to the SPECIFIC application protocol/port needed (e.g., the application's specific service port) rather than broad, unrestricted network-layer reachability between the entire user VLAN and the server — this means a compromised user workstation can reach the server only via the legitimate application interface, not via other ports/services that might be running on that server, meaningfully narrowing the attack surface even though the END USER's application-level access outcome is unchanged",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This additional segmentation is only valuable if the corporate user VLAN is eliminated entirely and replaced with individual per-user network segments",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Network segmentation between a user VLAN and an application server is purely a compliance documentation exercise with no effect on actual reachability or attack surface",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a nuanced but important segmentation principle: the distinction between USER-level application access (which is unchanged either way, since users need and are granted access to the application) and NETWORK-level reachability (which can be much broader than what's actually needed if the entire user VLAN has unrestricted network access to the server, rather than access scoped specifically to the application's own port/protocol). Introducing a properly-scoped application-tier boundary narrows what a COMPROMISED workstation can reach on that server to just the legitimate application interface, rather than any other service/port that might also be running there — this meaningfully reduces attack surface and lateral-movement/pivot risk even though the legitimate end-user experience and their application access outcome remain completely unchanged."
+  },
+  {
+    "external_key": "SO-101",
+    "domain": "SO",
+    "subtopic": "Cloud Security",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A CSPM (Cloud Security Posture Management) tool flags an IAM policy that grants a service role 's3:*' (all S3 actions) on a specific bucket, when the service actually only ever performs 'GetObject' and 'PutObject' operations based on 6 months of CloudTrail activity logs. A developer argues this is fine since 'the wildcard is scoped to just one specific bucket, not all buckets.' What residual risk remains despite the bucket-level scoping?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no residual risk whatsoever; scoping a wildcard action grant to a single specific bucket resource fully and completely eliminates any least-privilege concern regardless of which specific actions are actually included in that wildcard",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "'s3:*' includes many destructive/dangerous actions beyond the two actually used (e.g., 'DeleteObject', 'DeleteBucket', 'PutBucketPolicy' which could modify the bucket's own access controls) — if this service's credentials are ever compromised (via a vulnerable dependency, injection flaw, or similar), an attacker inherits ALL of these unnecessary and dangerous capabilities scoped to that bucket, not just the two the service actually needs, meaning bucket-level resource scoping alone doesn't achieve least privilege if the ACTION list itself remains overly broad",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This concern is only valid if the bucket also lacks versioning enabled; with versioning enabled, wildcard action grants pose no meaningful additional risk regardless of scope",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "IAM wildcard action grants are purely a cost-optimization concern related to API call billing, with no relationship to actual security risk",
+        "correct": false
+      }
+    ],
+    "explanation": "This reinforces the earlier least-privilege IAM lesson with a more granular distinction: least privilege requires scoping BOTH the resource (which this example already does, limiting to one specific bucket) AND the specific actions/permissions granted — 's3:*' includes many actions beyond what the service actually uses (based on 6 months of observed CloudTrail activity showing only GetObject/PutObject), including destructive actions like DeleteObject/DeleteBucket and access-control-modifying actions like PutBucketPolicy. If the service's credentials are compromised, an attacker inherits ALL of these unnecessary capabilities scoped to that bucket, not just the two actually needed — resource-level scoping alone is necessary but not sufficient for genuine least privilege if the action list itself remains far broader than what's actually used, and this concern is unrelated to whether bucket versioning is enabled or any cost/billing consideration."
+  },
+  {
+    "external_key": "SO-102",
+    "domain": "SO",
+    "subtopic": "Threat Intelligence",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A threat intelligence analyst produces an assessment stating an observed intrusion is 'likely' attributable to a specific known threat actor group, based on moderate-confidence overlapping indicators, and explicitly documents the confidence level and the specific evidence supporting (and any evidence complicating) this assessment. A stakeholder pushes back, wanting the report to simply state definitively 'this WAS [threat actor group]' for a cleaner, more decisive-sounding executive summary. What is the BEST response to this request?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The analyst should comply with the stakeholder's request and remove all confidence-level language and caveats, since executive audiences always prefer maximally decisive, simplified statements regardless of the actual underlying analytical certainty",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The analyst should preserve the calibrated confidence language and supporting/complicating evidence rather than overstating certainty for the sake of a cleaner-sounding summary — analytic tradecraft standards (used broadly across intelligence disciplines, not just cyber threat intelligence) specifically require communicating appropriate confidence levels rather than false certainty, since decision-makers acting on an artificially definitive attribution claim could make consequential decisions (legal, diplomatic, or operational) based on a confidence level the underlying evidence doesn't actually support",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Confidence-level language in threat intelligence reporting is purely a stylistic preference with no substantive analytical importance, making this entirely the stakeholder's call to decide",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct compromise is to state the attribution as definitive in the executive summary while only including confidence caveats in a technical appendix most readers won't see",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests analytic tradecraft integrity, a principle borrowed from broader intelligence analysis standards: calibrated confidence language (moderate/high/low confidence, with supporting AND complicating evidence documented) exists specifically to accurately convey the actual state of analytical certainty to decision-makers — stripping this nuance for a 'cleaner' or more decisive-sounding summary risks decision-makers acting on false certainty for consequential decisions (which could include legal, diplomatic, or significant operational responses) that the underlying evidence doesn't actually support. This isn't a stylistic preference to be resolved by stakeholder convenience, and burying the actual confidence level in an appendix most readers won't see would functionally achieve the same overstatement problem as removing it entirely from the parts of the report people actually read."
   }
 ]
