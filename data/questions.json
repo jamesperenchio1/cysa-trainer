@@ -8248,5 +8248,170 @@
       }
     ],
     "explanation": "This tests audience-appropriate structuring specifically for TIME-SENSITIVE, active-incident communication: during an ongoing incident, executives most urgently need to know business impact, containment status, and expected timeline — not unexplained technical jargon that doesn't answer those questions, even if it's technically accurate and relevant to the investigation itself. The fix is leading with the business-relevant framing (impact, status, timeline) with technical detail available as supporting context, not eliminating substantive detail entirely down to a vague reassurance, and not withholding updates until full resolution — active incidents specifically require ongoing, appropriately-framed communication precisely because leadership needs current information to make real-time decisions."
+  },
+  {
+    "external_key": "SO-085",
+    "domain": "SO",
+    "subtopic": "Endpoint Detection",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An EDR platform's console shows a specific endpoint has been 'offline' (not reporting) for 6 hours, which is unusual for that host's normal uptime pattern. A junior analyst assumes this is just a network connectivity issue and takes no further action. What alternative explanation should also be considered, and why does it matter?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no alternative explanation worth considering; an offline EDR agent can only ever indicate a benign connectivity or hardware issue",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A sophisticated attacker who has gained sufficient privilege on a host may deliberately disable, uninstall, or otherwise tamper with the EDR agent specifically to blind security visibility on that host before conducting further malicious activity — an unexpected, unusual EDR reporting gap should be investigated (checking other logs/telemetry sources for the host, physical/network status) rather than automatically assumed to be an innocuous connectivity problem, since EDR tampering is a recognized and meaningful indicator in its own right",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This can only indicate a licensing expiration issue and should be routed exclusively to procurement, with no security investigation warranted",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "EDR agents are technically incapable of being disabled or tampered with by any process running on the host, making this alternative explanation impossible",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests recognizing EDR/security tool tampering as a meaningful indicator in its own right — attackers with sufficient host privilege often deliberately disable, uninstall, or otherwise interfere with endpoint security tooling specifically to blind detection before conducting further malicious activity (a well-documented defense evasion technique). An unusual, unexpected gap in EDR reporting shouldn't be automatically assumed to be a benign connectivity issue — it warrants investigation using alternative telemetry sources for that host (network logs, other monitoring, physical status checks) to rule out or confirm tampering, since EDR agents CAN be disabled by a sufficiently privileged process, and this is exactly the scenario mature security operations should be alert to."
+  },
+  {
+    "external_key": "VM-072",
+    "domain": "VM",
+    "subtopic": "CVSS / Prioritization",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management team notices that two vulnerabilities affecting the same web application both score CVSS 7.5, but one has a publicly-available, easy-to-use exploit tool circulating widely, while the other requires deep technical expertise to exploit with no known public tooling. A stakeholder argues both should be remediated with identical urgency since 'the CVSS score is the same.' What is the BEST response?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The stakeholder is correct; identical CVSS Base Scores always mean identical real-world urgency regardless of any other factor, including exploit tooling availability",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "CVSS Base Score reflects the vulnerability's inherent technical characteristics but doesn't account for real-world exploit availability/maturity — a vulnerability with widely-circulating, easy-to-use exploit tooling has a dramatically lower barrier to actual exploitation (any unsophisticated attacker can use it) compared to one requiring deep expertise with no public tooling, making the former genuinely more urgent in practice despite an identical Base Score; supplementing CVSS with exploit-maturity intelligence (like EPSS or direct threat intelligence on tool availability) better reflects this real-world urgency difference",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "CVSS scores should be permanently and manually altered to reflect exploit tooling availability, blending this into the Base Score calculation itself going forward",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Exploit tooling availability is entirely irrelevant to vulnerability management prioritization and should never factor into remediation urgency decisions",
+        "correct": false
+      }
+    ],
+    "explanation": "This reinforces the CVSS-Base-Score-isn't-the-whole-picture lesson with a specific, practical example: identical Base Scores don't guarantee identical real-world exploitation risk — the actual availability and ease of use of exploit tooling meaningfully affects how likely and how soon a vulnerability is likely to be exploited in the wild, since it directly determines the sophistication threshold required of an attacker. Rather than manually altering the CVSS score itself (which should remain an accurate, standardized reflection of the vulnerability's inherent characteristics), the better practice is supplementing CVSS with exploit-maturity/threat-intelligence context (such as EPSS scoring or direct threat intel) to inform actual remediation prioritization urgency."
+  },
+  {
+    "external_key": "VM-073",
+    "domain": "VM",
+    "subtopic": "Compliance / Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management team reports 100% remediation of all Critical findings within SLA for the past quarter, but doesn't disclose that 30% of scans during that period failed to complete successfully (due to credential issues, network problems, etc.) and were simply excluded from the reported dataset rather than being investigated or retried. What is the BEST characterization of this reporting practice?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This reporting practice is fully honest and complete, since it accurately reflects performance for the scans that did successfully complete, with no obligation to discuss scans that failed",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Silently excluding failed/incomplete scans from the reported dataset, without disclosure, creates a misleadingly favorable picture — the 100% SLA compliance figure only reflects the subset of the environment that was successfully and completely assessed, while 30% of the environment had unknown vulnerability status during this period; a genuinely honest report should disclose scan completion/coverage rate alongside remediation SLA performance, since the two are related but distinct measures and omitting the coverage gap misrepresents the program's actual completeness",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This concern is only valid if the failed scans specifically targeted internet-facing assets; failed scans of internal-only assets require no disclosure of any kind",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct fix is to report 70% SLA compliance instead of 100%, treating the failed scans as automatic SLA violations regardless of their actual cause",
+        "correct": false
+      }
+    ],
+    "explanation": "This reinforces the earlier scan-coverage-metric lesson with a reporting-integrity angle: silently excluding failed/incomplete scans from a headline compliance metric, without disclosing that exclusion, creates a misleadingly favorable picture — the reported '100% SLA compliance' figure technically describes only the successfully-scanned subset, while omitting that a significant portion of the environment had genuinely unknown status during the period. Honest reporting requires disclosing scan coverage/completion rate ALONGSIDE remediation performance (they measure different things and both matter), rather than silently dropping inconvenient data — though the fix isn't to arbitrarily convert failed scans into automatic SLA violations either, since that conflates two genuinely distinct measurement concepts (coverage vs. remediation timeliness)."
+  },
+  {
+    "external_key": "IR-060",
+    "domain": "IR",
+    "subtopic": "Communication & Legal",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization's cyber insurance provider requires notification of any incident that could result in a claim exceeding a specific dollar threshold, within a specific number of days. During an active incident, the IR team is uncertain whether the eventual costs will exceed this threshold, and considers delaying notification until costs become clearer. What is the risk of this approach?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "There is no risk in waiting; insurance notification requirements only ever apply once a claim is formally being submitted, never during the underlying incident itself",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Many cyber insurance policies specify notification deadlines based on WHEN THE INCIDENT WAS DISCOVERED or when it COULD POTENTIALLY exceed the threshold, not when final costs are definitively known — waiting for cost certainty before notifying risks missing the policy's actual notification deadline, which could jeopardize coverage for the claim entirely regardless of the incident's actual severity, since many policies treat late notification as a basis for reduced or denied coverage",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Insurance notification timing has no bearing on eventual claim payout amounts under any cyber insurance policy structure, making this entirely a non-issue",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The correct approach is to always immediately notify the insurer of every single security event regardless of severity, threshold relevance, or the specific terms of the policy",
+        "correct": false
+      }
+    ],
+    "explanation": "This reinforces the earlier cyber-insurance IR lesson with a specific, common policy mechanism: many cyber insurance policies tie notification deadlines to when an incident was discovered or when it reasonably COULD exceed a coverage threshold — not to when final, certain costs are known (which often isn't determinable until well after an incident is resolved). Delaying notification while waiting for cost certainty risks missing this deadline entirely, and many policies treat late notification as grounds for reduced or denied coverage regardless of the incident's actual underlying severity — this is exactly the kind of policy-specific requirement that should be understood in advance (during IR preparation) rather than discovered mid-incident, though it also doesn't mean every minor security event warrants immediate insurer notification regardless of the policy's actual specified thresholds and triggers."
+  },
+  {
+    "external_key": "RC-037",
+    "domain": "RC",
+    "subtopic": "Regulatory Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A company operating under both a US state's breach notification law and a specific industry-sector regulation (e.g., FERPA for an educational institution) experiences a breach affecting student data. Compliance staff argue that since FERPA doesn't require notifying a state attorney general, no such notification is needed at all. Is this reasoning sound?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Yes — sector-specific federal regulations always fully preempt and eliminate any separately-applicable state breach notification law requirement, regardless of the specific laws involved",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Not necessarily — sector-specific regulations (like FERPA, which governs student education records specifically) and general state breach notification laws are often independent, overlapping legal frameworks, and satisfying one framework's specific requirements doesn't automatically exempt an organization from a separately-applicable framework's distinct requirements unless there's a specific, confirmed preemption provision — this needs to be verified with legal counsel rather than assumed based on one framework's silence on a particular notification type",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "No, but only because this specific scenario involves student data; for any other data type, sector-specific regulation would always fully preempt state law obligations",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This determination depends entirely on whether the educational institution is public or private, with no other relevant factor",
+        "correct": false
+      }
+    ],
+    "explanation": "This reinforces the overlapping-regulatory-framework theme from earlier questions with a sector-specific example: FERPA governs the privacy and handling of student education records specifically, but this doesn't automatically mean it preempts or supersedes a SEPARATE state breach notification law's own requirements — these are often independent legal obligations that both need to be evaluated and satisfied unless a specific, legally-confirmed preemption relationship exists. Compliance teams should verify this kind of interaction with legal counsel rather than assuming one framework's silence on a particular requirement (like AG notification) means no such requirement exists under a DIFFERENT, separately-applicable law — this determination depends on the actual specific legal relationship between the frameworks involved, not a blanket rule based on data type or institutional ownership type alone."
   }
 ]
