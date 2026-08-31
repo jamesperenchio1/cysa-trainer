@@ -3298,5 +3298,566 @@
       }
     ],
     "explanation": "This tests a common statistical reporting trap: an aggregate mean can be dominated by high-volume, low-severity events, making an overall metric look dramatically improved while the risk-relevant subset (serious intrusions) shows no real progress. This doesn't mean the metric or the tool is worthless — it means the metric needs to be reported with more nuance (segmented by severity, or using median/percentile alongside mean) so decision-makers aren't misled by an average that doesn't reflect the risk that actually matters."
+  },
+  {
+    "external_key": "SO-035",
+    "domain": "SO",
+    "subtopic": "Network Architecture",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A company implements microsegmentation for its container orchestration environment using network policies that allow pods to communicate only within their own namespace by default. A security review still finds a path for a compromised pod in the 'frontend' namespace to reach a database pod in the 'backend' namespace. Investigation shows both namespaces share a common 'monitoring' namespace that both are allowed to communicate with, and the monitoring pod itself has a misconfigured sidecar that proxies arbitrary traffic. What does this scenario BEST illustrate?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Microsegmentation is fundamentally ineffective in containerized environments and should not be used",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A transitive trust path: segmentation rules correctly restricted DIRECT namespace-to-namespace traffic, but a shared, trusted intermediary (the monitoring namespace/pod) that both segments were allowed to reach became an unintended bridge once it was itself compromised or misconfigured — segmentation must account for what trusted intermediaries can reach, not just direct paths",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This proves that Kubernetes network policies are purely cosmetic and provide no actual enforcement",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The finding is invalid because pods in different namespaces can never communicate under any circumstances by default",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a nuanced segmentation concept: even well-designed direct segmentation rules can be undermined by a shared trusted intermediary that multiple segments are allowed to reach — if that intermediary is compromised or misconfigured (here, a sidecar proxying arbitrary traffic), it becomes a bridge between segments that were never meant to communicate directly. Effective segmentation design needs to consider these transitive paths, not just enumerate direct allow-rules between the primary segments."
+  },
+  {
+    "external_key": "SO-036",
+    "domain": "SO",
+    "subtopic": "Threat Intelligence",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A threat intelligence feed provides an indicator (a file hash) tagged as associated with a specific ransomware family, with a confidence score of 'Low' and a context note saying it was 'observed in a single unverified sandbox report.' An analyst wants to immediately add this hash to a blocking rule across all endpoints. What is the BEST practice here?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Immediately block the hash across all endpoints, since any threat intelligence indicator related to ransomware should always be treated as an automatic block regardless of confidence level",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Evaluate the indicator's confidence level and source reliability before automated blocking action — a 'Low confidence, single unverified source' indicator carries meaningfully higher false-positive risk than a corroborated, high-confidence indicator, and blindly auto-blocking on low-confidence intel can cause operational disruption from false positives",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Discard the indicator entirely and take no action, since anything below 'High' confidence has no analytical value",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Confidence scoring in threat intelligence feeds is purely subjective and should never factor into any operational decision",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests threat intelligence quality assessment: confidence levels and source reliability are core parts of evaluating an indicator's actionability. A single unverified sandbox observation is a meaningfully weaker basis for automated, environment-wide blocking than a corroborated, multi-source, high-confidence indicator — acting on it without further validation risks operational disruption from false positives, but that doesn't mean low-confidence intel has zero value (it may still be worth monitoring/hunting on without automated enforcement)."
+  },
+  {
+    "external_key": "SO-037",
+    "domain": "SO",
+    "subtopic": "Zero Trust / Architecture",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization implements a Zero Trust Architecture (ZTA) with a Policy Decision Point (PDP) and Policy Enforcement Points (PEPs) at every service boundary. A developer requests an exception allowing a specific internal service-to-service call to bypass the PEP 'because it's just internal traffic and re-authenticating on every call adds latency.' What is the BEST response consistent with Zero Trust principles?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Grant the exception, since Zero Trust principles only apply to traffic that crosses the organization's external network perimeter",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Deny the exception in its current form, and instead work with the developer to address the latency concern through legitimate means (e.g., short-lived cached tokens, mutual TLS with session reuse, or optimized policy evaluation) — bypassing enforcement for 'internal' traffic reintroduces the implicit-trust-by-network-location model that Zero Trust is specifically designed to eliminate",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Grant the exception permanently and document it as an accepted architectural pattern going forward for all internal services",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Deny the exception and offer no alternative, since latency concerns are never a legitimate engineering consideration in a Zero Trust environment",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the core Zero Trust tenet of eliminating implicit trust based on network location ('internal' vs. 'external'). Granting a bypass specifically because traffic is internal reintroduces the exact trust model Zero Trust replaces. The correct response addresses the underlying legitimate concern (latency) through means that preserve verification (caching valid short-lived credentials, efficient mTLS session reuse, optimized policy evaluation) rather than either blindly refusing to engage with the real engineering constraint or granting an architecture-undermining exception."
+  },
+  {
+    "external_key": "VM-029",
+    "domain": "VM",
+    "subtopic": "Scanning Methodology",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management team schedules full authenticated scans of all production servers to run at 2 AM weekly. Three weeks in a row, several database servers show as 'unreachable' in the scan results with no vulnerabilities reported at all. The team marks these hosts as 'clean' since no findings were returned. What is the BEST assessment of this practice?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This is correct practice — a scan returning zero findings should always be interpreted as a clean, fully-secure host",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "'Unreachable' and 'no vulnerabilities found' are fundamentally different outcomes, and treating them as equivalent creates a dangerous false sense of security — these hosts likely have a connectivity, credential, or firewall issue preventing the scan from actually running, meaning they have effectively NOT been assessed at all rather than confirmed to be vulnerability-free",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Database servers are inherently exempt from vulnerability scanning requirements, so 'unreachable' status is expected and acceptable",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The scan schedule should simply be moved to 3 AM, which would resolve the underlying issue without further investigation",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a critical vulnerability management coverage gap: a scan that fails to reach a host (due to network ACLs, credential failures, agent issues, or the host being offline during the window) produces a fundamentally different result than a scan that successfully assessed the host and found nothing — conflating the two creates blind spots that look like clean bills of health in reporting. Scan coverage/completion should be tracked and investigated as its own metric, separate from vulnerability findings, and unreachable hosts require root-cause investigation, not an unrelated schedule change or a blanket 'clean' assumption."
+  },
+  {
+    "external_key": "VM-030",
+    "domain": "VM",
+    "subtopic": "CVSS / Prioritization",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "Two vulnerabilities are both scored CVSS 8.1 (High). Vulnerability A has a known, actively exploited proof-of-concept in the wild (confirmed via multiple threat intelligence sources) affecting an internet-facing asset. Vulnerability B has no known exploit code and affects an internal, non-critical test server. The team's ticketing system sorts strictly by CVSS score, placing both at equal priority. What is the BEST way to address this limitation?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "No action is needed, since identical CVSS scores always represent identical real-world risk and priority",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Incorporate threat intelligence on exploit availability/active exploitation (e.g., via a framework like the Exploit Prediction Scoring System, EPSS, or a manually-applied risk-based override) alongside asset criticality/exposure context to re-rank remediation priority, since CVSS Base Score alone doesn't capture real-world exploitation likelihood or business impact",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Downgrade Vulnerability A's severity rating to match its ticket priority, since CVSS scores should be adjusted to match whatever priority the ticketing system assigns",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Remove CVSS scoring from the process entirely and prioritize purely based on which team reported the finding first",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests risk-based vulnerability prioritization beyond raw CVSS Base Score: real-world exploitability (active exploitation, available PoC code — which is exactly what frameworks like EPSS are designed to estimate) and asset context (internet-facing and critical vs. internal test server) should factor into actual remediation priority, even when Base Scores are identical. The fix is enriching the prioritization process with this context, not manipulating the CVSS score itself or abandoning scoring frameworks altogether."
+  },
+  {
+    "external_key": "VM-031",
+    "domain": "VM",
+    "subtopic": "Remediation",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A team applies a vendor-released patch for a critical vulnerability to a fleet of application servers during a maintenance window. Two days later, the vulnerability scanner still reports the CVE as present on 40% of the fleet. Investigation shows the patch was correctly installed on all hosts, but the application service was never restarted on the affected 40%, so the vulnerable code remained loaded in memory. What lesson does this illustrate?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The patch itself was defective and should be rolled back across the entire fleet",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Patch installation and patch activation are not always the same event — some patches require a service restart, application reload, or reboot to actually take effect, and remediation verification should confirm the fix is actually active (e.g., via a version/behavior check or re-scan), not just that installation completed without error",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The vulnerability scanner is producing false positives and should be recalibrated, since the patch was confirmed installed",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This proves that patches should always be applied without a maintenance window to avoid the restart requirement entirely",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a common operational gap in patch management: installing a patch file and having the fix actually take effect are distinct steps for many applications and services that load code into memory at startup. Verification of remediation should confirm the vulnerability is actually resolved (e.g., via re-scan or functional check) rather than assuming installation success equals remediation — the scanner in this case is correctly reporting the vulnerability is still present because the vulnerable code is still running."
+  },
+  {
+    "external_key": "IR-025",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A forensic analyst images a compromised laptop's hard drive using a write blocker and calculates a SHA-256 hash of the resulting image, documenting it in the chain of custody form. Three weeks later, during analysis, the analyst needs to mount the image to examine specific files. A colleague suggests mounting the original image directly to save time. What is the BEST practice here, and why?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Mount the original image directly, since the write blocker used during acquisition already guarantees the image can never be altered by any later process",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Work from a verified forensic COPY of the original image (re-hashing to confirm it matches the documented value), preserving the original, unaltered acquisition image — mounting and analyzing a copy protects the evidentiary integrity of the original in case it's ever challenged, and the write blocker's protection applied only during the acquisition process, not to all subsequent handling",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Recalculate a new hash of the original image before analysis and simply overwrite the original chain-of-custody hash value with the new one",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Chain of custody documentation is only relevant for physical evidence; digital image files have no such requirement once initially hashed",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests forensic evidentiary integrity practice: the write blocker protects the source device during initial acquisition, but it doesn't retroactively protect the resulting image file from all future handling risk. Best practice is to work exclusively from verified copies of the original forensic image (confirming the copy's hash matches the original), preserving the pristine original for legal defensibility — never analyzing or mounting the original directly, and never overwriting a documented hash value, which would break the chain of custody's evidentiary record."
+  },
+  {
+    "external_key": "IR-026",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "During the eradication phase of a malware incident, the IR team removes the identified malicious binary and associated persistence mechanisms from all affected hosts, then immediately returns the hosts to production. Two days later, the same malware family reappears on the same hosts. What is the MOST likely explanation for this recurrence?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The malware family must have a zero-day self-replication capability that cannot be detected by any tool, making recurrence unavoidable",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The eradication phase likely addressed the visible symptoms (the binary and known persistence mechanisms) without fully identifying and closing the actual initial access vector or root cause, meaning the attacker (or an automated reinfection mechanism they left behind) was able to re-establish presence through the same unaddressed entry point",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Returning hosts to production after eradication is inherently unsafe and should never be done under any circumstances",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This indicates the initial incident was never actually eradicated in the first place, and the two events are the same continuous ongoing incident with no distinction possible",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the distinction between removing symptoms and addressing root cause in the IR lifecycle: eradication that only removes the known malicious artifacts without identifying and closing the actual initial access vector (unpatched vulnerability, compromised credentials, phishing-susceptible user, etc.) leaves the door open for reinfection through the same path. Thorough eradication requires root-cause identification and closure, plus recovery validation, before hosts are confidently returned to production."
+  },
+  {
+    "external_key": "RC-015",
+    "domain": "RC",
+    "subtopic": "Stakeholder Communication",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "During an active incident, the SOC analyst handling technical response is also fielding repeated status update requests from multiple business unit leaders, each wanting a personalized briefing. This is slowing down the actual technical response. What is the BEST structural fix?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The analyst should simply stop responding to any stakeholder requests until the technical work is fully complete",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Establish a designated incident communications role/lead (separate from the technical responders) responsible for gathering status and delivering consistent, scheduled updates to stakeholders through a single channel — this is a standard incident command structure practice that protects technical responders' focus while still meeting legitimate stakeholder communication needs",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Business unit leaders have no legitimate need for incident status information and their requests should be permanently declined by policy",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The analyst should personally provide a full technical deep-dive to each stakeholder individually to ensure maximum transparency",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests incident command structure and communication role separation, a practice borrowed from frameworks like ICS (Incident Command System): during an active incident, technical responders should be protected from stakeholder-management overhead by a dedicated communications/liaison role who consolidates status into scheduled, consistent updates through one channel. This meets legitimate stakeholder information needs without either ignoring them entirely or burdening the technical responders with repeated individual briefings."
+  },
+  {
+    "external_key": "SO-038",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An analyst observes a spike in outbound traffic on port 443 from an internal server to an external IP, but a deep packet inspection tool confirms the traffic is NOT actual TLS (the handshake structure is malformed / non-standard). What does this MOST likely indicate?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This is normal behavior, since any traffic on port 443 should be assumed to be legitimate HTTPS regardless of its actual structure",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "An attacker is likely using port 443 to disguise non-TLS traffic (e.g., a custom C2 protocol) specifically because that port is commonly allowed through egress filtering without deep inspection — the malformed handshake is a strong indicator the traffic is not what its port number suggests",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This indicates a certificate expiration issue that should be routed to the PKI team with no security relevance",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The deep packet inspection tool must be misconfigured, since traffic on port 443 is defined by the port number itself, not packet contents",
+        "correct": false
+      }
+    ],
+    "explanation": "Port numbers are a convention, not an enforced protocol guarantee — attackers frequently choose port 443 for command-and-control specifically because it's almost universally allowed outbound and often not deeply inspected, relying on defenders assuming 'port 443 equals HTTPS.' A malformed TLS handshake structure is a strong technical indicator that the traffic doesn't match its claimed protocol and warrants investigation as potential disguised C2, not routine certificate housekeeping or a tool misconfiguration."
+  },
+  {
+    "external_key": "SO-039",
+    "domain": "SO",
+    "subtopic": "Malware Analysis",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A suspicious binary submitted to a sandbox shows no malicious behavior during a 60-second automated analysis run. An analyst concludes the file is safe. What is the MOST important limitation of this conclusion?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The conclusion is fully sound; sandboxes are incapable of producing false negatives",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Malware can employ sandbox-evasion techniques such as environment fingerprinting, execution delays (sleeping past a short analysis window), or requiring specific user interaction/conditions before detonating — a short, clean automated run does not rule out malicious behavior that is deliberately designed to stay dormant during automated analysis",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Sandboxes can only ever analyze documents, never executable binaries, so this analysis method was invalid from the start",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The binary is guaranteed malicious specifically because it showed no behavior at all, since benign files always trigger some detectable activity",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests awareness of sandbox evasion techniques: sophisticated malware is often built to detect virtualized/sandboxed environments, delay execution past typical short analysis windows, or wait for specific triggers (like real user mouse movement) before executing its payload — precisely to produce a clean result during automated triage. A short, uneventful sandbox run reduces confidence in maliciousness somewhat but does not conclusively prove safety, especially for a file that otherwise raised suspicion."
+  },
+  {
+    "external_key": "SO-040",
+    "domain": "SO",
+    "subtopic": "Cloud Security",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A cloud-native application uses a serverless function that assumes an IAM role with 'AdministratorAccess' because 'it was easier to get working during initial development and nobody circled back to scope it down.' The function only needs to read from one specific S3 bucket and write to one specific DynamoDB table. What principle is being violated, and what is the associated risk?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "No principle is being violated, since IAM roles attached to serverless functions are automatically scoped by AWS regardless of the policy attached to them",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "This violates the principle of least privilege — if the function is ever compromised (e.g., via a vulnerable dependency or injection flaw), the blast radius extends to full administrative control over the cloud environment rather than being contained to the narrow set of resources the function actually needs",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This is only a compliance documentation issue with no actual security impact, since the function's code doesn't call any administrative APIs",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The violation is exclusively a cost-management issue, since overly broad IAM roles only affect AWS billing, not security posture",
+        "correct": false
+      }
+    ],
+    "explanation": "This directly tests least privilege in a cloud IAM context: the risk of an overly broad role isn't about what the function's OWN code currently calls — it's about what an attacker could do if they achieve code execution within that function's context (e.g., via a supply-chain compromise of a dependency, an injection vulnerability, or an SSRF that lets them abuse the function's credentials). An overly permissive role turns a contained compromise into a full administrative breach — scoping IAM policies to only the specific actions and resources needed is a foundational cloud security control, not a documentation formality."
+  },
+  {
+    "external_key": "VM-032",
+    "domain": "VM",
+    "subtopic": "Web App Vulnerabilities",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability scan flags an API endpoint as vulnerable to Cross-Site Request Forgery (CSRF). A developer objects, stating 'this endpoint only accepts JSON with a Content-Type of application/json, and browsers can't set that header on a simple cross-origin form submission, so CSRF isn't possible here.' Is the developer's reasoning sound?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Yes, completely — Content-Type restrictions to application/json provide full and permanent protection against CSRF for this endpoint under all circumstances",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Partially — requiring a non-simple Content-Type does raise the bar against classic HTML-form-based CSRF because it forces a CORS preflight, but this protection depends entirely on browser CORS enforcement and the ABSENCE of a permissive CORS policy on the server; if the server's CORS configuration (or another mechanism) allows crafted cross-origin requests with that content type, the protection is bypassed — a dedicated CSRF token remains the more robust, defense-in-depth control",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "No — Content-Type headers have no relationship to CSRF protection under any browser behavior",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The developer is correct, and this fully replaces the need for any authentication on the endpoint as well",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests a nuanced but real web security detail: requiring a Content-Type like application/json does make classic form-based CSRF harder because triggering a 'non-simple' cross-origin request requires a CORS preflight, which the browser enforces — but this is a byproduct of CORS behavior, not a purpose-built CSRF defense, and it can be undermined by misconfigured CORS policies, browser quirks, or alternate attack techniques. Relying on it as the SOLE protection is fragile; dedicated CSRF tokens (or SameSite cookies as defense-in-depth) are the more robust standard control, and Content-Type has no bearing on authentication at all."
+  },
+  {
+    "external_key": "VM-033",
+    "domain": "VM",
+    "subtopic": "Scanning Methodology",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A vulnerability management team runs scans against cloud workloads using a scanner licensed per-IP, and to control costs, they only scan the 'primary' IP of each auto-scaling group, assuming all instances in the group are identical. Six months later, a security incident occurs on an instance that had actually drifted from the group's baseline image due to a manual hotfix that introduced a new vulnerable dependency. What does this scenario BEST illustrate?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Auto-scaling groups guarantee configuration consistency across all instances at all times by design, so this incident must have an unrelated cause",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "An assumption of configuration homogeneity across a fleet (sampling one instance to represent all) breaks down whenever configuration drift occurs — manual changes, hotfixes, or inconsistent deployment pipelines can cause individual instances to diverge from the assumed-identical baseline, meaning sampling-based scanning coverage decisions need to account for and detect drift, not just assume uniformity",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "This proves that cloud-based auto-scaling architectures are inherently unscannable and vulnerability management should be abandoned for them",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The vulnerability management team's cost-control approach was correct, and the incident was purely due to an unrelated failure in the hotfix process",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests the concept of configuration drift undermining sampling-based assumptions in scan coverage: treating a fleet as homogeneous to reduce scanning costs is only valid if that homogeneity actually holds — manual changes or hotfixes applied outside the standard deployment pipeline can cause drift that a 'scan one, assume all' approach will never detect. Effective vulnerability management for elastic/scaled infrastructure needs either full-fleet coverage, drift detection tooling, or enforced immutable-infrastructure practices (no manual hotfixes) to make a sampling assumption valid."
+  },
+  {
+    "external_key": "IR-027",
+    "domain": "IR",
+    "subtopic": "Attack Frameworks",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "Using the Cyber Kill Chain, an analyst classifies a phishing email that successfully delivered a malicious attachment, but where the recipient did NOT open the attachment, as having reached the 'Exploitation' stage. A colleague disagrees. Who is correct?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The original analyst is correct — successful email delivery alone always constitutes exploitation regardless of whether the payload executed",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The colleague is correct — the email reaching the inbox represents the 'Delivery' stage; 'Exploitation' specifically refers to the vulnerability or user action actually being triggered (e.g., the attachment being opened and executing code, or a macro running), which did not occur here since the recipient never opened it",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Neither is correct, since the Cyber Kill Chain does not include a distinct 'Delivery' or 'Exploitation' stage at all",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Both are correct simultaneously, since Delivery and Exploitation are interchangeable terms for the same stage in the Cyber Kill Chain model",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests precise Cyber Kill Chain stage boundaries: Delivery is the transmission of the weaponized payload to the target (the email arriving), while Exploitation is the stage where the vulnerability or user action is actually triggered (the attachment being opened, a macro executing, code running). An email sitting unopened in an inbox has completed Delivery but has not reached Exploitation — precise stage classification matters for accurately describing where in an attack chain a defensive control succeeded or failed."
+  },
+  {
+    "external_key": "IR-028",
+    "domain": "IR",
+    "subtopic": "Communication & Legal",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An organization discovers a data breach affecting customers in multiple states and countries. The legal team is still determining the exact scope of affected records three days after discovery. A junior team member argues that no external communication should happen until the exact scope is 100% finalized, even if that takes weeks. What is the BEST counterpoint?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The junior team member is correct — no communication of any kind should ever occur until an investigation reaches complete certainty, regardless of applicable deadlines",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Many breach notification laws impose fixed notification deadlines (e.g., specific day counts from discovery) that do not wait for full investigative certainty — organizations often must issue notifications based on the best available information at the legally required time, with the ability to provide supplemental/updated information as the investigation continues, rather than delaying all communication indefinitely",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "External communication requirements only apply once a criminal conviction related to the breach has been obtained",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Waiting for complete certainty is always legally required and organizations that notify earlier are automatically in violation of privacy law",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests breach notification timing realities: many jurisdictions impose hard notification deadlines that are not contingent on an investigation reaching full certainty, precisely because delaying notification harms affected individuals' ability to protect themselves. Organizations frequently must notify based on the best available understanding of scope at the legally required time, then supplement with updates as more facts emerge — indefinitely withholding all communication pending full certainty can itself create legal exposure for missing statutory deadlines."
+  },
+  {
+    "external_key": "RC-016",
+    "domain": "RC",
+    "subtopic": "Metrics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A security team reports 'zero security incidents this quarter' as evidence the program is succeeding. A more detailed review shows the organization's definition of 'incident' requires confirmed data exfiltration, meaning three separate detected-and-contained intrusion attempts that were stopped before exfiltration are excluded from the count entirely. What is the BEST critique of the 'zero incidents' headline metric?",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The metric is fully appropriate and requires no additional context, since the formal definition of 'incident' was followed correctly",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A narrow definitional threshold (requiring confirmed exfiltration) can make a headline metric technically accurate while omitting security-relevant activity that stakeholders would reasonably want visibility into — reporting should disclose both the narrow 'incident' count AND meaningful related activity (like detected-and-contained intrusion attempts), or stakeholders get an inflated sense of how quiet the threat landscape actually was",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The three contained intrusion attempts should have been counted as three separate confirmed data breaches regardless of the incident definition used",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Metrics reporting is entirely subjective and no standard of accuracy can reasonably be applied to security reporting of any kind",
+        "correct": false
+      }
+    ],
+    "explanation": "This tests critical evaluation of how definitional scope affects the honesty of a headline security metric: a technically-accurate 'zero incidents' claim under a narrow, exfiltration-only definition can create a misleading impression of a quiet threat landscape if it silently excludes detected-and-stopped intrusion attempts that are highly relevant to understanding the actual threat activity the organization faced. Good reporting practice discloses the methodology and includes adjacent relevant activity, rather than letting a narrow definition imply more than it actually demonstrates — though this doesn't mean contained attempts should be reclassified as confirmed breaches, which would be inaccurate in the other direction."
   }
 ]
