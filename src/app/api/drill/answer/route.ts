@@ -1,17 +1,40 @@
 import { NextRequest, NextResponse } from "next/server";
 import db from "@/lib/db";
 import { schedule } from "@/lib/srs";
-import { getCorrectLabels, getExplanation, isAnswerCorrect } from "@/lib/queries";
+import {
+  getCorrectLabels,
+  getExplanation,
+  isAnswerCorrect,
+  getQuestionType,
+  isOrderingCorrect,
+  getCorrectOrder,
+  isMatchingCorrect,
+  getCorrectPairs,
+} from "@/lib/queries";
 import { updateStreak } from "@/lib/streak";
-import { AnswerResultDTO } from "@/lib/types";
-
+import { AnswerResultDTO, DrillAnswerPayload } from "@/lib/types";
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const questionId: number = body.question_id;
-  const selected: string[] = body.selected_labels || [];
+  const body: DrillAnswerPayload = await req.json();
+  const questionId = body.question_id;
+  const type = getQuestionType(questionId);
 
-  const correct = isAnswerCorrect(questionId, selected);
+  let correct: boolean;
+  let extra: Partial<AnswerResultDTO> = {};
+
+  if (type === "ordering") {
+    const orderedIds = body.ordered_ids || [];
+    correct = isOrderingCorrect(questionId, orderedIds);
+    extra = { correct_order: getCorrectOrder(questionId) };
+  } else if (type === "matching") {
+    const pairs = body.pairs || {};
+    correct = isMatchingCorrect(questionId, pairs);
+    extra = { correct_pairs: getCorrectPairs(questionId) };
+  } else {
+    const selected = body.selected_labels || [];
+    correct = isAnswerCorrect(questionId, selected);
+  }
+
   const correctLabels = getCorrectLabels(questionId);
   const explanation = getExplanation(questionId);
 
@@ -48,10 +71,11 @@ export async function POST(req: NextRequest) {
       explanation,
       next_due_at: result.due_at,
       new_interval_days: result.interval_days,
+      ...extra,
     };
     return NextResponse.json(payload);
   }
 
-  const payload: AnswerResultDTO = { correct, correct_labels: correctLabels, explanation };
+  const payload: AnswerResultDTO = { correct, correct_labels: correctLabels, explanation, ...extra };
   return NextResponse.json(payload);
 }

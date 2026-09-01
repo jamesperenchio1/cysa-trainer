@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import { QuestionDTO } from "@/lib/types";
+import { QuestionDTO, ChoiceDTO } from "@/lib/types";
+import OrderingQuestion from "./OrderingQuestion";
+import MatchingQuestion from "./MatchingQuestion";
 
 const DOMAIN_COLORS: Record<string, string> = {
   SO: "bg-emerald-900/50 text-emerald-300 border border-emerald-700/50",
@@ -9,12 +11,26 @@ const DOMAIN_COLORS: Record<string, string> = {
   RC: "bg-blue-900/50 text-blue-300 border border-blue-700/50",
 };
 
+export interface SubmitPayload {
+  selected_labels?: string[];
+  ordered_ids?: number[];
+  pairs?: Record<number, number>;
+}
+
+interface Feedback {
+  correct: boolean;
+  correct_labels: string[];
+  explanation: string;
+  correct_order?: { id: number; label: string; body: string }[];
+  correct_pairs?: { left: { id: number; label: string; body: string }; right: { id: number; label: string; body: string } }[];
+}
+
 interface Props {
   question: QuestionDTO;
-  onSubmit: (selectedLabels: string[]) => void;
+  onSubmit: (payload: SubmitPayload) => void;
   // If provided, shows immediate correct/incorrect styling + explanation (drill mode).
   // If null, just collects the answer with no feedback (exam mode).
-  feedback?: { correct: boolean; correct_labels: string[]; explanation: string } | null;
+  feedback?: Feedback | null;
   disabled?: boolean;
   questionNumber?: number;
   totalQuestions?: number;
@@ -35,13 +51,18 @@ export default function QuestionCard({
   initialSelected,
 }: Props) {
   const [selected, setSelected] = useState<string[]>(revealed ? initialSelected || [] : []);
+  const [orderState, setOrderState] = useState<ChoiceDTO[]>(question.choices);
+  const [pairsState, setPairsState] = useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(!!revealed);
 
   useEffect(() => {
     if (!revealed) {
       setSelected([]);
+      setOrderState(question.choices);
+      setPairsState({});
       setSubmitted(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [question.id, revealed]);
 
   const toggle = (label: string) => {
@@ -55,14 +76,25 @@ export default function QuestionCard({
     }
   };
 
-  const canSubmit = question.is_multi
-    ? selected.length === question.select_n
-    : selected.length === 1;
+  const canSubmit =
+    question.type === "ordering"
+      ? orderState.length > 0
+      : question.type === "matching"
+      ? question.choices.filter((c) => c.match_group === "left").every((l) => pairsState[l.id] !== undefined)
+      : question.is_multi
+      ? selected.length === question.select_n
+      : selected.length === 1;
 
   const handleSubmit = () => {
     if (!canSubmit) return;
     setSubmitted(true);
-    onSubmit(selected);
+    if (question.type === "ordering") {
+      onSubmit({ ordered_ids: orderState.map((o) => o.id) });
+    } else if (question.type === "matching") {
+      onSubmit({ pairs: pairsState });
+    } else {
+      onSubmit({ selected_labels: selected });
+    }
   };
 
   const showFeedback = feedback !== undefined && feedback !== null && submitted;
@@ -79,9 +111,16 @@ export default function QuestionCard({
   return (
     <div className="card">
       <div className="flex items-center justify-between mb-3">
-        <span className={`badge ${DOMAIN_COLORS[question.domain_code] || "bg-gray-800"}`}>
-          {question.domain_name}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className={`badge ${DOMAIN_COLORS[question.domain_code] || "bg-gray-800"}`}>
+            {question.domain_name}
+          </span>
+          {question.type !== "mcq" && (
+            <span className="badge bg-purple-900/50 text-purple-300 border border-purple-700/50">
+              {question.type === "ordering" ? "SEQUENCE" : question.type === "matching" ? "MATCH" : "HOTSPOT"}
+            </span>
+          )}
+        </div>
         <div className="flex items-center gap-2">
           {question.difficulty >= 5 && (
             <span className="badge bg-rose-900/60 text-rose-300 border border-rose-700/50">
@@ -97,7 +136,7 @@ export default function QuestionCard({
       </div>
 
       <p className="text-[15px] leading-relaxed mb-1">
-        {question.is_multi && (
+        {question.is_multi && question.type === "mcq" && (
           <span className="text-accent font-semibold">(Select {question.select_n}) </span>
         )}
         {question.stem}
@@ -106,23 +145,45 @@ export default function QuestionCard({
       {question.exhibit && <pre className="exhibit-block">{question.exhibit}</pre>}
 
       <div className="mt-4">
-        {question.choices.map((c, i) => {
-          const isSelected = selected.includes(c.label);
-          const isCorrectChoice = feedback?.correct_labels.includes(c.label);
-          let cls = "choice";
-          if (showFeedback) {
-            if (isCorrectChoice) cls += " choice-correct";
-            else if (isSelected && !isCorrectChoice) cls += " choice-incorrect";
-          } else if (isSelected) {
-            cls += " choice-selected";
-          }
-          return (
-            <button key={c.id} className={cls} onClick={() => toggle(c.label)} disabled={submitted || disabled}>
-              <span className="font-semibold text-gray-400 mr-2">{String.fromCharCode(65 + i)}.</span>
-              {c.body}
-            </button>
-          );
-        })}
+        {question.type === "ordering" && (
+          <OrderingQuestion
+            items={question.choices}
+            disabled={submitted || disabled}
+            onChange={setOrderState}
+            correctOrder={showFeedback ? feedback!.correct_order : null}
+          />
+        )}
+
+        {question.type === "matching" && (
+          <MatchingQuestion
+            choices={question.choices}
+            disabled={submitted || disabled}
+            onChange={setPairsState}
+            correctPairs={showFeedback ? feedback!.correct_pairs : null}
+          />
+        )}
+
+        {(question.type === "mcq" || question.type === "hotspot") &&
+          question.choices.map((c, i) => {
+            const isSelected = selected.includes(c.label);
+            const isCorrectChoice = feedback?.correct_labels.includes(c.label);
+            let cls = "choice";
+            if (question.type === "hotspot") cls += " font-mono text-[13px]";
+            if (showFeedback) {
+              if (isCorrectChoice) cls += " choice-correct";
+              else if (isSelected && !isCorrectChoice) cls += " choice-incorrect";
+            } else if (isSelected) {
+              cls += " choice-selected";
+            }
+            return (
+              <button key={c.id} className={cls} onClick={() => toggle(c.label)} disabled={submitted || disabled}>
+                {question.type === "mcq" && (
+                  <span className="font-semibold text-gray-400 mr-2">{String.fromCharCode(65 + i)}.</span>
+                )}
+                {c.body}
+              </button>
+            );
+          })}
       </div>
 
       {!submitted && (
@@ -142,7 +203,11 @@ export default function QuestionCard({
           }`}
         >
           <p className={`font-semibold mb-1 ${feedback.correct ? "text-good" : "text-bad"}`}>
-            {feedback.correct ? "Correct" : `Incorrect — correct answer: ${(correctDisplayLetters || []).join(", ")}`}
+            {feedback.correct
+              ? "Correct"
+              : question.type === "mcq" || question.type === "hotspot"
+              ? `Incorrect — correct answer: ${(correctDisplayLetters || []).join(", ")}`
+              : "Incorrect — see the highlighted correct answer above"}
           </p>
           <p className="text-sm text-gray-300 leading-relaxed">{feedback.explanation}</p>
         </div>

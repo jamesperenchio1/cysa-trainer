@@ -21,8 +21,10 @@ export async function POST() {
   for (const d of domainRows) {
     const weight = DOMAIN_WEIGHTS[d.code] ?? 0;
     const target = Math.round((weight / totalWeight) * EXAM_QUESTION_COUNT);
+    // Mock exam stays MCQ-only: ordering/matching PBQs are a drill-mode-only
+    // learning tool for now, not built into the timed exam flow/scoring UI.
     const available = db
-      .prepare("SELECT id FROM questions WHERE domain_id = ?")
+      .prepare("SELECT id FROM questions WHERE domain_id = ? AND type = 'mcq'")
       .all(d.id) as { id: number }[];
     const ids = available.map((r) => r.id);
 
@@ -43,7 +45,7 @@ export async function POST() {
   // Trim/pad to exact EXAM_QUESTION_COUNT in case of rounding drift.
   questionIds = pickRandom(questionIds, Math.min(questionIds.length, EXAM_QUESTION_COUNT));
   while (questionIds.length < EXAM_QUESTION_COUNT) {
-    const all = db.prepare("SELECT id FROM questions").all() as { id: number }[];
+    const all = db.prepare("SELECT id FROM questions WHERE type = 'mcq'").all() as { id: number }[];
     if (all.length === 0) break;
     questionIds.push(all[Math.floor(Math.random() * all.length)].id);
   }

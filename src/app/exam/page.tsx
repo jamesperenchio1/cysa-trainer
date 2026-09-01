@@ -112,7 +112,7 @@ export default function ExamPage() {
         <QuestionCard
           key={current.id}
           question={current}
-          onSubmit={(labels) => selectAnswer(current.id, labels)}
+          onSubmit={(payload) => selectAnswer(current.id, payload.selected_labels || [])}
           feedback={null}
           questionNumber={index + 1}
           totalQuestions={questions.length}

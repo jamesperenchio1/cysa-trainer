@@ -10261,5 +10261,487 @@
       }
     ],
     "explanation": "The pattern here — off-hours access, multiple related patient records (same surname), and NO corresponding business justification (no open billing ticket) — is exactly what compliance audits look for as a sign of impermissible access under HIPAA's minimum-necessary standard, independent of whether the department's role generally involves viewing records. As covered in an earlier related question, unauthorized VIEW access alone can constitute a reportable impermissible use even with no further export/printing/transmission — the access itself is the compliance concern, not just what happens afterward."
+  },
+  {
+    "external_key": "PBQ-SO-001",
+    "domain": "SO",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "ordering",
+    "stem": "Drag these steps into the correct order for the NIST incident response lifecycle.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "1",
+        "body": "Preparation",
+        "correct_order": 1
+      },
+      {
+        "label": "2",
+        "body": "Detection and Analysis",
+        "correct_order": 2
+      },
+      {
+        "label": "3",
+        "body": "Containment, Eradication, and Recovery",
+        "correct_order": 3
+      },
+      {
+        "label": "4",
+        "body": "Post-Incident Activity",
+        "correct_order": 4
+      }
+    ],
+    "explanation": "The NIST SP 800-61 incident response lifecycle runs: Preparation (building capability before anything happens), Detection and Analysis (identifying and scoping an event), Containment/Eradication/Recovery (stopping the threat and restoring service), and Post-Incident Activity (lessons learned feeding back into Preparation). In practice these phases loop and overlap rather than running strictly once, but this is the canonical order the framework defines."
+  },
+  {
+    "external_key": "PBQ-SO-002",
+    "domain": "SO",
+    "subtopic": "Attack Frameworks",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "ordering",
+    "stem": "Drag these Lockheed Martin Cyber Kill Chain stages into their correct sequence.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "1",
+        "body": "Reconnaissance",
+        "correct_order": 1
+      },
+      {
+        "label": "2",
+        "body": "Weaponization",
+        "correct_order": 2
+      },
+      {
+        "label": "3",
+        "body": "Delivery",
+        "correct_order": 3
+      },
+      {
+        "label": "4",
+        "body": "Exploitation",
+        "correct_order": 4
+      },
+      {
+        "label": "5",
+        "body": "Installation",
+        "correct_order": 5
+      },
+      {
+        "label": "6",
+        "body": "Command and Control",
+        "correct_order": 6
+      },
+      {
+        "label": "7",
+        "body": "Actions on Objectives",
+        "correct_order": 7
+      }
+    ],
+    "explanation": "The Cyber Kill Chain models an intrusion as: Reconnaissance (target research), Weaponization (pairing an exploit with a payload), Delivery (transmitting it to the target), Exploitation (triggering the vulnerability), Installation (establishing persistence), Command and Control (a remote channel to the attacker), and Actions on Objectives (achieving the actual goal — exfiltration, destruction, etc.). Each stage represents an opportunity to detect or break the chain before the attacker reaches their objective."
+  },
+  {
+    "external_key": "PBQ-VM-001",
+    "domain": "VM",
+    "subtopic": "Remediation",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "ordering",
+    "stem": "A critical vulnerability was just confirmed on an internet-facing server. Drag these remediation steps into the correct order.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "1",
+        "body": "Assess actual exploitability and exposure in this specific environment",
+        "correct_order": 1
+      },
+      {
+        "label": "2",
+        "body": "Apply compensating controls if the permanent fix can't be deployed immediately",
+        "correct_order": 2
+      },
+      {
+        "label": "3",
+        "body": "Schedule and apply the permanent fix (patch or configuration change)",
+        "correct_order": 3
+      },
+      {
+        "label": "4",
+        "body": "Verify the fix actually resolved the vulnerability (re-scan or confirm the fixed version is running)",
+        "correct_order": 4
+      },
+      {
+        "label": "5",
+        "body": "Document the remediation and update tracking/reporting",
+        "correct_order": 5
+      }
+    ],
+    "explanation": "Sound remediation starts with understanding actual risk (exploitability/exposure) before reacting, since that determines urgency and whether interim compensating controls are needed while the real fix is scheduled. After the permanent fix is applied, verification is essential — installing a patch isn't the same as confirming the vulnerable code path is actually gone (a lesson from earlier in this bank: some patches require a restart to take effect). Documentation closes the loop for audit and reporting."
+  },
+  {
+    "external_key": "PBQ-IR-001",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "ordering",
+    "stem": "Drag these evidence sources into the correct order of volatility, from MOST volatile (collect first) to LEAST volatile (collect last).",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "1",
+        "body": "CPU registers and cache",
+        "correct_order": 1
+      },
+      {
+        "label": "2",
+        "body": "RAM (running processes, network connections, encryption keys)",
+        "correct_order": 2
+      },
+      {
+        "label": "3",
+        "body": "Network state (active connections, routing tables)",
+        "correct_order": 3
+      },
+      {
+        "label": "4",
+        "body": "Disk (local file system contents)",
+        "correct_order": 4
+      },
+      {
+        "label": "5",
+        "body": "Remote logging / archived backups",
+        "correct_order": 5
+      }
+    ],
+    "explanation": "The order-of-volatility principle prioritizes evidence by how quickly it decays: CPU registers and cache are lost in fractions of a second, RAM disappears on power-off (including active connections and in-memory keys), network state changes continuously, disk contents persist until overwritten, and remote/archived logs are the most durable. Collecting in this order ensures the most perishable, high-value evidence isn't lost while gathering the more stable sources."
+  },
+  {
+    "external_key": "PBQ-IR-002",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "ordering",
+    "stem": "During a live ransomware incident, drag these actions into the correct order an IR lead should take.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "1",
+        "body": "Isolate the confirmed patient-zero host and any hosts showing clear lateral movement indicators",
+        "correct_order": 1
+      },
+      {
+        "label": "2",
+        "body": "Preserve volatile memory/evidence on affected hosts before any shutdown",
+        "correct_order": 2
+      },
+      {
+        "label": "3",
+        "body": "Identify and close the initial access vector so re-infection can't recur through the same path",
+        "correct_order": 3
+      },
+      {
+        "label": "4",
+        "body": "Restore systems from verified-clean backups",
+        "correct_order": 4
+      },
+      {
+        "label": "5",
+        "body": "Conduct a lessons-learned review and track resulting action items to closure",
+        "correct_order": 5
+      }
+    ],
+    "explanation": "Containment comes first to stop active spread, but evidence preservation must happen before any host is powered down (order of volatility applies here too). Root-cause closure — identifying and fixing how the attacker actually got in — has to happen before recovery, or restoring from backup just reopens the same door. Post-incident review with tracked action items is the final step that prevents repeat incidents, a theme reinforced elsewhere in this bank: a lessons-learned finding that never becomes a tracked ticket tends to recur."
+  },
+  {
+    "external_key": "PBQ-SO-003",
+    "domain": "SO",
+    "subtopic": "Security Tools",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "matching",
+    "stem": "Match each security tool on the left to its PRIMARY purpose on the right.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "L1",
+        "body": "SIEM",
+        "match_group": "left",
+        "pair_key": "siem"
+      },
+      {
+        "label": "L2",
+        "body": "EDR",
+        "match_group": "left",
+        "pair_key": "edr"
+      },
+      {
+        "label": "L3",
+        "body": "SOAR",
+        "match_group": "left",
+        "pair_key": "soar"
+      },
+      {
+        "label": "L4",
+        "body": "CASB",
+        "match_group": "left",
+        "pair_key": "casb"
+      },
+      {
+        "label": "R1",
+        "body": "Aggregates and correlates log data across the environment for centralized detection",
+        "match_group": "right",
+        "pair_key": "siem"
+      },
+      {
+        "label": "R2",
+        "body": "Monitors and responds to threats at the individual host/process level",
+        "match_group": "right",
+        "pair_key": "edr"
+      },
+      {
+        "label": "R3",
+        "body": "Automates and orchestrates response playbooks across multiple security tools",
+        "match_group": "right",
+        "pair_key": "soar"
+      },
+      {
+        "label": "R4",
+        "body": "Enforces policy and visibility over sanctioned and unsanctioned cloud application usage",
+        "match_group": "right",
+        "pair_key": "casb"
+      }
+    ],
+    "explanation": "SIEM centralizes and correlates log/event data for detection across the environment. EDR operates at the endpoint level, observing process/file/network behavior on individual hosts. SOAR sits above both, automating response actions (like isolating a host or blocking an indicator) across multiple integrated tools via playbooks. CASB specifically governs cloud application usage — visibility into shadow IT and policy enforcement for sanctioned SaaS. Each tool category has a genuinely distinct primary function, even though modern platforms increasingly blur these lines (XDR, for instance, deliberately combines EDR-style telemetry with SIEM-style correlation)."
+  },
+  {
+    "external_key": "PBQ-VM-002",
+    "domain": "VM",
+    "subtopic": "CVSS / Prioritization",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "matching",
+    "stem": "Match each CVSS v3.1 Base metric abbreviation on the left to what it actually measures on the right.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "L1",
+        "body": "AV (Attack Vector)",
+        "match_group": "left",
+        "pair_key": "av"
+      },
+      {
+        "label": "L2",
+        "body": "AC (Attack Complexity)",
+        "match_group": "left",
+        "pair_key": "ac"
+      },
+      {
+        "label": "L3",
+        "body": "PR (Privileges Required)",
+        "match_group": "left",
+        "pair_key": "pr"
+      },
+      {
+        "label": "L4",
+        "body": "UI (User Interaction)",
+        "match_group": "left",
+        "pair_key": "ui"
+      },
+      {
+        "label": "R1",
+        "body": "How the vulnerability is reached — network, adjacent, local, or physical",
+        "match_group": "right",
+        "pair_key": "av"
+      },
+      {
+        "label": "R2",
+        "body": "Whether exploitation depends on conditions outside the attacker's direct control",
+        "match_group": "right",
+        "pair_key": "ac"
+      },
+      {
+        "label": "R3",
+        "body": "The access level an attacker must already have before exploiting the flaw",
+        "match_group": "right",
+        "pair_key": "pr"
+      },
+      {
+        "label": "R4",
+        "body": "Whether a victim must take some action for the exploit to succeed",
+        "match_group": "right",
+        "pair_key": "ui"
+      }
+    ],
+    "explanation": "These four metrics together make up the Exploitability sub-score of CVSS v3.1. Attack Vector describes the required network position (Network/Adjacent/Local/Physical). Attack Complexity captures whether success depends on conditions the attacker doesn't control (like winning a race condition). Privileges Required is the access level needed before the attack even starts. User Interaction asks whether a victim has to do something (click a link, open a file) for the exploit to work. Getting these confused is a common source of CVSS-reading errors — for instance, mixing up Attack Complexity (a technical difficulty factor) with Privileges Required (an access-level factor) is one of the more frequent mistakes."
+  },
+  {
+    "external_key": "PBQ-IR-003",
+    "domain": "IR",
+    "subtopic": "Attack Frameworks",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "matching",
+    "stem": "Match each MITRE ATT&CK tactic on the left to the example technique on the right that BEST fits it.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "L1",
+        "body": "Initial Access",
+        "match_group": "left",
+        "pair_key": "ia"
+      },
+      {
+        "label": "L2",
+        "body": "Privilege Escalation",
+        "match_group": "left",
+        "pair_key": "pe"
+      },
+      {
+        "label": "L3",
+        "body": "Defense Evasion",
+        "match_group": "left",
+        "pair_key": "de"
+      },
+      {
+        "label": "L4",
+        "body": "Exfiltration",
+        "match_group": "left",
+        "pair_key": "ex"
+      },
+      {
+        "label": "R1",
+        "body": "Logging in with a valid, stolen VPN credential",
+        "match_group": "right",
+        "pair_key": "ia"
+      },
+      {
+        "label": "R2",
+        "body": "Bypassing User Account Control to gain administrative rights",
+        "match_group": "right",
+        "pair_key": "pe"
+      },
+      {
+        "label": "R3",
+        "body": "Clearing Windows Event Logs to remove evidence of activity",
+        "match_group": "right",
+        "pair_key": "de"
+      },
+      {
+        "label": "R4",
+        "body": "Uploading collected data to an attacker-controlled cloud storage account",
+        "match_group": "right",
+        "pair_key": "ex"
+      }
+    ],
+    "explanation": "Valid Accounts (using stolen but legitimate credentials) is a classic Initial Access technique — no exploit needed, just a working login. UAC bypass is Privilege Escalation (and, as covered elsewhere in this bank, also often dual-mapped to Defense Evasion since it hides the escalation from prompts). Clearing event logs is textbook Defense Evasion — removing the evidence of what already happened, not gaining new access. Uploading data to attacker-controlled cloud storage is Exfiltration, the stage where the actual stolen data leaves the environment."
+  },
+  {
+    "external_key": "PBQ-RC-001",
+    "domain": "RC",
+    "subtopic": "Metrics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "matching",
+    "stem": "Match each metric on the left to the category of measurement it actually represents on the right.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "L1",
+        "body": "Percentage of employees who completed security awareness training",
+        "match_group": "left",
+        "pair_key": "output"
+      },
+      {
+        "label": "L2",
+        "body": "Phishing simulation click rate over time on varied, non-repeated templates",
+        "match_group": "left",
+        "pair_key": "outcome"
+      },
+      {
+        "label": "L3",
+        "body": "Number of security tools deployed",
+        "match_group": "left",
+        "pair_key": "output2"
+      },
+      {
+        "label": "L4",
+        "body": "Mean time to detect, segmented by incident severity",
+        "match_group": "left",
+        "pair_key": "outcome2"
+      },
+      {
+        "label": "R1",
+        "body": "Output metric — measures activity/acquisition, not whether it actually changed anything",
+        "match_group": "right",
+        "pair_key": "output"
+      },
+      {
+        "label": "R2",
+        "body": "Outcome metric — reflects an actual change in real-world behavior or risk",
+        "match_group": "right",
+        "pair_key": "outcome"
+      },
+      {
+        "label": "R3",
+        "body": "Output metric — measures acquisition, not integration or effectiveness",
+        "match_group": "right",
+        "pair_key": "output2"
+      },
+      {
+        "label": "R4",
+        "body": "Outcome metric — reflects genuine detection performance rather than an average skewed by volume",
+        "match_group": "right",
+        "pair_key": "outcome2"
+      }
+    ],
+    "explanation": "This bank has repeatedly tested the output-vs-outcome distinction because it's one of the most common reporting traps: training completion and tool count measure that ACTIVITY happened, not whether it changed anything real. A properly-varied phishing simulation click rate and a severity-segmented detection time are both genuine OUTCOME measures — they reflect whether behavior or capability actually improved, rather than an easily-gamed proxy for effort."
+  },
+  {
+    "external_key": "PBQ-SO-004",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "hotspot",
+    "stem": "A Windows Sysmon log excerpt is shown below. Click the SINGLE line that is the strongest indicator of malicious activity.",
+    "exhibit": "Sysmon Event ID: 1 (Process Create)\nUtcTime: 2026-08-30 09:12:44\nImage: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\nParentImage: C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE\nCommandLine: powershell -nop -w hidden -enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQA...\nUser: CORP\\jsmith\nCurrentDirectory: C:\\Users\\jsmith\\Documents\\\nIntegrityLevel: Medium",
+    "choices": [
+      {
+        "label": "A",
+        "body": "Image: ...WindowsPowerShell\\v1.0\\powershell.exe",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "ParentImage: ...Office16\\WINWORD.EXE",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "CommandLine: powershell -nop -w hidden -enc SQBFAFgA...",
+        "correct": true
+      },
+      {
+        "label": "D",
+        "body": "IntegrityLevel: Medium",
+        "correct": false
+      }
+    ],
+    "explanation": "The command line is the strongest single indicator here: -w hidden (suppress the window) combined with -enc (a base64-encoded command) is one of the most recognizable malicious PowerShell invocation patterns, regardless of what spawned it. PowerShell being the Image and Word being the ParentImage are each individually explainable on their own (PowerShell is a legitimate signed binary; Office documents can trigger PowerShell via legitimate automation) — it's specifically the hidden-window-plus-encoded-command combination in the command line that turns this from 'plausible' to 'should be investigated immediately.' A Medium IntegrityLevel is completely routine for a standard user process and carries no signal on its own."
   }
 ]

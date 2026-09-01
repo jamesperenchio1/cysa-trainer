@@ -3,7 +3,14 @@ import fs from "fs";
 import path from "path";
 import { DOMAIN_NAMES, DOMAIN_WEIGHTS } from "../src/lib/scoring";
 
-type SeedChoice = { label: string; body: string; correct: boolean };
+type SeedChoice = {
+  label: string;
+  body: string;
+  correct?: boolean;
+  correct_order?: number;
+  match_group?: "left" | "right";
+  pair_key?: string;
+};
 type SeedQuestion = {
   external_key: string;
   domain: string;
@@ -11,6 +18,7 @@ type SeedQuestion = {
   difficulty: number;
   is_multi: boolean;
   select_n: number;
+  type?: "mcq" | "ordering" | "matching" | "hotspot";
   stem: string;
   exhibit: string | null;
   choices: SeedChoice[];
@@ -41,17 +49,17 @@ function main() {
   const items: SeedQuestion[] = JSON.parse(fs.readFileSync(file, "utf-8"));
 
   const insertQuestion = db.prepare(`
-    INSERT INTO questions (external_key, domain_id, subtopic_id, difficulty, is_multi, select_n, stem, exhibit, explanation)
-    VALUES (@external_key, @domain_id, @subtopic_id, @difficulty, @is_multi, @select_n, @stem, @exhibit, @explanation)
+    INSERT INTO questions (external_key, domain_id, subtopic_id, difficulty, is_multi, select_n, type, stem, exhibit, explanation)
+    VALUES (@external_key, @domain_id, @subtopic_id, @difficulty, @is_multi, @select_n, @type, @stem, @exhibit, @explanation)
     ON CONFLICT(external_key) DO UPDATE SET
       domain_id=excluded.domain_id, subtopic_id=excluded.subtopic_id, difficulty=excluded.difficulty,
-      is_multi=excluded.is_multi, select_n=excluded.select_n, stem=excluded.stem,
+      is_multi=excluded.is_multi, select_n=excluded.select_n, type=excluded.type, stem=excluded.stem,
       exhibit=excluded.exhibit, explanation=excluded.explanation
   `);
   const clearChoices = db.prepare("DELETE FROM choices WHERE question_id = ?");
   const insertChoice = db.prepare(`
-    INSERT INTO choices (question_id, label, body, is_correct, sort_order)
-    VALUES (?, ?, ?, ?, ?)
+    INSERT INTO choices (question_id, label, body, is_correct, sort_order, correct_order, match_group, pair_key)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `);
   const getQuestionId = db.prepare("SELECT id FROM questions WHERE external_key = ?");
   const ensureSrs = db.prepare(`
@@ -70,6 +78,7 @@ function main() {
         difficulty: item.difficulty,
         is_multi: item.is_multi ? 1 : 0,
         select_n: item.select_n,
+        type: item.type || "mcq",
         stem: item.stem,
         exhibit: item.exhibit,
         explanation: item.explanation,
@@ -77,7 +86,16 @@ function main() {
       const row = getQuestionId.get(item.external_key) as { id: number };
       clearChoices.run(row.id);
       item.choices.forEach((c, i) => {
-        insertChoice.run(row.id, c.label, c.body, c.correct ? 1 : 0, i);
+        insertChoice.run(
+          row.id,
+          c.label,
+          c.body,
+          c.correct ? 1 : 0,
+          i,
+          c.correct_order ?? null,
+          c.match_group ?? null,
+          c.pair_key ?? null
+        );
       });
       ensureSrs.run(row.id);
       count++;

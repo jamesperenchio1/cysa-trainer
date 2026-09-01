@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS questions (
   difficulty INTEGER NOT NULL DEFAULT 3,   -- 1 (easy) - 5 (brutal)
   is_multi INTEGER NOT NULL DEFAULT 0,     -- 0 = single answer, 1 = select-N
   select_n INTEGER NOT NULL DEFAULT 1,
+  type TEXT NOT NULL DEFAULT 'mcq',        -- 'mcq' | 'ordering' | 'matching' | 'hotspot'
   stem TEXT NOT NULL,              -- question text (may include inline exhibit markdown/code block)
   exhibit TEXT,                    -- optional extra exhibit block (table/log/vector), rendered monospace
   explanation TEXT NOT NULL,
@@ -43,10 +44,13 @@ CREATE TABLE IF NOT EXISTS questions (
 CREATE TABLE IF NOT EXISTS choices (
   id INTEGER PRIMARY KEY,
   question_id INTEGER NOT NULL REFERENCES questions(id) ON DELETE CASCADE,
-  label TEXT NOT NULL,             -- 'A','B','C','D',...
+  label TEXT NOT NULL,             -- 'A','B','C','D',... (mcq/hotspot) or item id (ordering/matching)
   body TEXT NOT NULL,
-  is_correct INTEGER NOT NULL DEFAULT 0,
-  sort_order INTEGER NOT NULL DEFAULT 0
+  is_correct INTEGER NOT NULL DEFAULT 0,   -- mcq/hotspot: this choice is a correct answer
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  correct_order INTEGER,           -- ordering: 1-based correct sequence position
+  match_group TEXT,                -- matching: 'left' | 'right'
+  pair_key TEXT                    -- matching: shared key linking a left item to its correct right item
 );
 
 -- Spaced repetition state, one row per question (single-user app: no user_id needed)
@@ -90,5 +94,19 @@ CREATE TABLE IF NOT EXISTS streak (
 );
 INSERT OR IGNORE INTO streak (id, current_streak, longest_streak, last_practice_date) VALUES (1, 0, 0, NULL);
 `);
+
+// Migrate existing DBs (the volume-mounted one on a running deployment) that predate
+// the performance-based-question columns -- CREATE TABLE IF NOT EXISTS doesn't add
+// columns to an already-existing table, so add them defensively if missing.
+function ensureColumn(table: string, column: string, ddl: string) {
+  const cols = db.prepare(`PRAGMA table_info(${table})`).all() as { name: string }[];
+  if (!cols.some((c) => c.name === column)) {
+    db.exec(`ALTER TABLE ${table} ADD COLUMN ${ddl}`);
+  }
+}
+ensureColumn("questions", "type", "type TEXT NOT NULL DEFAULT 'mcq'");
+ensureColumn("choices", "correct_order", "correct_order INTEGER");
+ensureColumn("choices", "match_group", "match_group TEXT");
+ensureColumn("choices", "pair_key", "pair_key TEXT");
 
 export default db;

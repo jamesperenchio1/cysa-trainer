@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import QuestionCard from "@/components/QuestionCard";
+import QuestionCard, { SubmitPayload } from "@/components/QuestionCard";
 import { QuestionDTO, AnswerResultDTO } from "@/lib/types";
 
 const SESSION_SIZE = 15;
@@ -49,12 +49,12 @@ export default function DrillPage() {
 
   const current = queue[index];
 
-  const handleSubmit = async (selected: string[]) => {
+  const handleSubmit = async (payload: SubmitPayload) => {
     if (!current) return;
     const res = await fetch("/api/drill/answer", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question_id: current.id, selected_labels: selected }),
+      body: JSON.stringify({ question_id: current.id, ...payload }),
     });
     const result: AnswerResultDTO = await res.json();
     setFeedback(result);
