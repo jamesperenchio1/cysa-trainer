@@ -6,6 +6,14 @@ import { QuestionDTO, AnswerResultDTO } from "@/lib/types";
 
 const SESSION_SIZE = 15;
 
+const DOMAINS = [
+  { code: "", name: "All domains" },
+  { code: "SO", name: "Security Operations" },
+  { code: "VM", name: "Vulnerability Management" },
+  { code: "IR", name: "Incident Response" },
+  { code: "RC", name: "Reporting & Communication" },
+];
+
 export default function DrillPage() {
   const [queue, setQueue] = useState<QuestionDTO[]>([]);
   const [index, setIndex] = useState(0);
@@ -14,22 +22,30 @@ export default function DrillPage() {
   const [sessionTotal, setSessionTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [done, setDone] = useState(false);
+  const [domain, setDomain] = useState("");
 
-  const loadBatch = useCallback(async () => {
+  const loadBatch = useCallback(async (domainCode?: string) => {
     setLoading(true);
     setDone(false);
     setIndex(0);
     setFeedback(null);
-    const res = await fetch(`/api/drill/next?count=${SESSION_SIZE}`);
+    setSessionCorrect(0);
+    setSessionTotal(0);
+    const d = domainCode !== undefined ? domainCode : domain;
+    const params = new URLSearchParams({ count: String(SESSION_SIZE) });
+    if (d) params.set("domain", d);
+    const res = await fetch(`/api/drill/next?${params.toString()}`);
     const data = await res.json();
     setQueue(data.questions);
     setLoading(false);
     if (data.questions.length === 0) setDone(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    loadBatch();
-  }, [loadBatch]);
+    loadBatch(domain);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [domain]);
 
   const current = queue[index];
 
@@ -59,7 +75,7 @@ export default function DrillPage() {
 
   return (
     <main>
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex items-center justify-between mb-3">
         <Link href="/" className="text-sm text-gray-400 hover:text-gray-200">
           ← Dashboard
         </Link>
@@ -67,6 +83,22 @@ export default function DrillPage() {
           Session: <span className="text-gray-100 font-semibold">{sessionCorrect}</span>/{sessionTotal}
           {sessionTotal > 0 && <span className="ml-1 text-gray-500">({accuracy}%)</span>}
         </div>
+      </div>
+
+      <div className="flex flex-wrap gap-2 mb-5">
+        {DOMAINS.map((d) => (
+          <button
+            key={d.code}
+            onClick={() => setDomain(d.code)}
+            className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
+              domain === d.code
+                ? "bg-accent text-white border-accent"
+                : "border-gray-700 text-gray-400 hover:text-gray-200 hover:border-gray-500"
+            }`}
+          >
+            {d.name}
+          </button>
+        ))}
       </div>
 
       {loading && <p className="text-gray-400">Loading due questions…</p>}
@@ -78,7 +110,7 @@ export default function DrillPage() {
             {sessionCorrect} / {sessionTotal} correct ({accuracy}%) this session.
           </p>
           <div className="flex gap-3 justify-center">
-            <button className="btn-primary" onClick={loadBatch}>
+            <button className="btn-primary" onClick={() => loadBatch(domain)}>
               Drill another {SESSION_SIZE}
             </button>
             <Link href="/" className="btn-secondary">

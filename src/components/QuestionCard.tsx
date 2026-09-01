@@ -67,6 +67,15 @@ export default function QuestionCard({
 
   const showFeedback = feedback !== undefined && feedback !== null && submitted;
 
+  // Choices arrive pre-shuffled per fetch; display letters reflect that render order
+  // rather than the fixed authored label, so position can't be pattern-matched.
+  const displayLetterByLabel = new Map(
+    question.choices.map((c, i) => [c.label, String.fromCharCode(65 + i)])
+  );
+  const correctDisplayLetters = feedback?.correct_labels
+    .map((l) => displayLetterByLabel.get(l) || l)
+    .sort();
+
   return (
     <div className="card">
       <div className="flex items-center justify-between mb-3">
@@ -97,7 +106,7 @@ export default function QuestionCard({
       {question.exhibit && <pre className="exhibit-block">{question.exhibit}</pre>}
 
       <div className="mt-4">
-        {question.choices.map((c) => {
+        {question.choices.map((c, i) => {
           const isSelected = selected.includes(c.label);
           const isCorrectChoice = feedback?.correct_labels.includes(c.label);
           let cls = "choice";
@@ -109,7 +118,7 @@ export default function QuestionCard({
           }
           return (
             <button key={c.id} className={cls} onClick={() => toggle(c.label)} disabled={submitted || disabled}>
-              <span className="font-semibold text-gray-400 mr-2">{c.label}.</span>
+              <span className="font-semibold text-gray-400 mr-2">{String.fromCharCode(65 + i)}.</span>
               {c.body}
             </button>
           );
@@ -133,7 +142,7 @@ export default function QuestionCard({
           }`}
         >
           <p className={`font-semibold mb-1 ${feedback.correct ? "text-good" : "text-bad"}`}>
-            {feedback.correct ? "Correct" : `Incorrect — correct answer: ${feedback.correct_labels.join(", ")}`}
+            {feedback.correct ? "Correct" : `Incorrect — correct answer: ${(correctDisplayLetters || []).join(", ")}`}
           </p>
           <p className="text-sm text-gray-300 leading-relaxed">{feedback.explanation}</p>
         </div>

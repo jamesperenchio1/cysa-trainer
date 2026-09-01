@@ -13,6 +13,15 @@ interface QuestionRow {
   domain_name: string;
 }
 
+function shuffle<T>(arr: T[]): T[] {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
 export function hydrateQuestions(rows: QuestionRow[]): QuestionDTO[] {
   const choiceStmt = db.prepare(
     "SELECT id, label, body FROM choices WHERE question_id = ? ORDER BY sort_order ASC"
@@ -27,7 +36,9 @@ export function hydrateQuestions(rows: QuestionRow[]): QuestionDTO[] {
     select_n: r.select_n,
     stem: r.stem,
     exhibit: r.exhibit,
-    choices: choiceStmt.all(r.id) as { id: number; label: string; body: string }[],
+    // Shuffled per fetch: the authored choice order (correct answer was almost
+    // always written 2nd) is otherwise a trivially learnable "always pick B" exploit.
+    choices: shuffle(choiceStmt.all(r.id) as { id: number; label: string; body: string }[]),
   }));
 }
 

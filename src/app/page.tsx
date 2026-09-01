@@ -40,7 +40,7 @@ export default function Dashboard() {
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-3 mb-6">
+      <div className="grid grid-cols-2 gap-3 mb-3">
         <Link href="/drill" className="card hover:border-accent transition-colors">
           <p className="text-2xl mb-1">🎯</p>
           <p className="font-semibold">Drill</p>
@@ -54,6 +54,14 @@ export default function Dashboard() {
           <p className="text-xs text-gray-500 mt-1">85 Q · 165 min timed</p>
         </Link>
       </div>
+
+      <Link href="/analytics" className="card hover:border-accent transition-colors flex items-center gap-3 mb-6">
+        <p className="text-2xl">📊</p>
+        <div>
+          <p className="font-semibold">Analytics</p>
+          <p className="text-xs text-gray-500">Subtopic accuracy, activity trend, exam score history</p>
+        </div>
+      </Link>
 
       <div className="card mb-6">
         <h2 className="font-semibold mb-4">Domain mastery</h2>
