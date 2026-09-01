@@ -16,7 +16,7 @@
       },
       {
         "label": "B",
-        "body": "It violates zero trust's core principle of explicit verification for every request regardless of network location, even though the risk may be low enough to formally accept",
+        "body": "It violates zero trust's core principle of explicit verification for every request, regardless of network location.",
         "correct": true
       },
       {
@@ -82,7 +82,7 @@
       },
       {
         "label": "B",
-        "body": "The security group is a default-deny allowlist model, so 8443 should be unreachable unless the underlying OS firewall or a misconfigured rule elsewhere also permits it.",
+        "body": "The security group is a default-deny allowlist model.",
         "correct": true
       },
       {
@@ -115,7 +115,7 @@
       },
       {
         "label": "B",
-        "body": "It maintains consistent policy enforcement as workloads are dynamically created, destroyed, and rescheduled with changing IP addresses (e.g., in Kubernetes/autoscaling)",
+        "body": "It maintains consistent policy enforcement as workloads are created, destroyed, and rescheduled.",
         "correct": true
       },
       {
@@ -148,7 +148,7 @@
       },
       {
         "label": "B",
-        "body": "Traffic is being backhauled through a distant cloud PoP instead of being handled by a nearby edge node, or VoIP traffic isn't configured for local breakout/QoS prioritization",
+        "body": "Traffic is backhauled through a distant cloud PoP instead of a nearby edge node, or lacks local QoS.",
         "correct": true
       },
       {
@@ -214,7 +214,7 @@
       },
       {
         "label": "B",
-        "body": "Host B, because jittered timing and variable payload size are deliberately designed to defeat simple threshold/interval-based detection rules that Host A's pattern would trigger",
+        "body": "Host B, since jittered timing and variable size are designed to defeat threshold-based detection rules.",
         "correct": true
       },
       {
@@ -280,7 +280,7 @@
       },
       {
         "label": "B",
-        "body": "Traditional file-based/signature antivirus scanning that inspects files written to disk will not see this activity, since no new malicious file is ever written.",
+        "body": "Traditional file-based/signature antivirus scanning that inspects files written to disk will not see this activity.",
         "correct": true
       },
       {
@@ -379,7 +379,7 @@
       },
       {
         "label": "B",
-        "body": "Pull the full command line and actual DLL path/hash from raw EDR telemetry, since alert summary views often truncate or hide arguments.",
+        "body": "Pull the full command line and actual DLL path/hash from raw EDR telemetry.",
         "correct": true
       },
       {
@@ -407,22 +407,22 @@
     "choices": [
       {
         "label": "A",
-        "body": "Standard HTTPS web browsing traffic",
+        "body": "Standard HTTPS web browsing traffic on its usual port",
         "correct": false
       },
       {
         "label": "B",
-        "body": "Legacy IRC (Internet Relay Chat) traffic, historically associated with botnet C2 channels, though the port alone is only a weak/legacy indicator worth correlating with other signals",
+        "body": "Legacy IRC traffic, a historically weak but real botnet C2 indicator",
         "correct": true
       },
       {
         "label": "C",
-        "body": "DNS zone transfers",
+        "body": "DNS zone transfer traffic between authoritative servers",
         "correct": false
       },
       {
         "label": "D",
-        "body": "SMTP mail relay traffic",
+        "body": "Routine SMTP mail relay traffic between mail servers",
         "correct": false
       }
     ],
@@ -440,7 +440,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "XDR (extended detection and response), which ingests and correlates telemetry across multiple existing security layers",
+        "body": "XDR (extended detection and response).",
         "correct": true
       },
       {
@@ -478,7 +478,7 @@
       },
       {
         "label": "B",
-        "body": "Add a risk-tiered approval step to the playbook (e.g., auto-remediate for standard users, require analyst confirmation for VIP/executive accounts or when a known corporate VPN egress is involved) rather than blanket full automation",
+        "body": "Add a risk-tiered approval step to the playbook rather than blanket full automation",
         "correct": true
       },
       {
@@ -511,7 +511,7 @@
       },
       {
         "label": "B",
-        "body": "An NGFW integrates IPS (along with application awareness and other Layer 7 inspection) into a single platform, whereas a standalone IPS focuses purely on threat detection/blocking without broader firewall policy management",
+        "body": "An NGFW integrates IPS into a single platform, while a standalone IPS focuses purely on threat blocking.",
         "correct": true
       },
       {
@@ -544,7 +544,7 @@
       },
       {
         "label": "B",
-        "body": "It typically provides near-real-time (not truly real-time, inline) visibility and control, since it works by querying the cloud provider's API rather than sitting in the live traffic path.",
+        "body": "It typically provides near-real-time (not truly real-time, inline) visibility and control.",
         "correct": true
       },
       {
@@ -643,7 +643,7 @@
       },
       {
         "label": "B",
-        "body": "Shared/leaked tooling and reused infrastructure can be repurposed by other actors, meaning attribution confidence should be treated as provisional and updated as new evidence emerges, not treated as a permanent fact",
+        "body": "Shared/leaked tooling and reused infrastructure can be repurposed by other actors.",
         "correct": true
       },
       {
@@ -676,7 +676,7 @@
       },
       {
         "label": "B",
-        "body": "Automatically actioning unvetted IOCs from a single, unvalidated source risks operational disruption from false positives (blocking legitimate infrastructure) and gives no defense-in-depth if that single feed misses something",
+        "body": "Auto-actioning unvalidated IOCs risks false-positive disruption with no defense-in-depth if the feed misses something.",
         "correct": true
       },
       {
@@ -841,7 +841,7 @@
       },
       {
         "label": "B",
-        "body": "The uncredentialed scan likely flagged version-banner-based 'possible' vulnerabilities that the credentialed scan was able to rule out by directly confirming actual installed package versions and applied patches",
+        "body": "The uncredentialed scan flagged banner-based guesses that credentialed scanning ruled out with real version data.",
         "correct": true
       },
       {
@@ -874,7 +874,7 @@
       },
       {
         "label": "B",
-        "body": "A monthly scan interval will almost never actually catch most ephemeral containers while they exist, creating a substantial blind spot that requires a different approach",
+        "body": "A monthly scan interval will almost never catch ephemeral containers while they actually exist.",
         "correct": true
       },
       {
@@ -940,7 +940,7 @@
       },
       {
         "label": "B",
-        "body": "A passive scanning approach (or an active scan specifically validated as safe for fragile OT devices, run during a planned maintenance window) should have been used.",
+        "body": "A passive scan, or an active scan validated safe and run during a maintenance window, should have been used.",
         "correct": true
       },
       {
@@ -1006,7 +1006,7 @@
       },
       {
         "label": "B",
-        "body": "Vulnerability B, because the combination of a very high EPSS (real-world exploitation likelihood) and internet-facing exposure represents materially higher actual risk despite the lower raw CVSS score, while Vulnerability A's air-gapped isolation substantially reduces its practical exploitability",
+        "body": "Vulnerability B, since high EPSS plus internet-facing exposure means materially higher real risk than the CVSS alone suggests.",
         "correct": true
       },
       {
@@ -1039,7 +1039,7 @@
       },
       {
         "label": "B",
-        "body": "AC:H means successful exploitation depends on conditions largely outside the attacker's control (e.g., winning a race condition, specific victim configuration) making reliable exploitation harder.",
+        "body": "AC:H means successful exploitation depends on conditions largely outside the attacker's control making reliable exploitation harder.",
         "correct": true
       },
       {
@@ -1072,7 +1072,7 @@
       },
       {
         "label": "B",
-        "body": "Both scores serve different purposes: the Base score is the vendor's context-free severity rating (appropriate for public CVE tracking/comparison across organizations), while the Environmental score reflects this organization's actual risk given its specific compensating controls.",
+        "body": "The Base score is vendor-assigned and context-free, while the Environmental score reflects this org's actual controls.",
         "correct": true
       },
       {
@@ -1110,7 +1110,7 @@
       },
       {
         "label": "C",
-        "body": "Review the vendor's changelog/release notes for the vulnerable code path to determine whether it exists in the older version, or directly test/contact the vendor for clarification, before committing to a remediation priority",
+        "body": "Check the vendor changelog for the older version, or contact the vendor, before setting priority.",
         "correct": true
       },
       {
@@ -1143,7 +1143,7 @@
       },
       {
         "label": "C",
-        "body": "Deploy a virtual patch (e.g., a WAF rule or IPS signature specifically targeting the known exploit pattern) to reduce risk during the development window, while continuing to track the permanent fix",
+        "body": "Deploy a virtual patch to reduce risk during the development window.",
         "correct": true
       },
       {
@@ -1171,7 +1171,7 @@
       },
       {
         "label": "B",
-        "body": "The exception process itself may have been followed correctly at approval time, but the LACK of a review/expiration enforcement mechanism means residual risk could have silently grown without anyone re-evaluating whether the original justification still holds",
+        "body": "The exception process itself may have been followed correctly at approval time.",
         "correct": true
       },
       {
@@ -1204,7 +1204,7 @@
       },
       {
         "label": "B",
-        "body": "The pipeline needs a mechanism to rebuild and redeploy images when the BASE image changes, not only on application code changes.",
+        "body": "The pipeline needs a mechanism to rebuild and redeploy images when the BASE image changes.",
         "correct": true
       },
       {
@@ -1270,7 +1270,7 @@
       },
       {
         "label": "B",
-        "body": "Submit the compensating control as part of a formal exception/attestation process with the ASV or acquiring bank as PCI DSS requires, since ASV scan results generally cannot be self-overridden by the merchant",
+        "body": "Submit the compensating control as part of a formal exception/attestation process with the ASV or acquiring bank as PCI DSS requires.",
         "correct": true
       },
       {
@@ -1303,7 +1303,7 @@
       },
       {
         "label": "B",
-        "body": "HIPAA's Security Rule obligations are specifically scoped to safeguarding ePHI, so a system with no ePHI involvement falls outside HIPAA's direct remediation mandate for that finding.",
+        "body": "HIPAA's Security Rule obligations are specifically scoped to safeguarding ePHI.",
         "correct": true
       },
       {
@@ -1336,7 +1336,7 @@
       },
       {
         "label": "B",
-        "body": "Generally, from the point of actual organizational awareness/discovery (Friday), not from when it was administratively logged.",
+        "body": "Generally, from the point of actual organizational awareness/discovery (Friday).",
         "correct": true
       },
       {
@@ -1369,7 +1369,7 @@
       },
       {
         "label": "B",
-        "body": "Manipulating severity classification to hit a reporting metric undermines the entire purpose of risk-based prioritization and produces misleading metrics that could cause leadership to underestimate actual organizational risk",
+        "body": "Gaming severity to hit a metric undermines risk-based prioritization and produces misleading risk data.",
         "correct": true
       },
       {
@@ -1402,7 +1402,7 @@
       },
       {
         "label": "B",
-        "body": "Loop back into Detection & Analysis for the newly discovered host to scope and understand it, while continuing appropriate containment across the now-expanded incident, rather than treating the phases as strictly linear and one-directional",
+        "body": "Loop back into Detection & Analysis for the newly discovered host to scope and understand it.",
         "correct": true
       },
       {
@@ -1435,7 +1435,7 @@
       },
       {
         "label": "B",
-        "body": "Without capturing what allowed the incident to occur and how effectively the response actually performed, the same root cause and any process gaps are likely to recur in a future incident.",
+        "body": "Without capturing what caused it and how the response performed, the same gaps are likely to recur.",
         "correct": true
       },
       {
@@ -1468,7 +1468,7 @@
       },
       {
         "label": "B",
-        "body": "A risk-based judgment weighing the likely rate/impact of continued compromise spread during the 20-minute window against the business/data-integrity cost of an abrupt mid-transaction disruption.",
+        "body": "A risk-based judgment weighing continued compromise spread against the cost of an abrupt disruption.",
         "correct": true
       },
       {
@@ -1534,7 +1534,7 @@
       },
       {
         "label": "B",
-        "body": "It should be documented in root cause analysis as part of lessons learned, since understanding WHY a known, already-flagged risk went unaddressed is essential to preventing recurrence.",
+        "body": "It should be documented in root cause analysis as part of lessons learned.",
         "correct": true
       },
       {
@@ -1633,7 +1633,7 @@
       },
       {
         "label": "B",
-        "body": "Exfiltrating first (via a trusted/allow-listed tool that blends into normal traffic) both maximizes double-extortion leverage before detection likely occurs at encryption time, and reduces the chance the exfiltration itself gets flagged as anomalous, compared to using an unfamiliar exfil tool",
+        "body": "Exfiltrating first maximizes leverage before encryption and blends in better than an unfamiliar exfil tool.",
         "correct": true
       },
       {
@@ -1699,7 +1699,7 @@
       },
       {
         "label": "B",
-        "body": "Process/masquerading detection through careful verification of process name, path, and signature against known-good baselines.",
+        "body": "Masquerading detection via careful process name, path, and signature verification.",
         "correct": true
       },
       {
@@ -1732,7 +1732,7 @@
       },
       {
         "label": "B",
-        "body": "The earliest-stage evidence (initial access vector, earliest attacker activity) may be permanently unavailable, potentially leaving root cause determination incomplete or based on inference rather than direct evidence.",
+        "body": "The earliest-stage evidence may be permanently gone, leaving root cause based on inference, not proof.",
         "correct": true
       },
       {
@@ -1765,7 +1765,7 @@
       },
       {
         "label": "B",
-        "body": "Coordination with relevant government/sector-specific agencies (e.g., CISA, sector ISACs, or law enforcement) given the critical infrastructure and suspected nation-state involvement.",
+        "body": "Coordination with relevant government/sector-specific agencies given the critical infrastructure and suspected nation-state involvement.",
         "correct": true
       },
       {
@@ -1798,7 +1798,7 @@
       },
       {
         "label": "B",
-        "body": "To attempt to preserve attorney-client privilege / work-product protection over sensitive investigative findings, which can affect what must later be disclosed in litigation or regulatory proceedings.",
+        "body": "To attempt to preserve attorney-client privilege / work-product protection over sensitive investigative findings.",
         "correct": true
       },
       {
@@ -1864,7 +1864,7 @@
       },
       {
         "label": "B",
-        "body": "Continue technical containment, eradication scoping, and forensic investigation in parallel, since negotiation and technical response are complementary tracks.",
+        "body": "Continue technical containment, eradication scoping, and forensic investigation in parallel.",
         "correct": true
       },
       {
@@ -1897,7 +1897,7 @@
       },
       {
         "label": "B",
-        "body": "Improved detection capability is very likely surfacing incidents that were previously going undetected entirely (reflected in the old, much longer dwell time), rather than reflecting an actual 300% increase in attack volume",
+        "body": "Improved detection capability is very likely surfacing incidents that were previously going undetected entirely (reflected in the old, much longer dwell time).",
         "correct": true
       },
       {
@@ -1963,7 +1963,7 @@
       },
       {
         "label": "B",
-        "body": "A shrinking average could be driven simply by closing easy, low-effort, low-severity findings quickly while a small number of high-severity, hard-to-fix critical vulnerabilities linger unaddressed and drag out over many quarters.",
+        "body": "A shrinking average can hide a few lingering critical findings behind many quickly-closed easy ones.",
         "correct": true
       },
       {
@@ -2029,7 +2029,7 @@
       },
       {
         "label": "B",
-        "body": "Because clearly distinguishing confirmed facts from working hypotheses is essential for accurate decision-making by readers (including legal and executive stakeholders).",
+        "body": "Because clearly distinguishing confirmed facts from working hypotheses is essential for accurate decision-making by readers.",
         "correct": true
       },
       {
@@ -2095,7 +2095,7 @@
       },
       {
         "label": "B",
-        "body": "No — affected individuals must still be notified, and HHS must still be notified (annually for breaches under 500, rather than within 60 days as required for 500+).",
+        "body": "No — individuals and HHS must still be notified, just on a different timeline for breaches under 500.",
         "correct": true
       },
       {
@@ -2227,7 +2227,7 @@
       },
       {
         "label": "B",
-        "body": "The absence of an expedited/emergency patching exception path for active-exploitation scenarios means the standard process, appropriate for routine patches, becomes a liability when speed is critical.",
+        "body": "No emergency patching exception path means the standard process becomes a liability when speed matters.",
         "correct": true
       },
       {
@@ -2293,7 +2293,7 @@
       },
       {
         "label": "B",
-        "body": "Explain that scope is still being determined, provide the best current estimate range with explicit assumptions and confidence level, and commit to a specific time for the next update.",
+        "body": "Explain scope is still being determined, give a best estimate with assumptions, and commit to a next update time.",
         "correct": true
       },
       {
@@ -2326,7 +2326,7 @@
       },
       {
         "label": "B",
-        "body": "New scheduled task creation is a commonly monitored/alerted event in many environments, whereas modification of an already-existing, previously-trusted task may not trigger the same detection rules.",
+        "body": "New scheduled tasks are commonly monitored, but modifying an existing trusted task may not trigger the same rules.",
         "correct": true
       },
       {
@@ -2359,7 +2359,7 @@
       },
       {
         "label": "B",
-        "body": "MD5 is retained largely for backward compatibility/cross-referencing with older case records, tools, and legal precedent that used MD5, while SHA-256 serves as the actual cryptographically robust integrity guarantee going forward.",
+        "body": "MD5 is retained largely for backward compatibility/cross-referencing with older case records, tools, and legal precedent that used MD5.",
         "correct": true
       },
       {
@@ -2392,7 +2392,7 @@
       },
       {
         "label": "B",
-        "body": "Immediately notify the insurer and engage the required approved firm as soon as possible to preserve coverage eligibility, coordinating a handoff/collaboration with the internal team rather than discovering post-incident that the claim is denied on a technicality",
+        "body": "Notify the insurer and engage the required approved firm immediately to preserve coverage eligibility.",
         "correct": true
       },
       {
@@ -2425,7 +2425,7 @@
       },
       {
         "label": "B",
-        "body": "Without knowing what fraction of triaged alerts were true positives requiring real action versus noise/false positives, a rising raw alert count says as much about alert volume/tuning quality as it does about team output.",
+        "body": "Without a true-positive rate, rising alert volume says as much about tuning as it does about output.",
         "correct": true
       },
       {
@@ -2458,7 +2458,7 @@
       },
       {
         "label": "B",
-        "body": "It's missing the specific technical detail developers actually need to act: the vulnerable endpoint/parameter, a proof-of-concept request demonstrating the injection, and the specific code location or pattern to fix.",
+        "body": "It's missing the specific vulnerable endpoint, a proof-of-concept request, and the exact fix location.",
         "correct": true
       },
       {
@@ -2557,7 +2557,7 @@
       },
       {
         "label": "B",
-        "body": "Binary legitimacy and behavioral legitimacy are different questions: a signed LOLBin (living-off-the-land binary) launched with no expected arguments, spawned from a browser/document-handler-adjacent parent, and immediately beaconing to a young domain is a known process-injection/proxy-execution pattern regardless of the binary's signature",
+        "body": "A signed binary launched with unusual arguments and beaconing to a new domain is still suspicious behavior.",
         "correct": true
       },
       {
@@ -2590,7 +2590,7 @@
       },
       {
         "label": "B",
-        "body": "Block Public Access has multiple independent sub-settings, and unless the specific sub-setting that blocks public policies is confirmed enabled at both the account AND bucket level, the wildcard principal remains a live exposure that should not be assumed mitigated",
+        "body": "Block Public Access has separate sub-settings, and an unconfirmed one leaves the wildcard exposure live.",
         "correct": true
       },
       {
@@ -2656,7 +2656,7 @@
       },
       {
         "label": "B",
-        "body": "DNS tunneling — data or C2 traffic is likely being encoded into DNS query/response payloads to evade egress controls that only inspect ports other than 53, which is often left open by default",
+        "body": "DNS tunneling — data or C2 traffic is likely being encoded into DNS query/response payloads to evade egress controls that only inspect ports other than 53.",
         "correct": true
       },
       {
@@ -2755,7 +2755,7 @@
       },
       {
         "label": "B",
-        "body": "This is an Insecure Direct Object Reference (IDOR) / broken access control issue: authentication (proving who you are) is a separate control from authorization (verifying what that specific identity is allowed to access).",
+        "body": "This is an IDOR / broken access control issue: authentication and authorization are separate controls.",
         "correct": true
       },
       {
@@ -2788,7 +2788,7 @@
       },
       {
         "label": "B",
-        "body": "Apply compensating controls (e.g., network segmentation/isolation, strict access control lists, enhanced monitoring for exploitation attempts, and formal documented risk acceptance with a remediation timeline) to reduce exploitability and exposure while tracking the vulnerability until a permanent fix is available",
+        "body": "Apply compensating controls and a documented risk acceptance while tracking toward a permanent fix.",
         "correct": true
       },
       {
@@ -2821,7 +2821,7 @@
       },
       {
         "label": "B",
-        "body": "Broad, immediate isolation of an entire VLAN risks alerting the attacker to detection (potentially triggering faster/more destructive encryption or data destruction) and can destroy forensic value and business continuity for unaffected hosts, whereas targeted isolation based on confirmed indicators contains the known threat while preserving visibility into whether the compromise has actually spread further",
+        "body": "Broad VLAN isolation can alert the attacker and destroy forensic value on unaffected hosts, unlike targeted isolation.",
         "correct": true
       },
       {
@@ -2953,7 +2953,7 @@
       },
       {
         "label": "B",
-        "body": "Incorrect — PCI DSS and state breach notification laws are separate, independently-triggered obligations covering different regulatory relationships (card brand/acquirer contractual requirements vs. legal obligations to affected individuals/state regulators).",
+        "body": "Incorrect — PCI DSS and state breach law are separate obligations covering different regulatory relationships.",
         "correct": true
       },
       {
@@ -2986,7 +2986,7 @@
       },
       {
         "label": "B",
-        "body": "SPF and DKIM authenticate the sending infrastructure/domain in the technical envelope, not the display name shown to the user or the semantic legitimacy of the message content.",
+        "body": "SPF and DKIM authenticate the sending infrastructure/domain in the technical envelope.",
         "correct": true
       },
       {
@@ -3085,7 +3085,7 @@
       },
       {
         "label": "B",
-        "body": "A WAF inspects HTTP requests/responses at the perimeter in real time; a second-order injection stores malicious input that passes initial inspection (because it doesn't look like an attack payload in that specific request context) and is only weaponized later when an internal, non-HTTP code path uses the stored value unsafely.",
+        "body": "A WAF inspects HTTP requests/responses at the perimeter in real time.",
         "correct": true
       },
       {
@@ -3118,7 +3118,7 @@
       },
       {
         "label": "B",
-        "body": "The reported metric only measures time-to-remediate AFTER triage, hiding a significant real-world exposure window (the 22-day average triage delay) during which the vulnerability remains unaddressed and unmitigated.",
+        "body": "The metric only measures time after triage, hiding the real exposure window during the 22-day triage delay.",
         "correct": true
       },
       {
@@ -3189,7 +3189,7 @@
       },
       {
         "label": "C",
-        "body": "Formally document a time-bound risk acceptance for continuing to support TLS 1.0 only for the specific legacy terminal fleet (ideally isolated to a restricted network segment with compensating monitoring) while actively tracking the terminal upgrade project, rather than either an unmanaged indefinite exception or an unplanned outage-causing cutover",
+        "body": "Formally document a time-bound risk acceptance for the legacy fleet while tracking the upgrade project.",
         "correct": true
       },
       {
@@ -3217,7 +3217,7 @@
       },
       {
         "label": "B",
-        "body": "Routing sensitive investigative communications through counsel (attorney-client privilege / work-product protections) can protect certain communications from discovery in later litigation or employment action, and it reduces the risk of premature, speculative, or inaccurate statements about a specific individual being preserved in an uncontrolled channel before the investigation is complete",
+        "body": "Routing communications through counsel can preserve privilege and avoid premature statements about a specific individual.",
         "correct": true
       },
       {
@@ -3316,7 +3316,7 @@
       },
       {
         "label": "B",
-        "body": "A transitive trust path: segmentation rules correctly restricted DIRECT namespace-to-namespace traffic, but a shared, trusted intermediary (the monitoring namespace/pod) that both segments were allowed to reach became an unintended bridge once it was itself compromised or misconfigured.",
+        "body": "A transitive trust path through a shared intermediary namespace both segments could reach.",
         "correct": true
       },
       {
@@ -3580,7 +3580,7 @@
       },
       {
         "label": "B",
-        "body": "Establish a designated incident communications role/lead (separate from the technical responders) responsible for gathering status and delivering consistent, scheduled updates to stakeholders through a single channel.",
+        "body": "Establish a designated communications lead delivering scheduled updates through a single channel.",
         "correct": true
       },
       {
@@ -3613,7 +3613,7 @@
       },
       {
         "label": "B",
-        "body": "An attacker is likely using port 443 to disguise non-TLS traffic (e.g., a custom C2 protocol) specifically because that port is commonly allowed through egress filtering without deep inspection.",
+        "body": "An attacker is likely using port 443 to disguise non-TLS traffic specifically because that port is commonly allowed through egress filtering without deep inspection.",
         "correct": true
       },
       {
@@ -3646,7 +3646,7 @@
       },
       {
         "label": "B",
-        "body": "Malware can employ sandbox-evasion techniques such as environment fingerprinting, execution delays (sleeping past a short analysis window), or requiring specific user interaction/conditions before detonating.",
+        "body": "Malware can use sandbox-evasion techniques like environment fingerprinting or execution delays.",
         "correct": true
       },
       {
@@ -3712,7 +3712,7 @@
       },
       {
         "label": "B",
-        "body": "Partially — requiring a non-simple Content-Type does raise the bar against classic HTML-form-based CSRF because it forces a CORS preflight, but this protection depends entirely on browser CORS enforcement and the ABSENCE of a permissive CORS policy on the server.",
+        "body": "Partially — requiring a non-simple Content-Type does raise the bar against classic HTML-form-based CSRF because it forces a CORS preflight.",
         "correct": true
       },
       {
@@ -3910,7 +3910,7 @@
       },
       {
         "label": "B",
-        "body": "The rule creates a direct path from a lower-trust zone (the internet-facing DMZ, which has the largest attack surface) into a higher-trust zone (the internal network holding sensitive data).",
+        "body": "The rule creates a direct path from the low-trust DMZ into the sensitive internal network.",
         "correct": true
       },
       {
@@ -3976,7 +3976,7 @@
       },
       {
         "label": "B",
-        "body": "Treat this as a high-priority anomaly requiring investigation: a service account authenticating outside its expected schedule, source, and purpose is a classic indicator of credential compromise or misuse, precisely because service accounts often have broad privileges and are less closely monitored by users who would otherwise notice unexpected activity on their own account",
+        "body": "Treat this as high-priority: off-schedule service account activity is a classic compromise indicator.",
         "correct": true
       },
       {
@@ -4108,7 +4108,7 @@
       },
       {
         "label": "B",
-        "body": "SQL injection and SSRF are different vulnerability classes with different root causes: SQL injection sanitization addresses how input is used in a DATABASE query, while SSRF requires validating what NETWORK DESTINATIONS the server is allowed to be directed to.",
+        "body": "SQL injection and SSRF are different vulnerability classes with different root causes: SQL injection sanitization addresses how input is used in a DATABASE query.",
         "correct": true
       },
       {
@@ -4273,7 +4273,7 @@
       },
       {
         "label": "B",
-        "body": "Create a scoped, documented detection exception (allowlist) for the specific known-good RMM tool's verified binary/publisher/behavior signature, rather than broadly suppressing the underlying detection logic.",
+        "body": "Create a scoped, documented detection exception (allowlist) for the specific known-good RMM tool's verified binary/publisher/behavior signature.",
         "correct": true
       },
       {
@@ -4372,7 +4372,7 @@
       },
       {
         "label": "B",
-        "body": "Traditional network/host-based vulnerability scanning of worker nodes doesn't assess vulnerabilities INSIDE container images (outdated base images, vulnerable application dependencies packaged into the container), misconfigurations in Kubernetes-specific objects (RBAC, pod security policies, network policies), or the container runtime/orchestration layer itself.",
+        "body": "Host-based scanning misses vulnerabilities inside container images and Kubernetes-specific misconfigurations.",
         "correct": true
       },
       {
@@ -4405,7 +4405,7 @@
       },
       {
         "label": "B",
-        "body": "Determine whether the specific vulnerable functionality/code path is actually reachable/exploitable in this deployment's configuration, and if it is reachable, apply available compensating controls (WAF rules, network restrictions, enhanced monitoring for exploitation attempts targeting this specific CVE) while the full remediation is tested and scheduled",
+        "body": "Determine if the vulnerable code path is actually reachable, and apply compensating controls if so.",
         "correct": true
       },
       {
@@ -4504,7 +4504,7 @@
       },
       {
         "label": "B",
-        "body": "MITRE ATT&CK is primarily focused on cataloging the specific tactics, techniques, and procedures (the 'how') an adversary used, while the Diamond Model provides a relational framework connecting who the adversary is, what capability/infrastructure they used, and who the victim is.",
+        "body": "MITRE ATT&CK is primarily focused on cataloging the specific tactics, techniques, and procedures (the 'how') an adversary used.",
         "correct": true
       },
       {
@@ -4537,7 +4537,7 @@
       },
       {
         "label": "B",
-        "body": "Restructure the primary report as a concise executive summary highlighting trends, top-priority items, and SLA compliance, with the full granular finding-by-finding detail moved to a separate, always-available appendix or a searchable ticketing system that engineers can reference as needed.",
+        "body": "Restructure as a concise executive summary, moving granular finding-by-finding detail into a separate appendix.",
         "correct": true
       },
       {
@@ -4570,7 +4570,7 @@
       },
       {
         "label": "B",
-        "body": "The data controller bears the primary obligation to notify the supervisory authority; the data processor's obligation under GDPR is to notify the CONTROLLER without undue delay upon becoming aware of a breach.",
+        "body": "The data controller bears the primary obligation to notify the supervisory authority.",
         "correct": true
       },
       {
@@ -4603,7 +4603,7 @@
       },
       {
         "label": "B",
-        "body": "Attribution confidence should weight more heavily on characteristics that are actually distinctive to a specific actor (unique custom tooling, exclusive infrastructure, or highly specific operational patterns) rather than commodity tools and shared infrastructure used broadly across many unrelated actors.",
+        "body": "Attribution should weight distinctive indicators like custom tooling more than commodity, widely-shared infrastructure.",
         "correct": true
       },
       {
@@ -4636,7 +4636,7 @@
       },
       {
         "label": "B",
-        "body": "This is consistent with a 'Golden Ticket' or 'Silver Ticket' style Kerberos abuse technique, where a forged ticket grants an attacker broad access, followed by exactly the kind of lateral movement to previously-unaccessed systems that would result from an attacker using stolen or forged credentials to explore the environment",
+        "body": "This matches a Golden/Silver Ticket Kerberos abuse pattern, followed by lateral movement to new systems.",
         "correct": true
       },
       {
@@ -4669,7 +4669,7 @@
       },
       {
         "label": "B",
-        "body": "Establish a specific, auditable exception (e.g., an approved encrypted channel or a pre-authorized recipient allowlist for verified vendors, with the exception itself logged and reviewed) rather than broadly disabling DLP for an entire department.",
+        "body": "Establish a specific, auditable exception rather than broadly disabling DLP for an entire department.",
         "correct": true
       },
       {
@@ -4707,7 +4707,7 @@
       },
       {
         "label": "C",
-        "body": "Use non-intrusive scanning on live production for routine operations, but supplement it with either scheduled intrusive scans during dedicated maintenance windows, testing against a representative non-production/staging replica, or credentialed/version-based checks that can infer vulnerability presence without actually attempting exploitation.",
+        "body": "Use non-intrusive scans routinely, but supplement with periodic intrusive scans during maintenance windows.",
         "correct": true
       },
       {
@@ -4801,7 +4801,7 @@
       },
       {
         "label": "B",
-        "body": "Not fully fair — Prefetch files DO contain valuable timestamp data (including last-run time and, in supported versions, run count and multiple last-execution timestamps).",
+        "body": "Not fully fair — Prefetch files DO contain valuable timestamp data.",
         "correct": true
       },
       {
@@ -5065,7 +5065,7 @@
       },
       {
         "label": "B",
-        "body": "Translate the technical findings into business-risk language the audience can act on (e.g., 'these findings could allow an attacker to manipulate what customers see on our website' or 'could allow internal systems to be tricked into exposing data to an attacker'), while keeping the full technical detail available in a supporting appendix or for the technical team's own use.",
+        "body": "Translate findings into business-risk language the audience can actually act on.",
         "correct": true
       },
       {
@@ -5098,7 +5098,7 @@
       },
       {
         "label": "B",
-        "body": "A material incident (one a reasonable investor would consider important to an investment decision.",
+        "body": "A material incident triggers a disclosure obligation on a specific legal timeline; below that threshold, no public disclosure is required.",
         "correct": true
       },
       {
@@ -5164,7 +5164,7 @@
       },
       {
         "label": "B",
-        "body": "SCP evaluation works on an intersection/inheritance model where policies at different levels of the OU hierarchy combine, and an explicit Allow at a lower-level OU for actions otherwise intended to be broadly restricted can create an unintended gap in coverage.",
+        "body": "SCPs combine across the OU hierarchy, so a permissive policy at a lower OU can create an unintended gap.",
         "correct": true
       },
       {
@@ -5296,7 +5296,7 @@
       },
       {
         "label": "B",
-        "body": "Attackers commonly clear or disable bash history (e.g., via 'unset HISTFILE', 'history -c', deleting .bash_history, or redirecting HISTFILE to /dev/null) as a basic anti-forensic technique.",
+        "body": "Attackers commonly clear or disable bash history as a basic anti-forensic technique.",
         "correct": true
       },
       {
@@ -5362,7 +5362,7 @@
       },
       {
         "label": "B",
-        "body": "This is a common sandbox-evasion / C2 fallback pattern: the malware may check for a specific C2 domain's availability as an environment/connectivity check, and terminating cleanly when it fails to resolve could indicate either a dead/sinkholed C2 domain in THIS sample, or deliberate behavior designed to appear inert when its expected infrastructure isn't reachable.",
+        "body": "This is a sandbox-evasion pattern — the malware likely checks for reachable C2 before acting.",
         "correct": true
       },
       {
@@ -5428,7 +5428,7 @@
       },
       {
         "label": "B",
-        "body": "No — these tools operate on fundamentally different detection models: the vulnerability scanner assesses whether known VULNERABILITIES (specific software flaws with CVEs) are present based on version/patch status, while the EDR observes BEHAVIOR at runtime.",
+        "body": "These tools use different detection models: known-CVE version matching versus runtime behavior.",
         "correct": true
       },
       {
@@ -5461,7 +5461,7 @@
       },
       {
         "label": "B",
-        "body": "EPSS estimates the LIKELIHOOD a specific vulnerability will actually be exploited based on real-world exploitation intelligence, while asset criticality tiering measures the potential IMPACT if a given asset is compromised, independent of any specific vulnerability.",
+        "body": "EPSS estimates the LIKELIHOOD a specific vulnerability will actually be exploited based on real-world exploitation intelligence.",
         "correct": true
       },
       {
@@ -5593,7 +5593,7 @@
       },
       {
         "label": "B",
-        "body": "Add the third-party marketing platform's sending infrastructure to the domain's SPF record AND configure DKIM signing for that platform (so its messages achieve proper alignment), preserving 'p=reject' protection against actual spoofing while accommodating the legitimate, properly-authorized use of a third-party sender",
+        "body": "Add the third-party platform to SPF and configure DKIM signing, preserving reject protection for legitimate senders.",
         "correct": true
       },
       {
@@ -5626,7 +5626,7 @@
       },
       {
         "label": "B",
-        "body": "Shared/dynamic hosting infrastructure IP addresses are commonly reassigned between different customers over time, and an 8-month-old indicator tied to a since-decommissioned instance carries significantly reduced confidence that the CURRENT occupant of that IP is still associated with the original malicious activity.",
+        "body": "Shared hosting IPs get reassigned often, so an 8-month-old indicator on a decommissioned instance is low-confidence.",
         "correct": true
       },
       {
@@ -5659,7 +5659,7 @@
       },
       {
         "label": "B",
-        "body": "Scanning credentials, especially domain-level admin/root accounts, represent an attractive and high-value target if compromised (e.g., via credential theft from the scanning infrastructure itself).",
+        "body": "Scanning credentials, especially domain-level admin/root accounts, represent an attractive and high-value target if compromised.",
         "correct": true
       },
       {
@@ -5692,7 +5692,7 @@
       },
       {
         "label": "B",
-        "body": "Given the confirmed Medium severity, unused vulnerable functionality, and reasonable, bounded timeline (3 weeks, next sprint) with a clear reason (avoiding a rushed breaking-change refactor), this is a reasonable candidate for a documented, time-bound acceptance/deferral rather than requiring immediate emergency remediation.",
+        "body": "Given the Medium severity, unused functionality, and a short bounded timeline, this is a reasonable documented deferral.",
         "correct": true
       },
       {
@@ -5725,7 +5725,7 @@
       },
       {
         "label": "B",
-        "body": "Use the cloud provider's native snapshot/image capabilities to create a forensic copy of the VM's virtual disk, document the exact process and timestamps (since a live snapshot has different integrity properties than a powered-off bit-for-bit physical image), and separately capture memory/volatile state if the instance must remain running during evidence collection.",
+        "body": "Use the cloud provider's native snapshot capability, documenting the process, and capture memory separately if the instance stays running.",
         "correct": true
       },
       {
@@ -5989,7 +5989,7 @@
       },
       {
         "label": "B",
-        "body": "Browser history showing a visit to a relevant site is circumstantial evidence that establishes correlation/opportunity, but does not by itself prove causation or exclude alternative explanations (e.g., another user of the same account/device, research/curiosity unrelated to the leak, or the visit being unrelated to how the data was actually leaked).",
+        "body": "Browser history showing a visit to a relevant site is circumstantial evidence that establishes correlation/opportunity.",
         "correct": true
       },
       {
@@ -6022,7 +6022,7 @@
       },
       {
         "label": "B",
-        "body": "A metric measuring a trivially-satisfiable proxy action (opening an alert) rather than the meaningful outcome it's meant to represent (an actual triage decision) is vulnerable to exactly this kind of goal-displacement/gaming behavior.",
+        "body": "A metric measuring an easy proxy action instead of the real outcome invites this exact gaming behavior.",
         "correct": true
       },
       {
@@ -6088,7 +6088,7 @@
       },
       {
         "label": "B",
-        "body": "The ML baseline may have adapted to include the malicious/anomalous behavior as part of its 'normal' model if that behavior was present continuously during the baselining period, or gradually incorporated slow, low-level attacker activity as it normalized into the baseline over time.",
+        "body": "The ML baseline may have adapted to include the malicious behavior as part of its learned 'normal' pattern.",
         "correct": true
       },
       {
@@ -6517,7 +6517,7 @@
       },
       {
         "label": "B",
-        "body": "Traditional full-network-access VPN grants broad network-level reachability once authenticated, meaning a compromised VPN credential or endpoint gives an attacker a broad foothold across the internal network.",
+        "body": "Traditional full-network-access VPN grants broad network-level reachability once authenticated.",
         "correct": true
       },
       {
@@ -6550,7 +6550,7 @@
       },
       {
         "label": "B",
-        "body": "Encryption at rest and IAM-gated console access protect against unauthorized VIEWING of the variables through the cloud console/API, but the running function's OWN code/process has the credentials available in plaintext in memory during execution.",
+        "body": "Encryption at rest and IAM-gated console access protect against unauthorized VIEWING of the variables through the cloud console/API.",
         "correct": true
       },
       {
@@ -6781,7 +6781,7 @@
       },
       {
         "label": "B",
-        "body": "The hunt still provided meaningful value even with a benign finding: it validated that the hunting methodology and detection logic actually work as intended (successfully surfacing a genuine parent-child anomaly), it documented a legitimate exception that can now inform tuning to reduce future false positives for this specific pattern, and it improved the team's understanding of the environment's baseline behavior.",
+        "body": "The hunt still provided value: it validated the methodology and documented a legitimate exception.",
         "correct": true
       },
       {
@@ -6847,7 +6847,7 @@
       },
       {
         "label": "B",
-        "body": "This decision requires weighing the actual, current exploitability and exposure of the vulnerability (is it internet-facing, is there active exploitation in the wild, are there compensating controls available) against the concrete business cost of a disruptive change during peak revenue.",
+        "body": "Weigh the vulnerability's actual exploitability and exposure against the real cost of a disruptive change now.",
         "correct": true
       },
       {
@@ -6913,7 +6913,7 @@
       },
       {
         "label": "B",
-        "body": "Immediate access revocation achieves the urgent containment goal (preventing further unauthorized action) without requiring the investigation to be complete, while premature termination before the investigation concludes could compromise the legal defensibility of any eventual employment action (wrongful termination risk if the investigation later reveals a different picture), limit the organization's ability to gather additional evidence or cooperation from the employee during the investigation, and potentially tip off a sophisticated insider before all relevant evidence is secured",
+        "body": "Immediate access revocation achieves the urgent containment goal (preventing further unauthorized action) without requiring the investigation to be complete.",
         "correct": true
       },
       {
@@ -6979,7 +6979,7 @@
       },
       {
         "label": "B",
-        "body": "A traditional single-authentication session model creates a window where, once a session token/cookie is established, an attacker who steals or hijacks that session token can act with the full privileges of the authenticated user for the ENTIRE remaining session duration without needing to re-authenticate.",
+        "body": "A stolen session token remains fully valid for the rest of the session under a single-authentication model.",
         "correct": true
       },
       {
@@ -7078,7 +7078,7 @@
       },
       {
         "label": "B",
-        "body": "Post-incident reviews should specifically compare the plan's assumptions (detection timing, available containment options, expected attacker behavior) against what ACTUALLY happened, and use discrepancies to refine the plan's assumptions and procedures going forward.",
+        "body": "Compare the plan's assumptions against what actually happened, and refine them from the discrepancies.",
         "correct": true
       },
       {
@@ -7210,7 +7210,7 @@
       },
       {
         "label": "B",
-        "body": "Not necessarily — these specific Windows APIs are legitimately used by many benign applications for valid purposes (debuggers, certain security tools, some legitimate software injection for compatibility shims, etc.).",
+        "body": "Not necessarily — these APIs are legitimately used by debuggers and some security tools.",
         "correct": true
       },
       {
@@ -7243,7 +7243,7 @@
       },
       {
         "label": "B",
-        "body": "Indefinite session lifetime meaningfully increases risk: if a session token is ever stolen (via XSS, a shared/public device, a lost laptop, or network interception), that stolen token remains valid indefinitely.",
+        "body": "Indefinite session lifetime means a stolen token remains valid and exploitable indefinitely.",
         "correct": true
       },
       {
@@ -7309,7 +7309,7 @@
       },
       {
         "label": "B",
-        "body": "STRIDE is a threat-modeling framework designed for proactively identifying categories of POTENTIAL threats during system DESIGN (before an application even exists in production), organized around threat TYPES relevant to software architecture, while MITRE ATT&CK catalogs OBSERVED real-world adversary tactics/techniques useful for analyzing ACTUAL incidents and building detections.",
+        "body": "STRIDE identifies categories of potential threats proactively during system design, before production.",
         "correct": true
       },
       {
@@ -7672,7 +7672,7 @@
       },
       {
         "label": "B",
-        "body": "Distinct error messages let an attacker efficiently determine which usernames/emails are valid registered accounts in the system (by observing which produces the 'no account found' response versus 'incorrect password'), enabling targeted follow-up attacks like password spraying or credential stuffing against only CONFIRMED valid accounts rather than wasting attempts on non-existent ones.",
+        "body": "Distinct error messages let an attacker confirm which accounts actually exist in the system.",
         "correct": true
       },
       {
@@ -7738,7 +7738,7 @@
       },
       {
         "label": "B",
-        "body": "Running fully siloed assessments risks inconsistent findings about the same underlying incident, inefficient duplicated investigative effort, and potentially missing that a single remediation action might need to satisfy requirements under BOTH frameworks simultaneously.",
+        "body": "Siloed assessments risk inconsistent findings and miss fixes that could satisfy both frameworks at once.",
         "correct": true
       },
       {
@@ -7804,7 +7804,7 @@
       },
       {
         "label": "B",
-        "body": "While the CVSS Base Score itself remains accurate (it reflects the vulnerability's characteristics under typical use), the confirmed lack of legitimate client usage actually points toward the SIMPLEST and most complete remediation: disabling the unused legacy protocol entirely (reducing attack surface) rather than merely patching it.",
+        "body": "The Base score is still accurate, but disabling the unused protocol is the simplest full remediation.",
         "correct": true
       },
       {
@@ -7870,7 +7870,7 @@
       },
       {
         "label": "B",
-        "body": "Activity logs typically show WHICH API calls/actions occurred but the retention period, level of detail (e.g., whether actual object CONTENT or just metadata about the access is available), and default logging configuration vary significantly by provider and by whether detailed logging was proactively enabled BEFORE the incident.",
+        "body": "Activity logs typically show WHICH API calls/actions occurred.",
         "correct": true
       },
       {
@@ -8035,7 +8035,7 @@
       },
       {
         "label": "B",
-        "body": "IR plans need to be developed WITH input and validation from the departments actually responsible for executing specific actions (IT operations, legal, HR, executive leadership) rather than written in isolation by the security team based on assumptions about other teams' capabilities.",
+        "body": "IR plans need input from the departments that actually execute each action, not just the security team.",
         "correct": true
       },
       {
@@ -8266,7 +8266,7 @@
       },
       {
         "label": "B",
-        "body": "A sophisticated attacker who has gained sufficient privilege on a host may deliberately disable, uninstall, or otherwise tamper with the EDR agent specifically to blind security visibility on that host before conducting further malicious activity.",
+        "body": "A privileged attacker may deliberately disable or tamper with the EDR agent to blind visibility on that host.",
         "correct": true
       },
       {
@@ -8365,7 +8365,7 @@
       },
       {
         "label": "B",
-        "body": "Many cyber insurance policies specify notification deadlines based on WHEN THE INCIDENT WAS DISCOVERED or when it COULD POTENTIALLY exceed the threshold, not when final costs are definitively known.",
+        "body": "Many cyber insurance policies specify notification deadlines based on WHEN THE INCIDENT WAS DISCOVERED or when it COULD POTENTIALLY exceed the threshold.",
         "correct": true
       },
       {
@@ -8398,7 +8398,7 @@
       },
       {
         "label": "B",
-        "body": "Not necessarily — sector-specific regulations (like FERPA.",
+        "body": "Not necessarily — sector-specific regulations like FERPA don't automatically override a separate state breach notification law.",
         "correct": true
       },
       {
@@ -8497,7 +8497,7 @@
       },
       {
         "label": "B",
-        "body": "Courts (and the standards governing expert/forensic testimony, such as Daubert or Frye in various US jurisdictions) generally require that a forensic examiner be able to explain and defend the reliability and validity of the methodology used, not merely that a tool produced a result.",
+        "body": "Courts (and the standards governing expert/forensic testimony, such as Daubert or Frye in various US jurisdictions) generally require that a forensic examiner be able to explain and defend the reliability and validity of the methodology used.",
         "correct": true
       },
       {
@@ -8530,7 +8530,7 @@
       },
       {
         "label": "B",
-        "body": "Training COMPLETION (an input/activity metric.",
+        "body": "Training completion measures activity, not whether behavior actually changed.",
         "correct": true
       },
       {
@@ -8596,7 +8596,7 @@
       },
       {
         "label": "B",
-        "body": "Content validation alone doesn't address a related but distinct risk: if the uploaded file (even one with genuinely valid image content properties) is stored with a '.php' extension in a web-accessible directory, and the web server is configured to execute '.php' files based on extension, certain image formats can be crafted to embed valid PHP code within otherwise-valid image data that the web server would then execute if requested directly.",
+        "body": "Content validation doesn't restrict the stored file extension, which a crafted image could still exploit if executable.",
         "correct": true
       },
       {
@@ -8629,7 +8629,7 @@
       },
       {
         "label": "B",
-        "body": "Repeatedly using the IDENTICAL scenario risks the team essentially memorizing the specific script and expected sequence of actions rather than genuinely exercising their real-time decision-making, communication, and adaptability under novel or unexpected conditions.",
+        "body": "Repeating the identical scenario risks the team memorizing the script instead of exercising real judgment.",
         "correct": true
       },
       {
@@ -8695,7 +8695,7 @@
       },
       {
         "label": "B",
-        "body": "Spreading a large transfer into small, evenly-paced chunks over an extended period ('low and slow' exfiltration) is a deliberate technique to avoid triggering volume-based or rate-based anomaly detection thresholds that are tuned to catch large, sudden data transfers.",
+        "body": "Spreading a transfer into small paced chunks deliberately evades volume-based detection thresholds.",
         "correct": true
       },
       {
@@ -8728,7 +8728,7 @@
       },
       {
         "label": "B",
-        "body": "Consistent overlap in Infrastructure and Capability features across multiple incidents, despite varying victim profiles, suggests these incidents may originate from the SAME adversary (or adversary group) engaged in broad, opportunistic targeting rather than a focused campaign against a specific victim type.",
+        "body": "Consistent Infrastructure/Capability overlap despite varying victims suggests one opportunistic adversary.",
         "correct": true
       },
       {
@@ -8827,7 +8827,7 @@
       },
       {
         "label": "B",
-        "body": "Traditional large-zone segmentation still allows broad lateral movement once an attacker compromises ANY single host within that zone, since all hosts within the same zone typically trust each other by default.",
+        "body": "Traditional large-zone segmentation still allows broad lateral movement once an attacker compromises ANY single host within that zone.",
         "correct": true
       },
       {
@@ -8860,7 +8860,7 @@
       },
       {
         "label": "B",
-        "body": "Rather than treating any single external source as automatically authoritative, the team should understand WHY the scores differ and apply the score (or a locally-adjusted assessment) that most accurately reflects THIS organization's actual deployment context and exposure.",
+        "body": "Understand WHY the scores differ and apply whichever reflects this organization's actual deployment context.",
         "correct": true
       },
       {
@@ -8959,7 +8959,7 @@
       },
       {
         "label": "B",
-        "body": "Documenting hunt methodology and outcomes builds an institutional record of what's already been checked and confirmed clean, preventing duplicate future effort on the same hypothesis, supports demonstrating detection coverage to auditors/stakeholders, and creates a knowledge base that helps train new team members and refine future hunt hypotheses based on what has and hasn't been productive historically.",
+        "body": "It builds an institutional record, proves detection coverage to auditors, and trains future hunt prioritization.",
         "correct": true
       },
       {
@@ -9025,7 +9025,7 @@
       },
       {
         "label": "B",
-        "body": "Combining fundamentally different cognitive/functional roles (strategic coordination and stakeholder management vs. deep hands-on technical work) in a single person creates a genuine bottleneck during complex, higher-intensity incidents where both functions demand significant simultaneous attention.",
+        "body": "Combining coordination and deep technical roles in one person creates a bottleneck during complex incidents.",
         "correct": true
       },
       {
@@ -9058,7 +9058,7 @@
       },
       {
         "label": "B",
-        "body": "Whether the benchmark report's methodology for measuring 'time to patch' (e.g., what start/end points are used, what vulnerability population is included, how the surveyed organizations self-reported their data, and whether the survey sample is representative of similar organizations) is actually comparable to how THIS organization calculates and defines its own 18-day figure.",
+        "body": "Whether the benchmark's methodology for measuring 'time to patch' actually matches how this org calculates its own figure.",
         "correct": true
       },
       {
@@ -9223,7 +9223,7 @@
       },
       {
         "label": "B",
-        "body": "Analysis environments can be hardened against this specific evasion check by removing or masking the telltale artifacts (VM tools files, registry keys, hardware identifiers) the malware specifically checks for, using bare-metal analysis systems, or using sandboxes specifically designed to minimize detectable virtualization artifacts.",
+        "body": "Harden the analysis environment to remove the artifacts the malware checks for, or use bare-metal analysis.",
         "correct": true
       },
       {
@@ -9256,7 +9256,7 @@
       },
       {
         "label": "B",
-        "body": "Defense in depth assumes that any SINGLE control can fail, be misconfigured, or be bypassed (e.g., a perimeter firewall doesn't help against an attacker who gains access via a phished internal user, a compromised VPN, or an insider).",
+        "body": "Defense in depth assumes that any SINGLE control can fail, be misconfigured, or be bypassed.",
         "correct": true
       },
       {
@@ -9289,7 +9289,7 @@
       },
       {
         "label": "B",
-        "body": "This is most likely explained by either the log reaching its configured maximum size and rolling over (overwriting oldest entries first, per default log rotation behavior) or a deliberate log-clearing action (a known anti-forensic technique attackers use to remove evidence of their activity).",
+        "body": "Either the log rolled over at its size limit, or someone deliberately cleared it as anti-forensics.",
         "correct": true
       },
       {
@@ -9685,7 +9685,7 @@
       },
       {
         "label": "B",
-        "body": "Injecting into a legitimate, expected, commonly-running system process allows the malicious code's activity (network connections, file access, etc.) to appear to originate from a trusted, unremarkable process rather than an unfamiliar or suspiciously-named standalone executable.",
+        "body": "Injecting into a trusted, common process makes malicious activity look like it comes from that process.",
         "correct": true
       },
       {
@@ -9751,7 +9751,7 @@
       },
       {
         "label": "B",
-        "body": "Beyond tone toward individuals, this illustrates an AUDIENCE-SCOPING and INFORMATION-SENSITIVITY risk: sharing detailed technical vulnerability information broadly (rather than to a scoped audience with a legitimate need to know) increases the risk of that sensitive detail reaching someone who could misuse it, being forwarded outside the organization, or simply being more widely known than necessary for the retrospective's actual purpose.",
+        "body": "This is an audience-scoping risk: sharing technical detail broadly increases the chance of misuse.",
         "correct": true
       },
       {
