@@ -87,7 +87,8 @@ export default function ExamPage() {
           <h1 className="text-xl font-semibold mb-3">Full Mock Exam</h1>
           <ul className="text-sm text-gray-300 space-y-1.5 mb-5 list-disc list-inside">
             <li>85 questions, domain-weighted (34% / 26% / 24% / 16%) like the real CS0-004</li>
-            <li>165 minute timer — auto-submits when time runs out</li>
+            <li>150 minute timer (tighter than the real 165) — auto-submits when time runs out</li>
+            <li>Passing score set to 800/900, above the real exam&apos;s 750 — a pass here means real margin</li>
             <li>No per-question feedback during the exam, matching real conditions</li>
             <li>Full scoring, domain breakdown, and explanations shown at the end</li>
           </ul>

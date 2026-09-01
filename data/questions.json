@@ -333,7 +333,7 @@
     "external_key": "SO-011",
     "domain": "SO",
     "subtopic": "Indicators of Malicious Activity",
-    "difficulty": 3,
+    "difficulty": 4,
     "is_multi": false,
     "select_n": 1,
     "stem": "Which of the following, if observed in isolation with no other context, is the WEAKEST standalone indicator of malicious activity?",
@@ -399,7 +399,7 @@
     "external_key": "SO-013",
     "domain": "SO",
     "subtopic": "Indicators of Malicious Activity",
-    "difficulty": 3,
+    "difficulty": 4,
     "is_multi": false,
     "select_n": 1,
     "stem": "A server shows a spike in outbound traffic to multiple destination IPs on port 6667, alongside CPU usage patterns inconsistent with any known scheduled job. Port 6667 is historically associated with which category of activity in a threat-hunting context (while noting it is not proof by itself)?",
@@ -432,7 +432,7 @@
     "external_key": "SO-014",
     "domain": "SO",
     "subtopic": "Security Tools",
-    "difficulty": 3,
+    "difficulty": 4,
     "is_multi": false,
     "select_n": 1,
     "stem": "A security team wants a single capability to correlate an endpoint alert, a suspicious email delivery event, and an anomalous cloud-login event into one unified incident timeline, using data ALREADY collected by separate point tools. Which capability category is the BEST fit, distinct from simply adding another EDR agent?",
@@ -498,7 +498,7 @@
     "external_key": "SO-016",
     "domain": "SO",
     "subtopic": "Security Tools",
-    "difficulty": 3,
+    "difficulty": 4,
     "is_multi": false,
     "select_n": 1,
     "stem": "Which statement correctly distinguishes a next-generation firewall (NGFW) with IPS functionality from a standalone, dedicated IPS appliance in most modern deployments?",
@@ -564,7 +564,7 @@
     "external_key": "SO-018",
     "domain": "SO",
     "subtopic": "Security Tools",
-    "difficulty": 3,
+    "difficulty": 4,
     "is_multi": false,
     "select_n": 1,
     "stem": "An organization deploys deception technology consisting of fake credentials planted in a password manager vault, alongside a decoy admin share with no legitimate business purpose. A SOC alert fires from the decoy share. Which statement about this alert's reliability is MOST accurate?",
@@ -663,7 +663,7 @@
     "external_key": "SO-021",
     "domain": "SO",
     "subtopic": "Threat Intelligence",
-    "difficulty": 3,
+    "difficulty": 4,
     "is_multi": false,
     "select_n": 1,
     "stem": "An organization only consumes a single free, community-run threat intel feed and treats every IOC in it as automatically block-worthy across all firewalls with no review. What is the MOST significant risk of this approach?",
@@ -960,7 +960,7 @@
     "external_key": "VM-005",
     "domain": "VM",
     "subtopic": "Scanning Methodology",
-    "difficulty": 3,
+    "difficulty": 4,
     "is_multi": false,
     "select_n": 1,
     "stem": "A scan schedule excludes a subnet because 'it's just printers and shouldn't have real vulnerabilities.' Six months later, one of those printers is found to have been used as a foothold for lateral movement. What does this scenario BEST illustrate?",
@@ -1125,7 +1125,7 @@
     "external_key": "VM-010",
     "domain": "VM",
     "subtopic": "Remediation",
-    "difficulty": 3,
+    "difficulty": 4,
     "is_multi": false,
     "select_n": 1,
     "stem": "A critical vulnerability affects a public-facing web application. The development team says a proper code fix will take three weeks due to the complexity of the affected authentication module. What is the MOST appropriate immediate action while the permanent fix is developed?",
@@ -1224,7 +1224,7 @@
     "external_key": "VM-013",
     "domain": "VM",
     "subtopic": "Remediation",
-    "difficulty": 3,
+    "difficulty": 4,
     "is_multi": false,
     "select_n": 1,
     "stem": "Which of the following is NOT an appropriate compensating control for a critical vulnerability on an unpatchable, EOL medical device that cannot be taken offline?",
@@ -1422,7 +1422,7 @@
     "external_key": "IR-002",
     "domain": "IR",
     "subtopic": "IR Lifecycle",
-    "difficulty": 3,
+    "difficulty": 4,
     "is_multi": false,
     "select_n": 1,
     "stem": "An IR team fully eradicates malware and restores systems from clean backups, but skips a formal lessons-learned review because 'the incident is over and everyone wants to move on.' What is the MOST significant long-term risk of skipping this step?",
@@ -1488,7 +1488,7 @@
     "external_key": "IR-004",
     "domain": "IR",
     "subtopic": "IR Lifecycle",
-    "difficulty": 3,
+    "difficulty": 4,
     "is_multi": false,
     "select_n": 1,
     "stem": "A tabletop exercise reveals that no one on the IR team actually knows who has legal authority to approve paying a ransomware demand if it ever came to that. What TYPE of gap does this reveal, and what is the appropriate fix?",
@@ -1521,7 +1521,7 @@
     "external_key": "IR-005",
     "domain": "IR",
     "subtopic": "IR Lifecycle",
-    "difficulty": 3,
+    "difficulty": 4,
     "is_multi": false,
     "select_n": 1,
     "stem": "An incident's root cause is eventually traced to a vulnerability that had a critical CVSS score and was flagged by vulnerability management five months before exploitation, but remained unpatched due to a missed internal deadline. Where should this specific finding be recorded in the incident's documentation?",
@@ -1851,7 +1851,7 @@
     "external_key": "IR-015",
     "domain": "IR",
     "subtopic": "Communication & Legal",
-    "difficulty": 3,
+    "difficulty": 4,
     "is_multi": false,
     "select_n": 1,
     "stem": "During active ransomware negotiation led by a specialized third-party negotiation firm, what is the MOST appropriate role for the internal IR/security team during that specific window?",
@@ -2280,7 +2280,7 @@
     "external_key": "IR-016",
     "domain": "IR",
     "subtopic": "IR Lifecycle",
-    "difficulty": 3,
+    "difficulty": 4,
     "is_multi": false,
     "select_n": 1,
     "stem": "Twelve hours into an active incident, the IR lead is asked by an executive for a firm 'time to full resolution' estimate. The scope is still not fully understood. What is the MOST professionally appropriate response?",
@@ -2445,7 +2445,7 @@
     "external_key": "RC-010",
     "domain": "RC",
     "subtopic": "Stakeholder Communication",
-    "difficulty": 3,
+    "difficulty": 4,
     "is_multi": false,
     "select_n": 1,
     "stem": "A vulnerability report bound for a development team lists a finding as 'SQL injection, CVSS 9.8, CWE-89.' The developers report back that they don't know where to start. What is the MOST likely reason this technically accurate report failed to be actionable?",
@@ -10743,5 +10743,782 @@
       }
     ],
     "explanation": "The command line is the strongest single indicator here: -w hidden (suppress the window) combined with -enc (a base64-encoded command) is one of the most recognizable malicious PowerShell invocation patterns, regardless of what spawned it. PowerShell being the Image and Word being the ParentImage are each individually explainable on their own (PowerShell is a legitimate signed binary; Office documents can trigger PowerShell via legitimate automation) — it's specifically the hidden-window-plus-encoded-command combination in the command line that turns this from 'plausible' to 'should be investigated immediately.' A Medium IntegrityLevel is completely routine for a standard user process and carries no signal on its own."
+  },
+  {
+    "external_key": "PBQ-SO-005",
+    "domain": "SO",
+    "subtopic": "Threat Intelligence",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "ordering",
+    "stem": "Drag these phases of the threat intelligence cycle into their correct order.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "1",
+        "body": "Planning and Direction",
+        "correct_order": 1
+      },
+      {
+        "label": "2",
+        "body": "Collection",
+        "correct_order": 2
+      },
+      {
+        "label": "3",
+        "body": "Processing",
+        "correct_order": 3
+      },
+      {
+        "label": "4",
+        "body": "Analysis",
+        "correct_order": 4
+      },
+      {
+        "label": "5",
+        "body": "Dissemination",
+        "correct_order": 5
+      }
+    ],
+    "explanation": "The intelligence cycle begins with Planning and Direction, where stakeholders define what questions intelligence needs to answer. Collection gathers raw data from feeds, OSINT, and internal telemetry against those requirements. Processing normalizes and structures the raw data (deduplication, enrichment, format conversion) so it can actually be worked with. Analysis is where analysts interpret the processed data into actionable conclusions. Dissemination delivers that finished intelligence to the consumers who requested it, whose feedback then reshapes the next cycle's Planning and Direction."
+  },
+  {
+    "external_key": "PBQ-SO-006",
+    "domain": "SO",
+    "subtopic": "Log Sources",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "matching",
+    "stem": "Match each log source on the left to what it is BEST suited to reveal on the right.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "L1",
+        "body": "DNS query logs",
+        "match_group": "left",
+        "pair_key": "dns"
+      },
+      {
+        "label": "L2",
+        "body": "NetFlow / flow data",
+        "match_group": "left",
+        "pair_key": "netflow"
+      },
+      {
+        "label": "L3",
+        "body": "Web proxy logs",
+        "match_group": "left",
+        "pair_key": "proxy"
+      },
+      {
+        "label": "L4",
+        "body": "EDR / endpoint telemetry",
+        "match_group": "left",
+        "pair_key": "edr"
+      },
+      {
+        "label": "L5",
+        "body": "Firewall logs",
+        "match_group": "left",
+        "pair_key": "fw"
+      },
+      {
+        "label": "R1",
+        "body": "Domain names queried by a host, useful for spotting DGA or beaconing before any connection completes",
+        "match_group": "right",
+        "pair_key": "dns"
+      },
+      {
+        "label": "R2",
+        "body": "Volume, direction, and metadata of network conversations at scale, without full packet payload",
+        "match_group": "right",
+        "pair_key": "netflow"
+      },
+      {
+        "label": "R3",
+        "body": "The specific URLs and categories a host requested over HTTP(S), useful for spotting data exfiltration or policy violations",
+        "match_group": "right",
+        "pair_key": "proxy"
+      },
+      {
+        "label": "R4",
+        "body": "Process lineage, file, and registry activity actually executing on the host itself",
+        "match_group": "right",
+        "pair_key": "edr"
+      },
+      {
+        "label": "R5",
+        "body": "Allow/deny decisions made against rules for connections crossing the network perimeter",
+        "match_group": "right",
+        "pair_key": "fw"
+      }
+    ],
+    "explanation": "Each log source has a distinct vantage point. DNS logs show intent (what a host is trying to resolve) even before a connection succeeds, making them valuable for catching DGA domains and early beaconing. NetFlow gives volume and metadata at scale across the whole network without the storage cost of full packet capture. Proxy logs record the actual URLs requested, which flow data alone can't show. EDR is the only source here that sees what's actually running on the endpoint — process trees, file writes, registry changes. Firewall logs show perimeter-level allow/deny decisions but not payload content or endpoint-level detail."
+  },
+  {
+    "external_key": "PBQ-SO-007",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "hotspot",
+    "stem": "A DNS query log excerpt from a single internal host is shown below. Click the SINGLE line that is the strongest indicator of malicious activity.",
+    "exhibit": "09:14:02 client 10.1.4.22 query: www.google.com A\n09:14:05 client 10.1.4.22 query: outlook.office365.com A\n09:14:07 client 10.1.4.22 query: xk29fj28aldk3q.info A\n09:14:09 client 10.1.4.22 query: cdn.jsdelivr.net A",
+    "choices": [
+      {
+        "label": "A",
+        "body": "query: www.google.com A",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "query: outlook.office365.com A",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "query: xk29fj28aldk3q.info A",
+        "correct": true
+      },
+      {
+        "label": "D",
+        "body": "query: cdn.jsdelivr.net A",
+        "correct": false
+      }
+    ],
+    "explanation": "The xk29fj28aldk3q.info query has the hallmark signature of domain generation algorithm (DGA) output: a long, random-looking alphanumeric string with no dictionary structure, paired with a low-reputation generic TLD. Legitimate services essentially never use domains like this. The other three queries are all well-known, high-reputation, human-readable domains for common productivity and CDN services, and carry no signal on their own."
+  },
+  {
+    "external_key": "PBQ-SO-008",
+    "domain": "SO",
+    "subtopic": "Security Tools",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "ordering",
+    "stem": "Drag these steps into the correct order for safely rolling out a new SIEM correlation rule.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "1",
+        "body": "Define the specific detection use case and the log sources it requires",
+        "correct_order": 1
+      },
+      {
+        "label": "2",
+        "body": "Draft the correlation logic and test it against historical log data",
+        "correct_order": 2
+      },
+      {
+        "label": "3",
+        "body": "Tune thresholds to reduce false positives before enabling live alerting",
+        "correct_order": 3
+      },
+      {
+        "label": "4",
+        "body": "Have another analyst peer-review the logic and the alert destination",
+        "correct_order": 4
+      },
+      {
+        "label": "5",
+        "body": "Deploy to production and monitor initial alert volume and precision",
+        "correct_order": 5
+      }
+    ],
+    "explanation": "Skipping straight to production with an untested rule is how analysts end up drowning in noise or missing real detections. The use case and required log sources have to be defined first so the rule is even feasible. Testing against historical data validates the logic actually fires (and doesn't fire constantly) before anyone is paged by it. Tuning thresholds catches obvious false-positive patterns pre-launch. Peer review catches logic errors and confirms the alert routes to the right queue. Only after all of that does deploying to production with active monitoring make sense — and even then, the rule's real-world precision still needs to be watched and adjusted."
+  },
+  {
+    "external_key": "PBQ-SO-009",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "hotspot",
+    "stem": "A netstat-style connection listing from a workstation is shown below. Click the SINGLE line that is the strongest indicator of compromise.",
+    "exhibit": "Proto  Local Address       Foreign Address       State        PID (Process)\nTCP    10.1.4.22:49213     8.8.8.8:443           ESTABLISHED  1044 (chrome.exe)\nTCP    10.1.4.22:49301     172.217.10.14:443     ESTABLISHED  1044 (chrome.exe)\nTCP    10.1.4.22:51122     185.220.101.7:4444    ESTABLISHED  3392 (cmd.exe)\nTCP    10.1.4.22:139       0.0.0.0:0             LISTENING    4 (System)",
+    "choices": [
+      {
+        "label": "A",
+        "body": "10.1.4.22:49213 -> 8.8.8.8:443 ESTABLISHED (chrome.exe)",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "10.1.4.22:49301 -> 172.217.10.14:443 ESTABLISHED (chrome.exe)",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "10.1.4.22:51122 -> 185.220.101.7:4444 ESTABLISHED (cmd.exe)",
+        "correct": true
+      },
+      {
+        "label": "D",
+        "body": "10.1.4.22:139 LISTENING (System)",
+        "correct": false
+      }
+    ],
+    "explanation": "cmd.exe holding an established outbound connection to an external IP on port 4444 is highly anomalous — 4444 is the well-known default listener port for Metasploit handlers, and a command interpreter has no legitimate reason to be holding its own outbound network socket at all; that pattern is consistent with a reverse shell. The two chrome.exe connections to Google infrastructure on port 443 are completely routine browsing traffic. A System process listening on 139 (NetBIOS) is standard on nearly every Windows host and carries no signal by itself."
+  },
+  {
+    "external_key": "PBQ-SO-010",
+    "domain": "SO",
+    "subtopic": "Threat Actors",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "matching",
+    "stem": "Match each threat actor type on the left to its primary motivation or defining characteristic on the right.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "L1",
+        "body": "Nation-state / APT",
+        "match_group": "left",
+        "pair_key": "apt"
+      },
+      {
+        "label": "L2",
+        "body": "Organized crime group",
+        "match_group": "left",
+        "pair_key": "crime"
+      },
+      {
+        "label": "L3",
+        "body": "Hacktivist",
+        "match_group": "left",
+        "pair_key": "hacktivist"
+      },
+      {
+        "label": "L4",
+        "body": "Malicious insider",
+        "match_group": "left",
+        "pair_key": "insider"
+      },
+      {
+        "label": "L5",
+        "body": "Script kiddie",
+        "match_group": "left",
+        "pair_key": "script"
+      },
+      {
+        "label": "R1",
+        "body": "Long-term espionage and persistence, typically well-resourced and patient",
+        "match_group": "right",
+        "pair_key": "apt"
+      },
+      {
+        "label": "R2",
+        "body": "Financial gain, frequently through ransomware or reselling stolen data",
+        "match_group": "right",
+        "pair_key": "crime"
+      },
+      {
+        "label": "R3",
+        "body": "Ideological or political statement, often via defacement or denial-of-service",
+        "match_group": "right",
+        "pair_key": "hacktivist"
+      },
+      {
+        "label": "R4",
+        "body": "Abuses legitimate, already-granted access, often driven by grievance or financial incentive",
+        "match_group": "right",
+        "pair_key": "insider"
+      },
+      {
+        "label": "R5",
+        "body": "Low technical skill, relies on prebuilt tools, motivated by curiosity or notoriety",
+        "match_group": "right",
+        "pair_key": "script"
+      }
+    ],
+    "explanation": "Attributing likely motivation shapes how a defender prioritizes and responds. Nation-state actors play a long game focused on intelligence gathering. Organized crime is overwhelmingly profit-driven. Hacktivists want visibility for a cause, so disruption or defacement serves them better than quiet persistence. Insiders are uniquely dangerous because they already have legitimate access — the defense problem is misuse detection, not perimeter breach. Script kiddies pose real risk through sheer automation and volume, but generally lack the sophistication of the other categories."
+  },
+  {
+    "external_key": "PBQ-VM-003",
+    "domain": "VM",
+    "subtopic": "Vulnerability Management Lifecycle",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "ordering",
+    "stem": "Drag these steps into the correct order for the vulnerability management lifecycle.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "1",
+        "body": "Identify and scan assets across the environment",
+        "correct_order": 1
+      },
+      {
+        "label": "2",
+        "body": "Prioritize findings based on risk (severity, exploitability, asset criticality)",
+        "correct_order": 2
+      },
+      {
+        "label": "3",
+        "body": "Remediate or mitigate the highest-priority findings",
+        "correct_order": 3
+      },
+      {
+        "label": "4",
+        "body": "Validate that remediation was actually effective",
+        "correct_order": 4
+      },
+      {
+        "label": "5",
+        "body": "Report results and residual risk to stakeholders",
+        "correct_order": 5
+      }
+    ],
+    "explanation": "You can't prioritize what you haven't found, so scanning/identification comes first. Prioritization ranks findings by actual risk rather than raw CVSS score alone, since asset criticality and exploitability matter just as much. Remediation acts on that prioritized list. Validation is the step teams most often skip — closing a ticket isn't the same as confirming the fix actually landed and holds. Reporting closes the loop by communicating outcomes and any residual risk to the people who need to know."
+  },
+  {
+    "external_key": "PBQ-VM-004",
+    "domain": "VM",
+    "subtopic": "Remediation",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "matching",
+    "stem": "Match each vulnerability finding disposition on the left to the correct next action on the right.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "L1",
+        "body": "Confirmed, exploitable vulnerability on a critical system",
+        "match_group": "left",
+        "pair_key": "critical"
+      },
+      {
+        "label": "L2",
+        "body": "Finding does not actually apply to this system",
+        "match_group": "left",
+        "pair_key": "fp"
+      },
+      {
+        "label": "L3",
+        "body": "No vendor patch exists, but a compensating control can reduce risk",
+        "match_group": "left",
+        "pair_key": "compensating"
+      },
+      {
+        "label": "L4",
+        "body": "Low-severity finding where fixing it would be more disruptive than the risk it poses",
+        "match_group": "left",
+        "pair_key": "accept"
+      },
+      {
+        "label": "L5",
+        "body": "Finding duplicates a vulnerability already remediated elsewhere",
+        "match_group": "left",
+        "pair_key": "dup"
+      },
+      {
+        "label": "R1",
+        "body": "Prioritize and remediate immediately",
+        "match_group": "right",
+        "pair_key": "critical"
+      },
+      {
+        "label": "R2",
+        "body": "Document the justification and suppress/close the finding as a false positive",
+        "match_group": "right",
+        "pair_key": "fp"
+      },
+      {
+        "label": "R3",
+        "body": "Apply and document the compensating control, and revisit once a patch ships",
+        "match_group": "right",
+        "pair_key": "compensating"
+      },
+      {
+        "label": "R4",
+        "body": "Formally accept the risk with management sign-off and document it",
+        "match_group": "right",
+        "pair_key": "accept"
+      },
+      {
+        "label": "R5",
+        "body": "Verify the existing fix covers this instance, then close as resolved",
+        "match_group": "right",
+        "pair_key": "dup"
+      }
+    ],
+    "explanation": "Not every finding gets the same treatment, and picking the wrong disposition either wastes remediation effort or leaves real risk unaddressed. A confirmed critical finding demands immediate action. A false positive should be documented and closed, not silently ignored, so the justification survives an audit. When no patch exists, a compensating control plus a tracked revisit date keeps the risk managed without pretending it's solved. Risk acceptance requires actual management sign-off — an analyst can't unilaterally decide to ignore a finding. Duplicates still need verification before closing, since assuming a fix applied elsewhere without checking is how gaps get missed."
+  },
+  {
+    "external_key": "PBQ-VM-005",
+    "domain": "VM",
+    "subtopic": "False Positives",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "hotspot",
+    "stem": "A vulnerability scan finding is shown below. Click the SINGLE field that is the strongest reason to suspect this is a false positive before escalating it.",
+    "exhibit": "Finding: Apache HTTP Server Remote Code Execution (CVE-2024-XXXX)\nSeverity: Critical\nDetection Method: Unauthenticated version banner match only (no exploit attempted)\nServer Response Header: Apache/2.4.41 (Ubuntu)\nVendor Note: Ubuntu backports security fixes into shipped packages without changing the reported version string\nPort: 443",
+    "choices": [
+      {
+        "label": "A",
+        "body": "Severity: Critical",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Detection Method: Unauthenticated version banner match only (no exploit attempted)",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Server Response Header: Apache/2.4.41 (Ubuntu)",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Port: 443",
+        "correct": false
+      }
+    ],
+    "explanation": "Version-banner-only detection is one of the most common sources of false positives in vulnerability scanning, especially on distributions like Ubuntu and Debian that backport security patches into a package without bumping the version string the scanner reads. The scanner sees an 'old' version number and flags every CVE ever tied to it, even though the underlying code has already been patched. The severity label, the response header itself, and the port are just descriptive fields — it's specifically the detection *method* that tells an analyst to verify against the actual patch level before treating this as a real, exploitable finding."
+  },
+  {
+    "external_key": "PBQ-VM-006",
+    "domain": "VM",
+    "subtopic": "CVSS / Prioritization",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "hotspot",
+    "stem": "Four open findings and their CVSS v3.1 vectors are shown below. Click the SINGLE finding that should be remediated first.",
+    "exhibit": "Finding 1 (CVE-2024-AAAA): AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H — Base Score 9.8\nFinding 2 (CVE-2024-BBBB): AV:L/AC:H/PR:H/UI:R/S:U/C:H/I:H/A:H — Base Score 6.7\nFinding 3 (CVE-2024-CCCC): AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N — Base Score 5.3\nFinding 4 (CVE-2024-DDDD): AV:P/AC:H/PR:H/UI:R/S:C/C:L/I:L/A:N — Base Score 2.1",
+    "choices": [
+      {
+        "label": "A",
+        "body": "Finding 1 (CVE-2024-AAAA) — Base Score 9.8",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "Finding 2 (CVE-2024-BBBB) — Base Score 6.7",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "Finding 3 (CVE-2024-CCCC) — Base Score 5.3",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Finding 4 (CVE-2024-DDDD) — Base Score 2.1",
+        "correct": false
+      }
+    ],
+    "explanation": "Finding 1 has both the highest base score and the most attacker-favorable exploitability vector: network-reachable (AV:N), low attack complexity (AC:L), no privileges required (PR:N), and no user interaction needed (UI:N), combined with high impact across confidentiality, integrity, and availability. That combination means almost any remote attacker can exploit it with minimal effort. Finding 2 has comparable impact but requires local access, high complexity, privileges, and user interaction — each of those narrows real-world exploitability significantly. Findings 3 and 4 have meaningfully lower impact and, in Finding 4's case, requires physical access, making it the lowest real-world priority of the four despite Finding 3's still-remote vector."
+  },
+  {
+    "external_key": "PBQ-IR-004",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "ordering",
+    "stem": "Drag these phases of the digital forensics process into their correct order.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "1",
+        "body": "Identification — recognize that potential evidence exists",
+        "correct_order": 1
+      },
+      {
+        "label": "2",
+        "body": "Preservation — protect the evidence from alteration",
+        "correct_order": 2
+      },
+      {
+        "label": "3",
+        "body": "Collection — acquire the evidence using forensically sound methods",
+        "correct_order": 3
+      },
+      {
+        "label": "4",
+        "body": "Examination — process and extract data from the acquired evidence",
+        "correct_order": 4
+      },
+      {
+        "label": "5",
+        "body": "Analysis — interpret the extracted data and reconstruct events",
+        "correct_order": 5
+      },
+      {
+        "label": "6",
+        "body": "Presentation — report findings, potentially for legal proceedings",
+        "correct_order": 6
+      }
+    ],
+    "explanation": "This is distinct from order of volatility, which governs what to collect first once you're collecting — this is the overall process framework. You first have to recognize evidence exists (Identification), then protect it before anyone touches it (Preservation), then acquire it in a way that survives legal scrutiny, such as with hashing and a documented chain of custody (Collection). Examination pulls the raw data out of the acquired evidence, Analysis is where an examiner interprets what that data actually means, and Presentation is delivering the findings — often in a form that has to hold up in court."
+  },
+  {
+    "external_key": "PBQ-IR-005",
+    "domain": "IR",
+    "subtopic": "Containment",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "matching",
+    "stem": "Match each incident scenario on the left to the MOST appropriate containment strategy on the right.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "L1",
+        "body": "A single workstation is actively encrypting files on a mapped network share",
+        "match_group": "left",
+        "pair_key": "isolate"
+      },
+      {
+        "label": "L2",
+        "body": "A compromised user account is being used to send phishing internally",
+        "match_group": "left",
+        "pair_key": "disable"
+      },
+      {
+        "label": "L3",
+        "body": "Several hosts are beaconing to a known-malicious external IP",
+        "match_group": "left",
+        "pair_key": "block"
+      },
+      {
+        "label": "L4",
+        "body": "Attribution and full scope are still unknown, and legal wants evidence preserved for a case",
+        "match_group": "left",
+        "pair_key": "monitor"
+      },
+      {
+        "label": "L5",
+        "body": "A legacy device cannot be isolated or patched and is fully compromised",
+        "match_group": "left",
+        "pair_key": "offline"
+      },
+      {
+        "label": "R1",
+        "body": "Immediately isolate the host from the network to stop further spread",
+        "match_group": "right",
+        "pair_key": "isolate"
+      },
+      {
+        "label": "R2",
+        "body": "Disable the account and force a credential reset",
+        "match_group": "right",
+        "pair_key": "disable"
+      },
+      {
+        "label": "R3",
+        "body": "Block the indicator at the firewall or proxy while investigation continues",
+        "match_group": "right",
+        "pair_key": "block"
+      },
+      {
+        "label": "R4",
+        "body": "Monitor covertly and delay overt containment to avoid tipping off the attacker",
+        "match_group": "right",
+        "pair_key": "monitor"
+      },
+      {
+        "label": "R5",
+        "body": "Take the system offline entirely until it can be rebuilt",
+        "match_group": "right",
+        "pair_key": "offline"
+      }
+    ],
+    "explanation": "Containment strategy has to match both the technical situation and the business/legal context, not follow one default playbook. Active ransomware spreading over a share demands immediate network isolation — speed matters more than anything else. A compromised account is a credentials problem, so disabling it and resetting credentials addresses the actual vector. Known-bad IOCs can be blocked at the perimeter without touching the affected hosts yet. When legal explicitly wants attribution and evidence preserved, delayed/covert monitoring is a legitimate deliberate choice, not a failure to act. And when isolation and patching aren't options at all, taking the device fully offline is the only strategy left that actually stops the risk."
+  },
+  {
+    "external_key": "PBQ-IR-006",
+    "domain": "IR",
+    "subtopic": "Lateral Movement",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "hotspot",
+    "stem": "A sequence of Windows event log entries from a file server is shown below. Click the SINGLE line that is the strongest indicator of lateral movement via a remote administration tool.",
+    "exhibit": "Event ID 4688: New Process Created — Image: C:\\Windows\\PSEXESVC.exe — Parent: services.exe — Account: SYSTEM\nEvent ID 5140: Network share object accessed — Share: \\\\FILESRV01\\ADMIN$ — Account: CORP\\svc_backup\nEvent ID 4624: Successful logon — Logon Type: 3 (Network) — Account: CORP\\svc_backup — Source: 10.1.2.55\nEvent ID 4634: Account logged off — Account: CORP\\jsmith",
+    "choices": [
+      {
+        "label": "A",
+        "body": "Event ID 4688: PSEXESVC.exe created by services.exe under SYSTEM",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "Event ID 5140: ADMIN$ share accessed by CORP\\svc_backup",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "Event ID 4624: network logon (type 3) by CORP\\svc_backup",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Event ID 4634: CORP\\jsmith logged off",
+        "correct": false
+      }
+    ],
+    "explanation": "PSEXESVC.exe is the named service binary that Sysinternals PsExec installs and runs specifically to execute commands remotely — its presence, spawned by services.exe under SYSTEM, is a direct artifact of that tool being used, not just supporting context. ADMIN$ share access and a type-3 network logon are both necessary preconditions for many legitimate administrative and backup tools too, so on their own they're only suggestive. A logoff event for an unrelated account carries no signal about lateral movement at all."
+  },
+  {
+    "external_key": "PBQ-IR-007",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "ordering",
+    "stem": "During the eradication and recovery phase of an active incident, drag these sub-steps into the correct order.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "1",
+        "body": "Confirm the full scope of affected systems before taking remediation action",
+        "correct_order": 1
+      },
+      {
+        "label": "2",
+        "body": "Remove malware or rebuild affected systems from a known-good image",
+        "correct_order": 2
+      },
+      {
+        "label": "3",
+        "body": "Close the exploited vulnerability or misconfiguration that enabled the initial compromise",
+        "correct_order": 3
+      },
+      {
+        "label": "4",
+        "body": "Reset credentials for any accounts confirmed or suspected to be compromised",
+        "correct_order": 4
+      },
+      {
+        "label": "5",
+        "body": "Restore data from clean, verified backups",
+        "correct_order": 5
+      },
+      {
+        "label": "6",
+        "body": "Monitor affected systems closely before formally declaring the incident resolved",
+        "correct_order": 6
+      }
+    ],
+    "explanation": "Acting before scope is confirmed is a classic mistake — remediating one visible host while others remain compromised just lets the attacker regroup. Once scope is known, malware removal or rebuilding comes next, followed immediately by closing the actual entry point, since restoring a system without fixing the hole that let the attacker in invites immediate reinfection. Credential resets follow, since compromised credentials survive a rebuilt system. Data restoration comes after the environment itself is trustworthy again. Only after all of that does heightened monitoring confirm the incident is actually over before it's formally closed."
+  },
+  {
+    "external_key": "PBQ-RC-002",
+    "domain": "RC",
+    "subtopic": "Stakeholder Communication",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "matching",
+    "stem": "Match each audience on the left to the report style that BEST fits them on the right.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "L1",
+        "body": "Executive leadership / board",
+        "match_group": "left",
+        "pair_key": "exec"
+      },
+      {
+        "label": "L2",
+        "body": "Technical remediation team",
+        "match_group": "left",
+        "pair_key": "tech"
+      },
+      {
+        "label": "L3",
+        "body": "Regulator or legal counsel",
+        "match_group": "left",
+        "pair_key": "legal"
+      },
+      {
+        "label": "L4",
+        "body": "Affected end users",
+        "match_group": "left",
+        "pair_key": "users"
+      },
+      {
+        "label": "R1",
+        "body": "Business risk and financial or operational impact, framed in plain, non-technical language",
+        "match_group": "right",
+        "pair_key": "exec"
+      },
+      {
+        "label": "R2",
+        "body": "Specific IOCs, affected systems, CVEs, and concrete patch or configuration steps",
+        "match_group": "right",
+        "pair_key": "tech"
+      },
+      {
+        "label": "R3",
+        "body": "A factual, timeline-based account with language reviewed for compliance and liability exposure",
+        "match_group": "right",
+        "pair_key": "legal"
+      },
+      {
+        "label": "R4",
+        "body": "Simple, actionable guidance on what happened and what they personally need to do",
+        "match_group": "right",
+        "pair_key": "users"
+      }
+    ],
+    "explanation": "The same incident produces very different reports depending on who's reading them. Executives need impact and risk framed in business terms, not technical jargon — they're deciding on resources and priorities, not writing the patch. The remediation team needs the opposite: precise technical detail with nothing abstracted away. Regulatory and legal communication is deliberately factual and carefully worded, since it can carry compliance and liability consequences. End users need neither business risk framing nor technical detail — just clear instructions for what affects them and what to do next."
+  },
+  {
+    "external_key": "PBQ-RC-003",
+    "domain": "RC",
+    "subtopic": "Reporting Workflow",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "type": "ordering",
+    "stem": "Drag these steps into the correct order for the incident reporting and escalation workflow.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "1",
+        "body": "Detect and confirm the finding is genuine",
+        "correct_order": 1
+      },
+      {
+        "label": "2",
+        "body": "Determine its severity and potential business impact",
+        "correct_order": 2
+      },
+      {
+        "label": "3",
+        "body": "Notify the appropriate internal stakeholders per the escalation policy",
+        "correct_order": 3
+      },
+      {
+        "label": "4",
+        "body": "Escalate further to legal/compliance if required by policy or regulation",
+        "correct_order": 4
+      },
+      {
+        "label": "5",
+        "body": "Communicate externally to regulators or customers if legally required",
+        "correct_order": 5
+      },
+      {
+        "label": "6",
+        "body": "Document lessons learned and formally close the report",
+        "correct_order": 6
+      }
+    ],
+    "explanation": "Reporting has to follow confirmation and triage before anyone outside the immediate team gets pulled in — false alarms escalated prematurely burn credibility and stakeholder time. Once severity and impact are understood, internal notification follows the org's own escalation policy. Only findings that actually meet a legal or regulatory threshold move to legal/compliance and then to external notification, since notifying regulators or customers is often a one-way, legally consequential action. Closing the loop with documented lessons learned is what keeps the same gap from causing a repeat incident."
   }
 ]
