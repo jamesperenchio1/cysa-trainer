@@ -44,7 +44,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "Lack of per-session, context-aware authorization decisions (device posture, location, behavior) beyond initial authentication",
+        "body": "Lack of per-session, context-aware authorization beyond initial authentication.",
         "correct": true
       },
       {
@@ -115,7 +115,7 @@
       },
       {
         "label": "B",
-        "body": "It maintains consistent policy enforcement as workloads are created, destroyed, and rescheduled.",
+        "body": "It maintains consistent enforcement as workloads are created and rescheduled.",
         "correct": true
       },
       {
@@ -280,7 +280,7 @@
       },
       {
         "label": "B",
-        "body": "Traditional file-based/signature antivirus scanning that inspects files written to disk will not see this activity.",
+        "body": "Traditional signature antivirus scanning of disk files will not see this in-memory activity.",
         "correct": true
       },
       {
@@ -313,7 +313,7 @@
       },
       {
         "label": "B",
-        "body": "Geographic/network-origin anomaly relative to the user's established baseline is a strong indicator on its own.",
+        "body": "A geographic anomaly against the user's established baseline is a strong indicator on its own.",
         "correct": true
       },
       {
@@ -577,7 +577,7 @@
       },
       {
         "label": "B",
-        "body": "It carries very high confidence, since no legitimate process or user has any valid reason to interact with a resource that serves no real business function",
+        "body": "It carries very high confidence, since no legitimate process has any reason to touch it at all.",
         "correct": true
       },
       {
@@ -610,7 +610,7 @@
       },
       {
         "label": "B",
-        "body": "The B/2 report, because it reflects both a track record of source reliability and independent corroboration of the specific claim.",
+        "body": "The B/2 report, reflecting both source reliability and independent corroboration.",
         "correct": true
       },
       {
@@ -676,7 +676,7 @@
       },
       {
         "label": "B",
-        "body": "Auto-actioning unvalidated IOCs risks false-positive disruption with no defense-in-depth if the feed misses something.",
+        "body": "Auto-actioning unvalidated IOCs risks false-positive disruption with no defense-in-depth backup.",
         "correct": true
       },
       {
@@ -742,7 +742,7 @@
       },
       {
         "label": "B",
-        "body": "Verify that the actual observed behavior (specific servers touched, commands run, data accessed) matches what the approved change actually authorized.",
+        "body": "Verify the actual observed behavior matches what the approved change actually authorized.",
         "correct": true
       },
       {
@@ -841,7 +841,7 @@
       },
       {
         "label": "B",
-        "body": "The uncredentialed scan flagged banner-based guesses that credentialed scanning ruled out with real version data.",
+        "body": "The uncredentialed scan flagged banner guesses that credentialed scanning later ruled out.",
         "correct": true
       },
       {
@@ -973,7 +973,7 @@
       },
       {
         "label": "B",
-        "body": "Assumptions about an asset class's risk profile (based on function rather than actual firmware/exposed services) should not drive scan-scope exclusions.",
+        "body": "Assumptions about an asset's risk based on function, not actual exposure, shouldn't drive scan exclusions.",
         "correct": true
       },
       {
@@ -1039,7 +1039,7 @@
       },
       {
         "label": "B",
-        "body": "AC:H means successful exploitation depends on conditions largely outside the attacker's control making reliable exploitation harder.",
+        "body": "AC:H means exploitation depends on conditions outside the attacker's control, making it harder.",
         "correct": true
       },
       {
@@ -1242,7 +1242,7 @@
       },
       {
         "label": "C",
-        "body": "Manually lowering the recorded CVSS score in the vulnerability management tool so the finding no longer appears as critical in reports",
+        "body": "Manually lowering the recorded CVSS score so it no longer appears critical in reports",
         "correct": true
       },
       {
@@ -1270,7 +1270,7 @@
       },
       {
         "label": "B",
-        "body": "Submit the compensating control as part of a formal exception/attestation process with the ASV or acquiring bank as PCI DSS requires.",
+        "body": "Submit the compensating control through the formal ASV/acquiring-bank exception process PCI DSS requires.",
         "correct": true
       },
       {
@@ -1600,17 +1600,17 @@
       },
       {
         "label": "B",
-        "body": "Exploitation for Client Execution",
+        "body": "Exploitation for Client Execution, since a client application ran attacker code",
         "correct": false
       },
       {
         "label": "C",
-        "body": "Command and Control",
+        "body": "Command and Control, since the adversary maintained a C2 channel",
         "correct": false
       },
       {
         "label": "D",
-        "body": "Impact",
+        "body": "Impact, since the adversary directly disrupted business operations",
         "correct": false
       }
     ],
@@ -1666,7 +1666,7 @@
       },
       {
         "label": "B",
-        "body": "Analysis must be performed against a working COPY of the image (verified against the original hash), never the original evidence drive or the sole master image.",
+        "body": "Analysis must use a verified working copy, never the original evidence drive or master image.",
         "correct": true
       },
       {
@@ -1694,7 +1694,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "Static malware analysis",
+        "body": "Static malware analysis of the binary's code without execution",
         "correct": false
       },
       {
@@ -1704,12 +1704,12 @@
       },
       {
         "label": "C",
-        "body": "Chain of custody documentation",
+        "body": "Chain of custody documentation for the collected evidence",
         "correct": false
       },
       {
         "label": "D",
-        "body": "Order of volatility assessment",
+        "body": "Order of volatility assessment for evidence collection priority",
         "correct": false
       }
     ],
@@ -1765,7 +1765,7 @@
       },
       {
         "label": "B",
-        "body": "Coordination with relevant government/sector-specific agencies given the critical infrastructure and suspected nation-state involvement.",
+        "body": "Coordination with government/sector agencies given the critical infrastructure and nation-state involvement.",
         "correct": true
       },
       {
@@ -1798,7 +1798,7 @@
       },
       {
         "label": "B",
-        "body": "To attempt to preserve attorney-client privilege / work-product protection over sensitive investigative findings.",
+        "body": "To attempt to preserve attorney-client privilege over sensitive investigative findings.",
         "correct": true
       },
       {
@@ -1897,7 +1897,7 @@
       },
       {
         "label": "B",
-        "body": "Improved detection capability is very likely surfacing incidents that were previously going undetected entirely (reflected in the old, much longer dwell time).",
+        "body": "Improved detection is very likely surfacing incidents that were previously going undetected entirely.",
         "correct": true
       },
       {
@@ -2029,7 +2029,7 @@
       },
       {
         "label": "B",
-        "body": "Because clearly distinguishing confirmed facts from working hypotheses is essential for accurate decision-making by readers.",
+        "body": "Because distinguishing confirmed facts from working hypotheses is essential for readers.",
         "correct": true
       },
       {
@@ -2128,7 +2128,7 @@
       },
       {
         "label": "B",
-        "body": "Generally, from the point the organization has enough information to reasonably conclude a qualifying breach (as legally defined) has actually occurred.",
+        "body": "Generally, once the organization has enough information to conclude a qualifying breach occurred.",
         "correct": true
       },
       {
@@ -2194,7 +2194,7 @@
       },
       {
         "label": "B",
-        "body": "The Temporal metrics reflect that the SITUATION around the vulnerability has matured favorably (a fix now exists, confirmed details are known).",
+        "body": "Temporal metrics reflect the vulnerability's situation maturing favorably as a fix and details emerge.",
         "correct": true
       },
       {
@@ -2260,7 +2260,7 @@
       },
       {
         "label": "B",
-        "body": "If a system can reach a de-tokenization function that could reveal raw cardholder data, it may still fall within PCI DSS scope depending on how tightly that access is controlled.",
+        "body": "A reachable de-tokenization function may still bring the system into PCI DSS scope.",
         "correct": true
       },
       {
@@ -2359,7 +2359,7 @@
       },
       {
         "label": "B",
-        "body": "MD5 is retained largely for backward compatibility/cross-referencing with older case records, tools, and legal precedent that used MD5.",
+        "body": "MD5 is retained mainly for compatibility with older case records, tools, and legal precedent.",
         "correct": true
       },
       {
@@ -2524,7 +2524,7 @@
       },
       {
         "label": "B",
-        "body": "The tuning traded a high-noise, high-recall rule for a lower-noise rule whose new threshold (distinct-IP count) happened to sit just above the attacker's actual behavior.",
+        "body": "The new threshold happened to sit just above the attacker's actual observed behavior.",
         "correct": true
       },
       {
@@ -2628,7 +2628,7 @@
       },
       {
         "label": "C",
-        "body": "Verify independently with IT/the script's actual owner whether this script was authorized and expected to run on this host at this time, before treating the user's self-report as sufficient.",
+        "body": "Verify independently with IT or the script owner before treating the user's self-report as sufficient.",
         "correct": true
       },
       {
@@ -2656,7 +2656,7 @@
       },
       {
         "label": "B",
-        "body": "DNS tunneling — data or C2 traffic is likely being encoded into DNS query/response payloads to evade egress controls that only inspect ports other than 53.",
+        "body": "DNS tunneling, encoding C2 or exfil data into query/response payloads to evade port-based egress controls.",
         "correct": true
       },
       {
@@ -2689,7 +2689,7 @@
       },
       {
         "label": "B",
-        "body": "Unauthenticated scans can only assess what's externally visible on the network (open ports, banners, exposed services) and generally cannot enumerate locally-installed package versions.",
+        "body": "Unauthenticated scans only see what's externally visible and can't enumerate local package versions.",
         "correct": true
       },
       {
@@ -2930,7 +2930,7 @@
       },
       {
         "label": "D",
-        "body": "The fix is simply to increase the font size and add color coding, since the content itself is already appropriate for a board audience",
+        "body": "The fix is simply to increase the font size and add color coding.",
         "correct": false
       }
     ],
@@ -3184,7 +3184,7 @@
       },
       {
         "label": "B",
-        "body": "Leave TLS 1.0 enabled indefinitely with no further action, since the POS terminals require it and business continuity always takes precedence over security guidance",
+        "body": "Leave TLS 1.0 enabled indefinitely with no further action.",
         "correct": false
       },
       {
@@ -3344,7 +3344,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "Immediately block the hash across all endpoints, since any threat intelligence indicator related to ransomware should always be treated as an automatic block regardless of confidence level",
+        "body": "Immediately block the hash across all endpoints.",
         "correct": false
       },
       {
@@ -3415,7 +3415,7 @@
       },
       {
         "label": "B",
-        "body": "'Unreachable' and 'no vulnerabilities found' are fundamentally different outcomes, and treating them as equivalent creates a dangerous false sense of security.",
+        "body": "'Unreachable' and 'no vulnerabilities found' are different outcomes, and conflating them is risky.",
         "correct": true
       },
       {
@@ -3547,7 +3547,7 @@
       },
       {
         "label": "B",
-        "body": "The eradication phase likely addressed the visible symptoms (the binary and known persistence mechanisms) without fully identifying and closing the actual initial access vector or root cause.",
+        "body": "Eradication likely addressed visible symptoms without closing the actual initial access vector.",
         "correct": true
       },
       {
@@ -3613,7 +3613,7 @@
       },
       {
         "label": "B",
-        "body": "An attacker is likely using port 443 to disguise non-TLS traffic specifically because that port is commonly allowed through egress filtering without deep inspection.",
+        "body": "The attacker is likely disguising non-TLS traffic on 443 since that port is rarely deeply inspected.",
         "correct": true
       },
       {
@@ -3679,7 +3679,7 @@
       },
       {
         "label": "B",
-        "body": "This violates the principle of least privilege.",
+        "body": "This violates least privilege — a compromise inherits full admin rights instead of a narrow, scoped set.",
         "correct": true
       },
       {
@@ -3778,7 +3778,7 @@
       },
       {
         "label": "B",
-        "body": "The colleague is correct.",
+        "body": "The colleague is correct: Delivery and Exploitation are distinct Kill Chain stages, and this stayed at Delivery.",
         "correct": true
       },
       {
@@ -3844,7 +3844,7 @@
       },
       {
         "label": "B",
-        "body": "A narrow definitional threshold (requiring confirmed exfiltration) can make a headline metric technically accurate while omitting security-relevant activity that stakeholders would reasonably want visibility into.",
+        "body": "A narrow definition can make a metric technically accurate while hiding relevant activity.",
         "correct": true
       },
       {
@@ -3943,7 +3943,7 @@
       },
       {
         "label": "B",
-        "body": "Automated response playbooks need safeguards.",
+        "body": "Automated response playbooks need safeguards like allowlisting or human review for high-impact actions.",
         "correct": true
       },
       {
@@ -4108,7 +4108,7 @@
       },
       {
         "label": "B",
-        "body": "SQL injection and SSRF are different vulnerability classes with different root causes: SQL injection sanitization addresses how input is used in a DATABASE query.",
+        "body": "SQL injection and SSRF are different vulnerability classes with different root causes entirely.",
         "correct": true
       },
       {
@@ -4207,7 +4207,7 @@
       },
       {
         "label": "B",
-        "body": "Not necessarily correct.",
+        "body": "Not necessarily correct — unauthorized VIEW access alone can still be a reportable impermissible use.",
         "correct": true
       },
       {
@@ -4235,7 +4235,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "The metric is an excellent and sufficient way to demonstrate program improvement, since more detections always directly correlate with better security outcomes",
+        "body": "The metric is an excellent and sufficient way to demonstrate program improvement.",
         "correct": false
       },
       {
@@ -4334,12 +4334,12 @@
     "choices": [
       {
         "label": "A",
-        "body": "IoT devices being internally managed makes isolation unnecessary; only genuinely untrusted external traffic like guest Wi-Fi warrants segmentation",
+        "body": "IoT devices being internally managed makes isolation unnecessary.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "IoT devices frequently run outdated, unpatchable, or vendor-locked firmware with weak security controls, making them attractive and often easy initial-access or pivot targets.",
+        "body": "IoT devices often run outdated, unpatchable firmware, making them easy pivot targets.",
         "correct": true
       },
       {
@@ -4438,7 +4438,7 @@
       },
       {
         "label": "B",
-        "body": "Summing scores conflates volume with severity.",
+        "body": "Summing scores conflates volume with severity, letting many minor findings outrank a real critical one.",
         "correct": true
       },
       {
@@ -4466,7 +4466,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "Immediately declare a formal incident and begin full containment procedures, since any ambiguity should always be resolved by assuming the worst-case scenario without further investigation",
+        "body": "Immediately declare a formal incident and begin full containment procedures.",
         "correct": false
       },
       {
@@ -4476,7 +4476,7 @@
       },
       {
         "label": "C",
-        "body": "Perform rapid preliminary investigation and validation.",
+        "body": "Perform a rapid preliminary investigation before committing to full declaration or dismissal.",
         "correct": true
       },
       {
@@ -4565,7 +4565,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "The data processor bears the sole and complete notification obligation to the supervisory authority, with no role for the data controller",
+        "body": "The processor bears the sole and complete notification obligation, with no role for the controller.",
         "correct": false
       },
       {
@@ -4580,7 +4580,7 @@
       },
       {
         "label": "D",
-        "body": "The notification obligation exclusively depends on which party's physical infrastructure was compromised, regardless of controller/processor role",
+        "body": "The obligation exclusively depends on whose physical infrastructure was compromised.",
         "correct": false
       }
     ],
@@ -4697,12 +4697,12 @@
     "choices": [
       {
         "label": "A",
-        "body": "Always enable full intrusive scanning against production systems with no additional precautions, since detection completeness should always override any operational risk consideration",
+        "body": "Always enable full intrusive scanning against production systems with no additional precautions.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "Continue using non-intrusive scans on production indefinitely and simply accept that some vulnerability classes will never be directly verified, since intrusive testing is never worth the operational risk",
+        "body": "Continue using non-intrusive scans on production indefinitely and simply accept that some vulnerability classes will never be directly verified.",
         "correct": false
       },
       {
@@ -4730,12 +4730,12 @@
     "choices": [
       {
         "label": "A",
-        "body": "Whether the application also validates all XML against a schema, which is the only effective XXE mitigation and makes disabling DOCTYPE declarations unnecessary",
+        "body": "Whether the application also validates all XML against a schema.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "Whether external entity resolution and DTD (Document Type Definition) processing are ALSO disabled at the parser configuration level independent of DOCTYPE blocking.",
+        "body": "Whether external entity and DTD processing are also disabled, independent of DOCTYPE blocking.",
         "correct": true
       },
       {
@@ -4768,7 +4768,7 @@
       },
       {
         "label": "B",
-        "body": "Legal/regulatory considerations, law enforcement guidance, insurance policy terms and requirements, and executive/board risk tolerance and business continuity priorities.",
+        "body": "Legal, law enforcement, insurance terms, and executive risk tolerance and continuity priorities.",
         "correct": true
       },
       {
@@ -4796,7 +4796,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "Fully fair — Prefetch files contain no timestamp information whatsoever and are therefore useless for establishing a timeline",
+        "body": "Fully fair — Prefetch files contain no timestamp information whatsoever.",
         "correct": false
       },
       {
@@ -4806,7 +4806,7 @@
       },
       {
         "label": "C",
-        "body": "Prefetch files are exclusively used for tracking network connections and have no relationship to application execution at all",
+        "body": "Prefetch files are exclusively used for tracking network connections.",
         "correct": false
       },
       {
@@ -4834,7 +4834,7 @@
       },
       {
         "label": "B",
-        "body": "Blending two populations with fundamentally different remediation processes and constraints into one average produces a number that doesn't represent EITHER population accurately.",
+        "body": "Blending two populations with different processes into one average misrepresents both of them.",
         "correct": true
       },
       {
@@ -4900,7 +4900,7 @@
       },
       {
         "label": "B",
-        "body": "Internal network/host discovery scanning targeting SMB (port 445), likely representing either reconnaissance ahead of lateral movement or an active worm-like self-propagation attempt.",
+        "body": "Internal SMB scanning, likely reconnaissance ahead of lateral movement or worm-like spread.",
         "correct": true
       },
       {
@@ -4961,12 +4961,12 @@
     "choices": [
       {
         "label": "A",
-        "body": "The team should bypass the vendor's validation process and apply the patch directly to meet the SLA, since regulatory constraints on medical devices are subordinate to internal remediation SLA policy",
+        "body": "The team should bypass the vendor's validation process and apply the patch directly to meet the SLA.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "This represents a legitimate SLA exception scenario, not a policy failure.",
+        "body": "This is a legitimate SLA exception scenario given the regulatory constraint, not a policy failure.",
         "correct": true
       },
       {
@@ -5060,7 +5060,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "Present the technical vulnerability class names exactly as written, since audit committee members should be expected to research unfamiliar technical terms independently",
+        "body": "Present the technical vulnerability class names exactly as written.",
         "correct": false
       },
       {
@@ -5070,7 +5070,7 @@
       },
       {
         "label": "C",
-        "body": "Omit any mention of the vulnerabilities entirely from committee-level reporting, since technical findings are never appropriate for a non-technical audience",
+        "body": "Omit any mention of the vulnerabilities entirely from committee-level reporting.",
         "correct": false
       },
       {
@@ -5225,17 +5225,17 @@
     "choices": [
       {
         "label": "A",
-        "body": "The security team's retest must be inaccurate, since modern JavaScript frameworks make XSS completely impossible under all circumstances by design",
+        "body": "The security team's retest must be inaccurate.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "Modern framework auto-escaping typically protects standard data-binding contexts (like inserting text into an element), but doesn't automatically cover every rendering context.",
+        "body": "Modern auto-escaping protects standard data-binding, but not every rendering context.",
         "correct": true
       },
       {
         "label": "C",
-        "body": "This can only mean the vulnerability scanner produced a false positive, since framework auto-escaping is mathematically guaranteed to prevent all XSS variants",
+        "body": "This can only mean the vulnerability scanner produced a false positive.",
         "correct": false
       },
       {
@@ -5301,12 +5301,12 @@
       },
       {
         "label": "C",
-        "body": "Bash history is only recorded for root-level sessions, so a compromised standard user account would never generate any history regardless of attacker action",
+        "body": "Bash history is only recorded for root-level sessions.",
         "correct": false
       },
       {
         "label": "D",
-        "body": "This gap indicates the file modification timestamps and network logs must be inaccurate, since bash history is the only reliable indicator of command execution",
+        "body": "This gap indicates the file modification timestamps and network logs must be inaccurate.",
         "correct": false
       }
     ],
@@ -5329,7 +5329,7 @@
       },
       {
         "label": "B",
-        "body": "A declining click rate on REPEATED, recognizable templates may reflect template memorization/pattern recognition rather than genuinely improved ability to recognize novel phishing indicators in general.",
+        "body": "A declining rate on repeated templates may reflect memorization, not real improved recognition.",
         "correct": true
       },
       {
@@ -5357,7 +5357,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "The conclusion is fully correct — a binary that fails to resolve a domain has definitively proven it has no capability to cause harm under any circumstance",
+        "body": "The conclusion is fully correct.",
         "correct": false
       },
       {
@@ -5527,7 +5527,7 @@
       },
       {
         "label": "B",
-        "body": "Missing role redundancy/succession planning.",
+        "body": "This shows missing role redundancy — no defined backup for when the primary is unreachable.",
         "correct": true
       },
       {
@@ -5560,7 +5560,7 @@
       },
       {
         "label": "B",
-        "body": "The critique has merit.",
+        "body": "The critique has merit, since it assumes earlier-stage detections are perfectly effective, which is unrealistic.",
         "correct": true
       },
       {
@@ -5758,7 +5758,7 @@
       },
       {
         "label": "B",
-        "body": "Integrate post-incident recommendations directly into the organization's existing project/ticket tracking system with assigned owners, due dates, and periodic status review.",
+        "body": "Integrate recommendations into the existing ticket system with owners, due dates, and review.",
         "correct": true
       },
       {
@@ -5791,7 +5791,7 @@
       },
       {
         "label": "B",
-        "body": "Missing internal stakeholder communication planning.",
+        "body": "This shows missing internal stakeholder communication planning for customer-facing staff.",
         "correct": true
       },
       {
@@ -5801,7 +5801,7 @@
       },
       {
         "label": "D",
-        "body": "The support team should immediately confirm to all customers that their data was compromised, regardless of whether this has actually been established",
+        "body": "The support team should immediately confirm to all customers that their data was compromised.",
         "correct": false
       }
     ],
@@ -5824,7 +5824,7 @@
       },
       {
         "label": "B",
-        "body": "DNS infrastructure is a high-value target.",
+        "body": "DNS infrastructure is a high-value target that shouldn't share a segment with riskier user traffic.",
         "correct": true
       },
       {
@@ -5885,7 +5885,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "The reasoning is fully sound; since the token is delivered via a private channel (email), its predictability is irrelevant to the overall security of the reset flow",
+        "body": "The reasoning is sound, since email delivery makes token predictability irrelevant.",
         "correct": false
       },
       {
@@ -5900,7 +5900,7 @@
       },
       {
         "label": "D",
-        "body": "Password reset tokens are never a meaningful attack surface regardless of their construction, since password reset is a rarely-used feature",
+        "body": "Password reset tokens are never a meaningful attack surface regardless of construction.",
         "correct": false
       }
     ],
@@ -5918,7 +5918,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "This is fully acceptable and represents no meaningful gap, since monthly scanning satisfies any reasonable vulnerability management standard for all assets regardless of provisioning timing",
+        "body": "This is fully acceptable and represents no meaningful gap.",
         "correct": false
       },
       {
@@ -5956,7 +5956,7 @@
       },
       {
         "label": "B",
-        "body": "Not necessarily — precise, technically-accurate language that describes exactly what evidence shows (an observed outbound transfer) without overstating certainty about downstream consequences is a legitimate and common practice.",
+        "body": "Not necessarily — precise language describing only what evidence shows is a legitimate practice.",
         "correct": true
       },
       {
@@ -5966,7 +5966,7 @@
       },
       {
         "label": "D",
-        "body": "The IR team should refuse this request entirely and report only their own preferred terminology regardless of legal counsel's input, since legal counsel has no legitimate role in reviewing IR report language",
+        "body": "The IR team should refuse this request entirely and report only their own preferred terminology regardless of legal counsel's input.",
         "correct": false
       }
     ],
@@ -6154,7 +6154,7 @@
       },
       {
         "label": "B",
-        "body": "CVSS scores (and the underlying understanding of a vulnerability's exploitability) can and do change after initial publication as more information becomes available.",
+        "body": "CVSS scores can and do change after publication as more exploit information becomes available.",
         "correct": true
       },
       {
@@ -6187,7 +6187,7 @@
       },
       {
         "label": "B",
-        "body": "Rate limiting addresses a different risk category (availability and abuse prevention) than the other controls mentioned (input validation, authentication, injection prevention).",
+        "body": "Rate limiting addresses a different risk category than input validation or authentication controls.",
         "correct": true
       },
       {
@@ -6286,17 +6286,17 @@
       },
       {
         "label": "B",
-        "body": "This is a geofencing/targeting technique.",
+        "body": "This is a geofencing technique the malware uses to target or avoid specific regions.",
         "correct": true
       },
       {
         "label": "C",
-        "body": "Locale and keyboard layout checks are a standard, required component of all software regardless of malicious intent and carry no analytical significance",
+        "body": "Locale and keyboard checks are a standard, required component of all software.",
         "correct": false
       },
       {
         "label": "D",
-        "body": "This behavior indicates the sample is a benign localization testing tool rather than malware, regardless of any other indicators present",
+        "body": "This behavior indicates the sample is a benign localization testing tool.",
         "correct": false
       }
     ],
@@ -6352,12 +6352,12 @@
       },
       {
         "label": "B",
-        "body": "Compliance audits typically verify that a program's PROCESSES exist and are documented/followed as designed (policies, scan schedules, evidence of remediation tracking).",
+        "body": "Compliance audits typically verify that documented processes exist and are being followed.",
         "correct": true
       },
       {
         "label": "C",
-        "body": "The compliance audit result must have been fraudulent, since no legitimate audit process could produce a passing result alongside a genuine vulnerability",
+        "body": "The compliance audit result must have been fraudulent.",
         "correct": false
       },
       {
@@ -6446,12 +6446,12 @@
     "choices": [
       {
         "label": "A",
-        "body": "This is always the correct action during any active incident, since sharing threat information publicly as quickly as possible is unconditionally the top priority regardless of other considerations",
+        "body": "This is always the correct action during any active incident.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "This is problematic even with good intentions.",
+        "body": "This is problematic even with good intentions — it can tip off the attacker and bypass disclosure protocols.",
         "correct": true
       },
       {
@@ -6484,7 +6484,7 @@
       },
       {
         "label": "B",
-        "body": "Provide the necessary context alongside the raw trend.",
+        "body": "Provide context alongside the raw trend, like whether it reflects new scan coverage, not just risk.",
         "correct": true
       },
       {
@@ -6578,12 +6578,12 @@
     "choices": [
       {
         "label": "A",
-        "body": "This behavior should be considered fully acceptable and requires no further investigation, since after-hours scanning already captures a complete result",
+        "body": "This behavior should be considered fully acceptable and requires no further investigation.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "This reveals that a host-level control (rate-limiting/blocking scan traffic) is inadvertently causing INCOMPLETE vulnerability visibility during a significant portion of the day.",
+        "body": "A host-level control is inadvertently causing incomplete visibility for part of the day.",
         "correct": true
       },
       {
@@ -6611,17 +6611,17 @@
     "choices": [
       {
         "label": "A",
-        "body": "Yes, completely — Attack Vector is the only metric that matters for comparing vulnerability severity, and Network vector always outranks Local vector regardless of any other factor",
+        "body": "Yes, completely — Attack Vector is the only metric that matters for comparing severity.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "No — Attack Vector and User Interaction are separate, independent metrics that combine (along with Attack Complexity and Privileges Required) into the overall exploitability assessment.",
+        "body": "No — Attack Vector and User Interaction are separate metrics within the exploitability score.",
         "correct": true
       },
       {
         "label": "C",
-        "body": "This comparison is meaningless, since CVSS never considers Attack Vector and User Interaction as related metrics in the same scoring calculation",
+        "body": "This comparison is meaningless, since CVSS never treats these as related metrics.",
         "correct": false
       },
       {
@@ -6654,12 +6654,12 @@
       },
       {
         "label": "C",
-        "body": "Network isolation is functionally identical to powering off a system, so this decision has no meaningful practical difference either way",
+        "body": "Network isolation is functionally identical to powering off a system.",
         "correct": false
       },
       {
         "label": "D",
-        "body": "This decision was inappropriate specifically because runbooks should never be deviated from once written, regardless of new information or better available techniques",
+        "body": "This decision was inappropriate specifically because runbooks should never be deviated from once written.",
         "correct": false
       }
     ],
@@ -6748,12 +6748,12 @@
       },
       {
         "label": "B",
-        "body": "This is a 'password spraying' attack.",
+        "body": "This is password spraying: one common password tried across many accounts to dodge lockout thresholds.",
         "correct": true
       },
       {
         "label": "C",
-        "body": "This pattern indicates a credential stuffing attack, which specifically requires the attacker to already possess valid password hashes obtained from a prior breach",
+        "body": "This pattern indicates a credential stuffing attack.",
         "correct": false
       },
       {
@@ -6842,22 +6842,22 @@
     "choices": [
       {
         "label": "A",
-        "body": "The suggestion should always be accepted immediately regardless of business context, since any available patch for a Critical vulnerability must be applied the instant it exists with zero regard for operational timing",
+        "body": "The suggestion should always be accepted immediately regardless of business context.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "Weigh the vulnerability's actual exploitability and exposure against the real cost of a disruptive change now.",
+        "body": "Weigh the vulnerability's real exploitability against the actual cost of disrupting the business now.",
         "correct": true
       },
       {
         "label": "C",
-        "body": "The patch should never be applied outside of a previously-scheduled maintenance window under any circumstances, regardless of the vulnerability's actual severity or exploitation status",
+        "body": "The patch should never be applied outside of a previously-scheduled maintenance window under any circumstances.",
         "correct": false
       },
       {
         "label": "D",
-        "body": "This decision should be made unilaterally by the vulnerability management team without any input from business stakeholders, since patching timing is purely a technical matter",
+        "body": "This decision should be made unilaterally by the vulnerability management team without any input from business stakeholders.",
         "correct": false
       }
     ],
@@ -6941,7 +6941,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "Honeytoken alerts should be treated with the SAME confidence level as any other anomaly-based alert, with no meaningful difference in reliability",
+        "body": "Honeytoken alerts should be treated with the SAME confidence level as any other anomaly-based alert.",
         "correct": false
       },
       {
@@ -7012,7 +7012,7 @@
       },
       {
         "label": "B",
-        "body": "Standard vulnerability scanners often rely on techniques (banner grabbing, known CVE-to-version matching, standard OS/service fingerprinting) that assume common protocols and well-documented software stacks.",
+        "body": "Standard scanners rely on banner grabbing and version matching that assumes common protocols.",
         "correct": true
       },
       {
@@ -7040,7 +7040,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "This tracking approach is fully sound; closing a ticket based on majority remediation success accurately represents the organization's actual vulnerability exposure",
+        "body": "This tracking approach is fully sound and accurately represents actual exposure.",
         "correct": false
       },
       {
@@ -7055,7 +7055,7 @@
       },
       {
         "label": "D",
-        "body": "This tracking approach should be changed to track by department instead of by ticket or by individual asset, which would fully resolve the underlying issue",
+        "body": "The fix is to track by department instead of by ticket or individual asset.",
         "correct": false
       }
     ],
@@ -7177,7 +7177,7 @@
       },
       {
         "label": "B",
-        "body": "JA3 fingerprints the CLIENT's TLS handshake negotiation parameters (cipher suites, extensions, and their specific order) BEFORE encryption is established.",
+        "body": "JA3 fingerprints the client's TLS handshake parameters before encryption is established.",
         "correct": true
       },
       {
@@ -7337,7 +7337,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "Resubmit the identical request unchanged, since 'improving security posture' should be considered self-evidently sufficient justification for any financial decision-maker",
+        "body": "Resubmit the identical request unchanged.",
         "correct": false
       },
       {
@@ -7403,12 +7403,12 @@
     "choices": [
       {
         "label": "A",
-        "body": "This is coincidental and unrelated to any potential attacker activity; system clocks change for many benign reasons with no forensic significance whatsoever",
+        "body": "This is coincidental and unrelated to any potential attacker activity.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "Clock manipulation is a known anti-forensic technique.",
+        "body": "Clock manipulation is a known anti-forensic technique used to obscure log timelines.",
         "correct": true
       },
       {
@@ -7418,7 +7418,7 @@
       },
       {
         "label": "D",
-        "body": "This can only be explained by a legitimate NTP (Network Time Protocol) synchronization event, which always and exclusively causes large multi-hour time changes",
+        "body": "This can only be explained by a legitimate NTP (Network Time Protocol) synchronization event.",
         "correct": false
       }
     ],
@@ -7436,12 +7436,12 @@
     "choices": [
       {
         "label": "A",
-        "body": "Emergency patches should never be applied under any circumstances, even for actively-exploited zero-day vulnerabilities, given the risk of unintended side effects",
+        "body": "Emergency patches should never be applied under any circumstances.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "Emergency, expedited patching for active zero-day exploitation is often the right call despite reduced testing time, but this scenario illustrates the genuine tradeoff involved.",
+        "body": "Expedited patching is often the right call, but this illustrates the real tradeoff involved.",
         "correct": true
       },
       {
@@ -7451,7 +7451,7 @@
       },
       {
         "label": "D",
-        "body": "Unintended side effects from emergency patches are impossible to anticipate or plan for in any way, making post-patch monitoring pointless",
+        "body": "Unintended side effects are impossible to anticipate or plan for in any way.",
         "correct": false
       }
     ],
@@ -7507,7 +7507,7 @@
       },
       {
         "label": "B",
-        "body": "Missing lifecycle management for temporary/emergency changes.",
+        "body": "This is missing lifecycle management for temporary changes, which need a defined expiration or review step.",
         "correct": true
       },
       {
@@ -7573,7 +7573,7 @@
       },
       {
         "label": "B",
-        "body": "The industry/threat-actor-specific hypothesis should generally be prioritized.",
+        "body": "The industry/threat-actor-specific hypothesis should generally be prioritized, since it reflects who's actually likely to attack.",
         "correct": true
       },
       {
@@ -7583,7 +7583,7 @@
       },
       {
         "label": "D",
-        "body": "Both hypotheses should always be given exactly equal priority regardless of any distinguishing threat intelligence context, since prioritization itself is not a legitimate part of threat hunting methodology",
+        "body": "Both hypotheses should always be given exactly equal priority regardless of any distinguishing threat intelligence context.",
         "correct": false
       }
     ],
@@ -7606,7 +7606,7 @@
       },
       {
         "label": "B",
-        "body": "Incorrectly parsed or dropped log fields mean that correlation rules, alerts, and searches relying on those specific fields may silently fail to trigger or return incomplete results.",
+        "body": "Incorrectly parsed log fields can make correlation rules and alerts silently fail or miss data.",
         "correct": true
       },
       {
@@ -7700,12 +7700,12 @@
     "choices": [
       {
         "label": "A",
-        "body": "The internal team should always proceed immediately with full remediation regardless of insurance policy requirements, since technical urgency should override any contractual/insurance consideration in every case",
+        "body": "The internal team should always proceed immediately with full remediation regardless of insurance policy requirements.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "The team should take immediate, minimally-invasive containment actions that don't jeopardize evidence or coverage (isolating affected systems, preserving logs) while URGENTLY engaging the insurer and approved vendor in parallel.",
+        "body": "Take immediate, minimally-invasive containment steps while urgently engaging the insurer in parallel.",
         "correct": true
       },
       {
@@ -7748,7 +7748,7 @@
       },
       {
         "label": "D",
-        "body": "The correct fix is to treat this exclusively as a HIPAA matter and disregard PCI DSS entirely, since patient health information is inherently more sensitive than payment card data",
+        "body": "The correct fix is to treat this exclusively as a HIPAA matter and disregard PCI DSS entirely.",
         "correct": false
       }
     ],
@@ -7766,12 +7766,12 @@
     "choices": [
       {
         "label": "A",
-        "body": "Blocklisting known domains is fully sufficient, since DGA malware can only ever generate a small, finite, and fully predictable list of domains that can be comprehensively blocklisted in advance",
+        "body": "Blocklisting known domains is fully sufficient.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "DGA-based malware generates a large, constantly-rotating pool of possible domains, making it impractical to maintain a comprehensive, up-to-date blocklist of every possible domain the algorithm might generate.",
+        "body": "DGA malware generates a large rotating domain pool, making blocklists impractical to keep current.",
         "correct": true
       },
       {
@@ -7799,17 +7799,17 @@
     "choices": [
       {
         "label": "A",
-        "body": "The vulnerability should be prioritized identically to an actively-used vulnerable service, since CVSS Base Score alone should always be the sole determinant of remediation order with no consideration of actual usage",
+        "body": "The vulnerability should be prioritized identically to an actively-used vulnerable service.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "The Base score is still accurate, but disabling the unused protocol is the simplest full remediation.",
+        "body": "The Base score is still accurate, but disabling the unused protocol is simpler than patching it.",
         "correct": true
       },
       {
         "label": "C",
-        "body": "This finding should be permanently closed and untracked, since a lack of legitimate client connections in the past year definitively proves the service can never be exploited going forward",
+        "body": "This finding should be permanently closed and untracked.",
         "correct": false
       },
       {
@@ -7842,12 +7842,12 @@
       },
       {
         "label": "C",
-        "body": "The correct fix is to eliminate all backup and disaster recovery processes entirely, since they inherently and unavoidably conflict with vulnerability remediation efforts",
+        "body": "The correct fix is to eliminate all backup and disaster recovery processes entirely.",
         "correct": false
       },
       {
         "label": "D",
-        "body": "This reappearance should be dismissed as a duplicate finding and closed without investigation, since the vulnerability was already confirmed remediated once previously",
+        "body": "This reappearance should be dismissed as a duplicate finding and closed without investigation.",
         "correct": false
       }
     ],
@@ -7875,7 +7875,7 @@
       },
       {
         "label": "C",
-        "body": "Cloud provider activity logs can only ever show failed access attempts, never successful ones, making them fundamentally unsuitable for this type of investigation",
+        "body": "Cloud provider activity logs can only ever show failed access attempts, never successful ones.",
         "correct": false
       },
       {
@@ -7931,7 +7931,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "There is no meaningful gap; port/protocol-based rules provide identical protection to application-layer rules regardless of the specific traffic actually traversing that port",
+        "body": "There is no meaningful gap; port-based rules provide identical protection.",
         "correct": false
       },
       {
@@ -7946,7 +7946,7 @@
       },
       {
         "label": "D",
-        "body": "NGFW application-layer inspection features are purely a marketing distinction with no actual technical difference from traditional port-based filtering",
+        "body": "NGFW application-layer inspection is purely a marketing distinction.",
         "correct": false
       }
     ],
@@ -7964,12 +7964,12 @@
     "choices": [
       {
         "label": "A",
-        "body": "Automated remediation should never be used for any cloud security finding under any circumstances, since this incident proves automation is fundamentally incompatible with cloud security operations",
+        "body": "Automated remediation should never be used for any cloud security finding under any circumstances.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "Fully automated, irreversible remediation actions (like deletion) applied uniformly to a finding category that can have legitimate exceptions (intentionally public resources) creates significant risk of destructive false positives.",
+        "body": "Fully automated, irreversible actions on a finding category with legitimate exceptions risk destructive false positives.",
         "correct": true
       },
       {
@@ -8002,12 +8002,12 @@
       },
       {
         "label": "B",
-        "body": "Alternative, less invasive assessment methods should be used instead of active scanning.",
+        "body": "Use less invasive assessment methods, like passive monitoring, instead of active scanning here.",
         "correct": true
       },
       {
         "label": "C",
-        "body": "The correct fix is to force active scanning of the OT/ICS network regardless of stability concerns, since vulnerability visibility should always take priority over operational stability without exception",
+        "body": "The correct fix is to force active scanning of the OT/ICS network regardless of stability concerns.",
         "correct": false
       },
       {
@@ -8030,7 +8030,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "IR plans should always be written exclusively by the security team, since involving other departments introduces unnecessary complexity with no meaningful benefit",
+        "body": "IR plans should always be written exclusively by the security team.",
         "correct": false
       },
       {
@@ -8045,7 +8045,7 @@
       },
       {
         "label": "D",
-        "body": "The correct fix is to have IT operations completely rewrite and independently own the entire IR plan without any security team involvement going forward",
+        "body": "The fix is to have IT operations independently own the entire IR plan.",
         "correct": false
       }
     ],
@@ -8063,17 +8063,17 @@
     "choices": [
       {
         "label": "A",
-        "body": "This concern is invalid; an increasing blocked-email count can only ever indicate improving defensive effectiveness, with no other plausible explanation",
+        "body": "This concern is invalid; a rising blocked-count can only mean improving defenses.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "A rising raw count of blocked phishing emails is consistent with EITHER improved defensive effectiveness OR simply an increase in the volume of phishing attempts being directed at the organization.",
+        "body": "A rising blocked-count is consistent with either better defenses or simply more incoming attempts.",
         "correct": true
       },
       {
         "label": "C",
-        "body": "This concern is only relevant for organizations in specific high-risk industries like finance or healthcare, and has no bearing on general email security reporting",
+        "body": "This concern is only relevant for high-risk industries like finance or healthcare.",
         "correct": false
       },
       {
@@ -8096,7 +8096,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "The stakeholder's explanation is definitively correct and the alert should be closed immediately with no further verification, since VPN usage always fully explains any impossible-travel pattern",
+        "body": "The stakeholder's explanation is definitively correct and the alert should be closed immediately with no further verification.",
         "correct": false
       },
       {
@@ -8129,22 +8129,22 @@
     "choices": [
       {
         "label": "A",
-        "body": "The correct fix is to cancel all threat intelligence feed subscriptions entirely, since any volume of indicators beyond what the SOC can manually review by hand provides negative value",
+        "body": "The correct fix is to cancel all threat intelligence feed subscriptions entirely.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "Implement a structured intelligence curation/enrichment process.",
+        "body": "Implement a curation/enrichment process to deduplicate and filter feeds before they reach the SOC.",
         "correct": true
       },
       {
         "label": "C",
-        "body": "The SOC should be instructed to manually review every single indicator individually regardless of volume, since any automated filtering would inherently discard valuable intelligence",
+        "body": "The SOC should be instructed to manually review every single indicator individually regardless of volume.",
         "correct": false
       },
       {
         "label": "D",
-        "body": "This problem can only be solved by hiring proportionally more SOC analysts to match the raw indicator volume, with no possible process or tooling improvement available",
+        "body": "This problem can only be solved by hiring proportionally more SOC analysts to match the raw indicator volume.",
         "correct": false
       }
     ],
@@ -8195,12 +8195,12 @@
     "choices": [
       {
         "label": "A",
-        "body": "This goal framing is fully appropriate with no meaningful critique; achieving literal 100% detection coverage across every ATT&CK technique should always be the primary and sole objective of any detection engineering program",
+        "body": "This goal framing is fully appropriate with no meaningful critique.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "Not all ATT&CK techniques carry equal relevance or risk for a given organization.",
+        "body": "Not all ATT&CK techniques carry equal relevance to this organization's actual threat profile.",
         "correct": true
       },
       {
@@ -8228,7 +8228,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "The communication is fully appropriate as written; executives should be expected to research unfamiliar technical terminology on their own during an active incident",
+        "body": "The communication is fully appropriate as written.",
         "correct": false
       },
       {
@@ -8243,7 +8243,7 @@
       },
       {
         "label": "D",
-        "body": "Executive incident updates should only ever be delivered after the incident is fully resolved, since providing information during an active, unresolved incident is inherently premature and inappropriate",
+        "body": "Executive incident updates should only ever be delivered after the incident is fully resolved.",
         "correct": false
       }
     ],
@@ -8426,12 +8426,12 @@
     "choices": [
       {
         "label": "A",
-        "body": "This technique has no established name or category in malware analysis and represents an entirely novel, previously undocumented approach with no defensive implications",
+        "body": "This technique has no established name or category in malware analysis.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "This is a form of fragmentation/staging evasion.",
+        "body": "This is a form of fragmentation/staging evasion that defeats single-file signature detection.",
         "correct": true
       },
       {
@@ -8441,7 +8441,7 @@
       },
       {
         "label": "D",
-        "body": "Splitting a payload across multiple files makes a sample technically incapable of executing any malicious functionality under any circumstances",
+        "body": "Splitting a payload across files makes it technically incapable of executing.",
         "correct": false
       }
     ],
@@ -8497,7 +8497,7 @@
       },
       {
         "label": "B",
-        "body": "Courts (and the standards governing expert/forensic testimony, such as Daubert or Frye in various US jurisdictions) generally require that a forensic examiner be able to explain and defend the reliability and validity of the methodology used.",
+        "body": "Courts generally require an examiner to explain and defend the methodology, not just cite a result.",
         "correct": true
       },
       {
@@ -8507,7 +8507,7 @@
       },
       {
         "label": "D",
-        "body": "The correct fix is for the analyst to simply defer all technical questions to the tool vendor's marketing materials during testimony, which fully satisfies any legal standard for methodology explanation",
+        "body": "The correct fix is for the analyst to simply defer all technical questions to the tool vendor's marketing materials during testimony.",
         "correct": false
       }
     ],
@@ -8525,22 +8525,22 @@
     "choices": [
       {
         "label": "A",
-        "body": "Completion rate is a fully sufficient metric on its own; if 98% of employees clicked through the training, this necessarily and directly demonstrates the training successfully changed their security-related behavior",
+        "body": "Completion rate is a fully sufficient metric on its own.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "Training completion measures activity, not whether behavior actually changed.",
+        "body": "Training completion measures activity, not whether behavior actually changed in practice.",
         "correct": true
       },
       {
         "label": "C",
-        "body": "This concern is only relevant for programs with completion rates below 80%; any program achieving above that threshold has definitively proven effectiveness regardless of any other consideration",
+        "body": "This concern is only relevant for programs with completion rates below 80%.",
         "correct": false
       },
       {
         "label": "D",
-        "body": "The correct fix is to eliminate completion rate tracking entirely, since it provides no value whatsoever toward evaluating a security awareness program",
+        "body": "The correct fix is to eliminate completion rate tracking entirely.",
         "correct": false
       }
     ],
@@ -8563,7 +8563,7 @@
       },
       {
         "label": "B",
-        "body": "This is 'configuration drift'.",
+        "body": "This is 'configuration drift': the actual running state has diverged from the IaC code, bypassing code review entirely.",
         "correct": true
       },
       {
@@ -8624,7 +8624,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "There is no legitimate concern; consistently strong performance on the same tabletop scenario each year is conclusive proof of genuine, comprehensive incident response readiness for any real-world scenario",
+        "body": "There is no legitimate concern; consistently strong performance is conclusive proof of readiness.",
         "correct": false
       },
       {
@@ -8634,7 +8634,7 @@
       },
       {
         "label": "C",
-        "body": "Tabletop exercises provide no genuine value under any circumstances and should be replaced entirely with live-fire, unannounced red team exercises",
+        "body": "Tabletop exercises provide no genuine value under any circumstances.",
         "correct": false
       },
       {
@@ -8657,12 +8657,12 @@
     "choices": [
       {
         "label": "A",
-        "body": "Yes — the parent company's country of incorporation always fully and exclusively determines which breach notification laws apply to ALL of its subsidiaries and their data, regardless of where the affected individuals or subsidiary operations are actually located",
+        "body": "Yes — the parent company's country of incorporation always fully and exclusively determines which breach notification laws apply to ALL of its subsidiaries and their data.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "No — breach notification and data protection obligations are generally determined by factors like WHERE the affected individuals are located and/or where the specific data processing/subsidiary operations occur, not simply the parent company's country of incorporation.",
+        "body": "No — obligations depend on where the affected individuals or data processing are located, not the parent's country.",
         "correct": true
       },
       {
@@ -8672,7 +8672,7 @@
       },
       {
         "label": "D",
-        "body": "Multinational corporate structures are entirely exempt from any individual country's data breach notification requirements, being subject only to international treaty obligations instead",
+        "body": "Multinational corporate structures are entirely exempt from any individual country's data breach notification requirements.",
         "correct": false
       }
     ],
@@ -8700,12 +8700,12 @@
       },
       {
         "label": "C",
-        "body": "This pattern can only indicate a legitimate scheduled backup job and should never be considered a potential exfiltration indicator regardless of other context",
+        "body": "This pattern can only indicate a legitimate scheduled backup job.",
         "correct": false
       },
       {
         "label": "D",
-        "body": "Cloud storage services are technically incapable of receiving data in anything other than small, evenly-spaced chunks, making this pattern universally benign and expected",
+        "body": "Cloud storage services are technically incapable of receiving data any other way.",
         "correct": false
       }
     ],
@@ -8723,7 +8723,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "These must be entirely unrelated incidents from different, unconnected adversaries, since any variation in victim profile definitively rules out a common adversary regardless of other overlapping features",
+        "body": "These must be entirely unrelated incidents from different, unconnected adversaries.",
         "correct": false
       },
       {
@@ -8756,22 +8756,22 @@
     "choices": [
       {
         "label": "A",
-        "body": "This fact should always be omitted entirely from any external communication regardless of any legal or regulatory disclosure requirement, since it could create negative publicity",
+        "body": "This fact should always be omitted entirely from any external communication regardless of any legal or regulatory disclosure requirement.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "This determination depends on the specific applicable legal/regulatory notification requirements (which may mandate disclosing the root cause or vulnerability details) and a broader assessment of accuracy and transparency obligations.",
+        "body": "This depends on the applicable legal disclosure requirements, not just reputational concerns.",
         "correct": true
       },
       {
         "label": "C",
-        "body": "This fact should always be prominently included in the customer-facing notification specifically to publicly shame the organization's own security failures, regardless of any legal counsel guidance",
+        "body": "This fact should always be prominently included, specifically to publicly shame the organization.",
         "correct": false
       },
       {
         "label": "D",
-        "body": "Root cause information about how an incident occurred is never relevant to any breach notification requirement under any regulatory framework, making this question moot",
+        "body": "Root cause information is never relevant to any breach notification requirement.",
         "correct": false
       }
     ],
@@ -8794,17 +8794,17 @@
       },
       {
         "label": "B",
-        "body": "Framing the recommendation in terms of the business leader's actual concerns and context.",
+        "body": "Reframe the recommendation in terms of the business leader's actual concerns, not CVE/CVSS jargon they can't interpret.",
         "correct": true
       },
       {
         "label": "C",
-        "body": "The security team should have simply implemented MFA unilaterally without any business leader approval or communication, since technical security decisions should never require business stakeholder buy-in",
+        "body": "The security team should have simply implemented MFA unilaterally without any business leader approval or communication.",
         "correct": false
       },
       {
         "label": "D",
-        "body": "The correct approach is to escalate immediately to the business leader's supervisor whenever a request is initially declined, bypassing any attempt at improved communication with the original stakeholder",
+        "body": "The correct approach is to escalate immediately to the business leader's supervisor whenever a request is initially declined.",
         "correct": false
       }
     ],
@@ -8865,7 +8865,7 @@
       },
       {
         "label": "C",
-        "body": "The team should always use whichever score is highest among the available sources, regardless of whether the assumptions behind that score actually match this organization's specific deployment context",
+        "body": "The team should always use whichever score is highest among the available sources.",
         "correct": false
       },
       {
@@ -8888,12 +8888,12 @@
     "choices": [
       {
         "label": "A",
-        "body": "Containerized environments are fundamentally impossible to forensically investigate under any circumstances, making this entire incident uninvestigable",
+        "body": "Containerized environments are fundamentally impossible to forensically investigate.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "Container orchestration platforms' normal self-healing/auto-scaling behavior (terminating and replacing unhealthy or scaled-down instances) can inadvertently destroy forensic evidence far faster than in traditional server environments.",
+        "body": "Auto-scaling's self-healing behavior can destroy forensic evidence faster than traditional servers.",
         "correct": true
       },
       {
@@ -8903,7 +8903,7 @@
       },
       {
         "label": "D",
-        "body": "The correct fix is to disable all auto-scaling and self-healing behavior permanently across the entire production environment to prevent any possibility of evidence loss",
+        "body": "The fix is to disable all auto-scaling permanently across the entire environment.",
         "correct": false
       }
     ],
@@ -8926,7 +8926,7 @@
       },
       {
         "label": "B",
-        "body": "Absence of enforcement action is not the same as actual compliance.",
+        "body": "Absence of enforcement isn't the same as actual compliance — violations can simply go undetected.",
         "correct": true
       },
       {
@@ -8936,7 +8936,7 @@
       },
       {
         "label": "D",
-        "body": "The correct response is to deliberately seek out and provoke a regulatory investigation, since only an actual enforcement action can definitively establish current compliance status",
+        "body": "The correct response is to deliberately seek out and provoke a regulatory investigation.",
         "correct": false
       }
     ],
@@ -8964,7 +8964,7 @@
       },
       {
         "label": "C",
-        "body": "Threat hunting should never be documented at all regardless of outcome, since documentation itself creates a discoverable record that could be used against the organization in litigation",
+        "body": "Threat hunting should never be documented at all regardless of outcome.",
         "correct": false
       },
       {
@@ -9020,7 +9020,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "This is fully acceptable and represents an efficient staffing model with no meaningful downside for any incident regardless of complexity or scale",
+        "body": "This is fully acceptable and has no meaningful downside for any incident.",
         "correct": false
       },
       {
@@ -9035,7 +9035,7 @@
       },
       {
         "label": "D",
-        "body": "The correct fix is to eliminate the Incident Commander role entirely, having all coordination responsibilities default to whoever happens to be available first during an incident",
+        "body": "The fix is to eliminate the Incident Commander role entirely.",
         "correct": false
       }
     ],
@@ -9053,7 +9053,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "No methodological questions are necessary; any comparison against a published industry benchmark report is automatically valid and directly comparable regardless of the specific methodologies involved",
+        "body": "No methodological questions are necessary.",
         "correct": false
       },
       {
@@ -9063,7 +9063,7 @@
       },
       {
         "label": "C",
-        "body": "This methodological concern is only relevant if the industry benchmark report is more than five years old; any report published within the past five years can always be safely compared without further scrutiny",
+        "body": "This methodological concern is only relevant if the industry benchmark report is more than five years old.",
         "correct": false
       },
       {
@@ -9091,7 +9091,7 @@
       },
       {
         "label": "B",
-        "body": "The suspicion should come from the BEHAVIORAL ANOMALY (timing wildly inconsistent with 6 months of established baseline activity for this specific account) rather than the action type itself.",
+        "body": "The suspicion should come from the behavioral anomaly, not the action type itself.",
         "correct": true
       },
       {
@@ -9101,7 +9101,7 @@
       },
       {
         "label": "D",
-        "body": "Domain admin account activity should never be baselined or analyzed for behavioral anomalies, since these accounts are inherently trusted and exempt from anomaly-based scrutiny",
+        "body": "Domain admin account activity should never be baselined or analyzed for behavioral anomalies.",
         "correct": false
       }
     ],
@@ -9152,17 +9152,17 @@
     "choices": [
       {
         "label": "A",
-        "body": "No — legal counsel reviewing or requesting changes to investigative notes always constitutes improper evidence tampering or obstruction, regardless of the specific content involved",
+        "body": "No — legal counsel reviewing or requesting changes to investigative notes always constitutes improper evidence tampering or obstruction.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "Generally yes, when properly scoped.",
+        "body": "Generally yes, when properly scoped — it protects tone and speculation, not the underlying factual evidence.",
         "correct": true
       },
       {
         "label": "C",
-        "body": "Yes, and this process should also include permanently deleting the underlying technical evidence and findings that informed the notes, not just the notes' language and tone",
+        "body": "Yes, and this process should also include permanently deleting the underlying technical evidence and findings that informed the notes.",
         "correct": false
       },
       {
@@ -9251,7 +9251,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "This layering is indeed unnecessary redundancy, and a single, sufficiently well-configured perimeter firewall provides equivalent protection to the full layered approach",
+        "body": "This layering is unnecessary redundancy; one well-configured firewall is equivalent.",
         "correct": false
       },
       {
@@ -9261,7 +9261,7 @@
       },
       {
         "label": "C",
-        "body": "This layered approach is only justified for organizations with unlimited security budgets, and represents poor resource allocation for any organization with real financial constraints",
+        "body": "This layered approach is only justified for organizations with unlimited security budgets.",
         "correct": false
       },
       {
@@ -9294,7 +9294,7 @@
       },
       {
         "label": "C",
-        "body": "This finding is entirely unrelated to the investigation and should be disregarded without further inquiry, since event log retention has no bearing on incident timeline reconstruction",
+        "body": "This finding is entirely unrelated to the investigation and should be disregarded without further inquiry.",
         "correct": false
       },
       {
@@ -9317,17 +9317,17 @@
     "choices": [
       {
         "label": "A",
-        "body": "There is no legitimate tension; if a legal notification threshold isn't met, notifying anyway would always constitute an inappropriate and legally prohibited action",
+        "body": "There is no legitimate tension; notifying beyond the legal threshold is always prohibited.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "This illustrates the distinction between the LEGAL MINIMUM notification obligation (what's strictly required under applicable law) and a broader ETHICAL/REPUTATIONAL judgment about transparency and trust with affected individuals.",
+        "body": "This is the gap between the legal minimum notification and a broader ethical transparency judgment.",
         "correct": true
       },
       {
         "label": "C",
-        "body": "This tension only exists in jurisdictions with no defined legal breach notification threshold at all, and would not arise under any specific statutory framework",
+        "body": "This tension only exists in jurisdictions with no defined legal breach threshold at all.",
         "correct": false
       },
       {
@@ -9350,12 +9350,12 @@
     "choices": [
       {
         "label": "A",
-        "body": "This is entirely the SaaS vendor's responsibility and fault, since any security issue affecting data hosted on their platform is automatically their sole obligation to prevent regardless of the shared responsibility model's specific terms",
+        "body": "This is entirely the SaaS vendor's responsibility and fault.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "Under the shared responsibility model, this falls within the CUSTOMER's designated responsibility (configuring sharing/permission settings and managing user access), even though the underlying application and infrastructure are vendor-managed.",
+        "body": "Under the shared responsibility model, sharing settings and access remain the customer's responsibility.",
         "correct": true
       },
       {
@@ -9449,7 +9449,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "There is no legitimate concern; the total number of deployed security tools is, by itself, a fully sufficient and directly meaningful indicator of program maturity and effectiveness with no need for further context",
+        "body": "There is no legitimate concern; tool count alone is a fully sufficient maturity indicator.",
         "correct": false
       },
       {
@@ -9459,7 +9459,7 @@
       },
       {
         "label": "C",
-        "body": "This concern is only valid if the organization has deployed fewer than five total security tools; above that threshold, tool count becomes a fully reliable maturity indicator",
+        "body": "This concern is only valid below five total deployed security tools.",
         "correct": false
       },
       {
@@ -9487,17 +9487,17 @@
       },
       {
         "label": "B",
-        "body": "This is a form of DNS/hosts-file-based pharming or phishing redirection.",
+        "body": "This is DNS/hosts-file-based pharming, redirecting a legitimate domain to a fake page.",
         "correct": true
       },
       {
         "label": "C",
-        "body": "This attack technique can only succeed if the user's browser doesn't support HTTPS, and is otherwise fully prevented by transport encryption regardless of hosts file content",
+        "body": "This attack can only succeed if the browser doesn't support HTTPS.",
         "correct": false
       },
       {
         "label": "D",
-        "body": "Hosts file modification requires no elevated privileges of any kind and can be performed by any unprivileged process or user account on the system",
+        "body": "Hosts file modification requires no elevated privileges of any kind.",
         "correct": false
       }
     ],
@@ -9520,7 +9520,7 @@
       },
       {
         "label": "B",
-        "body": "This is a form of metric gaming through selective classification.",
+        "body": "This is metric gaming: avoiding formal incident declaration for borderline cases to protect the reported number.",
         "correct": true
       },
       {
@@ -9530,7 +9530,7 @@
       },
       {
         "label": "D",
-        "body": "The correct fix is to eliminate Mean Time to Contain as a tracked metric entirely, since any metric related to containment speed is inherently ungameable in any other configuration",
+        "body": "The correct fix is to eliminate Mean Time to Contain as a tracked metric entirely.",
         "correct": false
       }
     ],
@@ -9548,22 +9548,22 @@
     "choices": [
       {
         "label": "A",
-        "body": "The security team should unilaterally block the launch entirely regardless of the business timeline constraint or any interim mitigation options, since any identified security issue must always take absolute precedence over any business deadline",
+        "body": "The security team should unilaterally block the launch entirely regardless of the business timeline constraint or any interim mitigation options.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "Clearly communicate the specific risk (what could go wrong, and its plausible business impact) alongside concrete options.",
+        "body": "Clearly communicate the specific risk and its business impact, alongside concrete mitigation options.",
         "correct": true
       },
       {
         "label": "C",
-        "body": "The security team should silently approve the launch without documenting or communicating the identified issue at all, to avoid creating friction with the engineering team",
+        "body": "The security team should silently approve the launch without documenting or communicating the identified issue at all.",
         "correct": false
       },
       {
         "label": "D",
-        "body": "The correct approach is to escalate the disagreement directly and immediately to the CEO, bypassing the specific engineering team leadership and any intermediate risk-acceptance process entirely",
+        "body": "The correct approach is to escalate the disagreement directly and immediately to the CEO.",
         "correct": false
       }
     ],
@@ -9581,12 +9581,12 @@
     "choices": [
       {
         "label": "A",
-        "body": "This traffic pattern is always fully benign since connections to a well-known, legitimate cloud provider can never be associated with malicious activity under any circumstances",
+        "body": "This traffic is always fully benign since it connects to a well-known legitimate provider.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "This may represent C2-over-legitimate-cloud-service abuse.",
+        "body": "This may represent C2 traffic hidden inside otherwise-legitimate cloud service connections.",
         "correct": true
       },
       {
@@ -9596,7 +9596,7 @@
       },
       {
         "label": "D",
-        "body": "Cloud storage providers are technically incapable of being used for any purpose other than their intended, documented file storage/sync functionality",
+        "body": "Cloud storage providers are technically incapable of any other use.",
         "correct": false
       }
     ],
@@ -9657,7 +9657,7 @@
       },
       {
         "label": "C",
-        "body": "This distinction is only relevant for frameworks published more than 10 years ago; any framework published within the last decade fully and completely defines adequate security posture with no gap between compliance and genuine security",
+        "body": "This distinction is only relevant for frameworks published more than 10 years ago.",
         "correct": false
       },
       {
@@ -9680,7 +9680,7 @@
     "choices": [
       {
         "label": "A",
-        "body": "This technique provides no meaningful evasion benefit whatsoever, since process injection is always immediately and automatically detected by any endpoint security tool regardless of technique sophistication",
+        "body": "This technique provides no meaningful evasion benefit whatsoever.",
         "correct": false
       },
       {
@@ -9713,12 +9713,12 @@
     "choices": [
       {
         "label": "A",
-        "body": "Standard file deletion (moving a file to a recycle bin and emptying it, or a simple delete command) typically only removes the file system's reference/pointer to the data and marks that disk space as available for reuse.",
+        "body": "Standard deletion just removes the file system pointer and marks the space reusable.",
         "correct": true
       },
       {
         "label": "B",
-        "body": "File deletion always immediately and completely erases the underlying data at the physical storage level with zero possibility of recovery under any circumstances or timeframe",
+        "body": "File deletion always immediately and completely erases the underlying data.",
         "correct": false
       },
       {
@@ -9728,7 +9728,7 @@
       },
       {
         "label": "D",
-        "body": "File recovery is only possible if the original file was specifically saved using a proprietary format, and is otherwise technically impossible regardless of overwrite status",
+        "body": "File recovery is only possible if the original file used a proprietary format.",
         "correct": false
       }
     ],
@@ -9746,22 +9746,22 @@
     "choices": [
       {
         "label": "A",
-        "body": "There is no meaningful risk in this specific scenario; broad internal distribution of complete, unredacted technical incident details is always fully appropriate regardless of audience or channel",
+        "body": "There is no meaningful risk in this specific scenario.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "This is an audience-scoping risk: sharing technical detail broadly increases the chance of misuse.",
+        "body": "This is an audience-scoping risk: broad sharing of technical detail increases the chance of misuse.",
         "correct": true
       },
       {
         "label": "C",
-        "body": "This concern is only relevant if the messaging channel used is externally accessible; any purely internal-only distribution channel eliminates any legitimate risk regardless of content sensitivity or audience scope",
+        "body": "This concern is only relevant if the messaging channel used is externally accessible.",
         "correct": false
       },
       {
         "label": "D",
-        "body": "The correct fix is to stop producing any incident retrospective documentation at all, since any written record of a vulnerability inherently creates unacceptable risk regardless of how it's distributed",
+        "body": "The correct fix is to stop producing any incident retrospective documentation at all.",
         "correct": false
       }
     ],
@@ -9812,12 +9812,12 @@
     "choices": [
       {
         "label": "A",
-        "body": "There is no meaningful value; since users are granted access to the application either way, adding an intermediate network segment provides no security benefit regardless of configuration",
+        "body": "There is no meaningful value, since users are granted access to the application either way.",
         "correct": false
       },
       {
         "label": "B",
-        "body": "Adding an application-tier boundary allows access to be restricted to the SPECIFIC application protocol/port needed rather than broad, unrestricted network-layer reachability between the entire user VLAN and the server.",
+        "body": "An application-tier boundary restricts access to just the specific port needed, not the whole VLAN.",
         "correct": true
       },
       {
@@ -9827,7 +9827,7 @@
       },
       {
         "label": "D",
-        "body": "Network segmentation between a user VLAN and an application server is purely a compliance documentation exercise with no effect on actual reachability or attack surface",
+        "body": "Network segmentation here is purely a compliance documentation exercise.",
         "correct": false
       }
     ],
