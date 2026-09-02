@@ -56,13 +56,13 @@ export default function ExamPage() {
     setStarting(false);
   };
 
-  const selectAnswer = async (qid: number, labels: string[]) => {
+  const selectAnswer = async (qid: number, labels: string[], timeSeconds: number) => {
     setAnswers((prev) => ({ ...prev, [qid]: labels }));
     if (!sessionId) return;
     fetch(`/api/exam/${sessionId}/answer`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question_id: qid, selected_labels: labels }),
+      body: JSON.stringify({ question_id: qid, selected_labels: labels, time_seconds: timeSeconds }),
     }).catch(() => {});
   };
 
@@ -113,7 +113,7 @@ export default function ExamPage() {
         <QuestionCard
           key={current.id}
           question={current}
-          onSubmit={(payload) => selectAnswer(current.id, payload.selected_labels || [])}
+          onSubmit={(payload) => selectAnswer(current.id, payload.selected_labels || [], payload.time_seconds)}
           feedback={null}
           questionNumber={index + 1}
           totalQuestions={questions.length}

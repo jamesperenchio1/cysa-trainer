@@ -72,7 +72,8 @@ CREATE TABLE IF NOT EXISTS review_log (
   mode TEXT NOT NULL,              -- 'drill' | 'exam'
   correct INTEGER NOT NULL,
   answered_at TEXT NOT NULL DEFAULT (datetime('now')),
-  exam_session_id INTEGER
+  exam_session_id INTEGER,
+  time_seconds INTEGER             -- seconds spent on this question before submitting
 );
 
 CREATE TABLE IF NOT EXISTS exam_sessions (
@@ -82,6 +83,7 @@ CREATE TABLE IF NOT EXISTS exam_sessions (
   duration_seconds INTEGER NOT NULL DEFAULT 9900, -- 165 min
   question_ids TEXT NOT NULL,      -- JSON array, fixed order for this attempt
   answers TEXT NOT NULL DEFAULT '{}', -- JSON map questionId -> selected label(s)
+  answer_times TEXT NOT NULL DEFAULT '{}', -- JSON map questionId -> cumulative seconds spent
   scaled_score INTEGER,
   passed INTEGER
 );
@@ -108,5 +110,7 @@ ensureColumn("questions", "type", "type TEXT NOT NULL DEFAULT 'mcq'");
 ensureColumn("choices", "correct_order", "correct_order INTEGER");
 ensureColumn("choices", "match_group", "match_group TEXT");
 ensureColumn("choices", "pair_key", "pair_key TEXT");
+ensureColumn("review_log", "time_seconds", "time_seconds INTEGER");
+ensureColumn("exam_sessions", "answer_times", "answer_times TEXT NOT NULL DEFAULT '{}'");
 
 export default db;

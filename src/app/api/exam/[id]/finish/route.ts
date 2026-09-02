@@ -12,13 +12,14 @@ interface QRow {
 
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
   const sessionId = Number(params.id);
-  const row = db.prepare("SELECT question_ids, answers FROM exam_sessions WHERE id = ?").get(sessionId) as
-    | { question_ids: string; answers: string }
+  const row = db.prepare("SELECT question_ids, answers, answer_times FROM exam_sessions WHERE id = ?").get(sessionId) as
+    | { question_ids: string; answers: string; answer_times: string }
     | undefined;
   if (!row) return NextResponse.json({ error: "session not found" }, { status: 404 });
 
   const questionIds: number[] = JSON.parse(row.question_ids);
   const answers: Record<string, string[]> = JSON.parse(row.answers || "{}");
+  const answerTimes: Record<string, number> = JSON.parse(row.answer_times || "{}");
 
   const qRows = db
     .prepare(
@@ -66,8 +67,8 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       ).run(result.repetitions, result.ease_factor, result.interval_days, result.due_at, correct ? 1 : 0, correct ? 1 : 0, qid);
     }
     db.prepare(
-      "INSERT INTO review_log (question_id, mode, correct, exam_session_id) VALUES (?, 'exam', ?, ?)"
-    ).run(qid, correct ? 1 : 0, sessionId);
+      "INSERT INTO review_log (question_id, mode, correct, exam_session_id, time_seconds) VALUES (?, 'exam', ?, ?, ?)"
+    ).run(qid, correct ? 1 : 0, sessionId, answerTimes[String(qid)] ?? null);
 
     review.push({
       question_id: qid,

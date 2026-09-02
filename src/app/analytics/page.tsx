@@ -22,6 +22,19 @@ interface DailyStat {
   correct: number;
   accuracy: number | null;
 }
+interface TimeByDomainStat {
+  domain_code: string;
+  domain_name: string;
+  attempts: number;
+  avg_seconds: number;
+}
+interface SlowestQuestionStat {
+  question_id: number;
+  stem: string;
+  domain_code: string;
+  attempts: number;
+  avg_seconds: number;
+}
 interface Analytics {
   overall: {
     total_questions: number;
@@ -32,11 +45,20 @@ interface Analytics {
     exams_taken: number;
     avg_scaled_score: number | null;
     best_scaled_score: number | null;
+    avg_time_seconds: number | null;
   };
   subtopics: SubtopicStat[];
   difficulty: DifficultyStat[];
   daily: DailyStat[];
   exam_score_history: { id: number; finished_at: string; scaled_score: number; passed: number }[];
+  time_by_domain: TimeByDomainStat[];
+  slowest_questions: SlowestQuestionStat[];
+}
+
+function formatTime(seconds: number) {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
 }
 
 function accuracyColor(acc: number | null) {
@@ -110,6 +132,13 @@ export default function AnalyticsPage() {
           <p className="text-2xl font-bold">{data.overall.best_scaled_score ?? "—"}</p>
           <p className="text-xs text-gray-500 mt-1">scaled 100–900</p>
         </div>
+        <div className="card">
+          <p className="text-xs text-gray-500 mb-1">Avg time / question</p>
+          <p className="text-2xl font-bold">
+            {data.overall.avg_time_seconds === null ? "—" : formatTime(data.overall.avg_time_seconds)}
+          </p>
+          <p className="text-xs text-gray-500 mt-1">drill + exam combined</p>
+        </div>
       </div>
 
       {data.exam_score_history.length > 0 && (
@@ -182,6 +211,52 @@ export default function AnalyticsPage() {
           </div>
         ))}
       </div>
+
+      {data.time_by_domain.length > 0 && (
+        <div className="card mb-6">
+          <h2 className="font-semibold mb-1">Average time by domain</h2>
+          <p className="text-xs text-gray-500 mb-4">how long each domain takes you, on average, to answer</p>
+          {(() => {
+            const maxSeconds = Math.max(1, ...data.time_by_domain.map((d) => d.avg_seconds));
+            return data.time_by_domain.map((d) => (
+              <div key={d.domain_code} className="mb-3 last:mb-0">
+                <div className="flex justify-between text-sm mb-1">
+                  <span>{d.domain_name}</span>
+                  <span className="text-gray-400">
+                    {formatTime(d.avg_seconds)}
+                    <span className="text-gray-600 ml-2 text-xs">({d.attempts} attempts)</span>
+                  </span>
+                </div>
+                <div className="h-2 bg-panel2 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-accent"
+                    style={{ width: `${(d.avg_seconds / maxSeconds) * 100}%` }}
+                  />
+                </div>
+              </div>
+            ));
+          })()}
+        </div>
+      )}
+
+      {data.slowest_questions.length > 0 && (
+        <div className="card mb-6">
+          <h2 className="font-semibold mb-1">Slowest questions</h2>
+          <p className="text-xs text-gray-500 mb-4">specific questions that take you the longest to answer</p>
+          {data.slowest_questions.map((q) => (
+            <div key={q.question_id} className="mb-3 last:mb-0 flex justify-between gap-3 text-sm">
+              <span className="text-gray-300">
+                <span className="text-gray-600 text-xs mr-1">({q.domain_code})</span>
+                {q.stem}
+              </span>
+              <span className="text-gray-400 whitespace-nowrap">
+                {formatTime(q.avg_seconds)}
+                <span className="text-gray-600 ml-1 text-xs">×{q.attempts}</span>
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="card">
         <h2 className="font-semibold mb-1">Weakest subtopics</h2>

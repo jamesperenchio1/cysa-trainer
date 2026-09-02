@@ -32,6 +32,7 @@ export interface DrillAnswerPayload {
   selected_labels?: string[];
   ordered_ids?: number[];
   pairs?: Record<number, number>;
+  time_seconds?: number;
 }
 
 export interface AnswerResultDTO {

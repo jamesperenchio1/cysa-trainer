@@ -60,8 +60,8 @@ export async function POST(req: NextRequest) {
     );
 
     db.prepare(
-      "INSERT INTO review_log (question_id, mode, correct) VALUES (?, 'drill', ?)"
-    ).run(questionId, correct ? 1 : 0);
+      "INSERT INTO review_log (question_id, mode, correct, time_seconds) VALUES (?, 'drill', ?, ?)"
+    ).run(questionId, correct ? 1 : 0, body.time_seconds ?? null);
 
     updateStreak();
 

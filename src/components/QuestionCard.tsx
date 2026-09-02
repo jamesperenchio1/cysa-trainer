@@ -15,6 +15,7 @@ export interface SubmitPayload {
   selected_labels?: string[];
   ordered_ids?: number[];
   pairs?: Record<number, number>;
+  time_seconds: number;
 }
 
 interface Feedback {
@@ -54,6 +55,7 @@ export default function QuestionCard({
   const [orderState, setOrderState] = useState<ChoiceDTO[]>(question.choices);
   const [pairsState, setPairsState] = useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(!!revealed);
+  const [elapsed, setElapsed] = useState(0);
 
   useEffect(() => {
     if (!revealed) {
@@ -61,9 +63,16 @@ export default function QuestionCard({
       setOrderState(question.choices);
       setPairsState({});
       setSubmitted(false);
+      setElapsed(0);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [question.id, revealed]);
+
+  useEffect(() => {
+    if (revealed || submitted) return;
+    const interval = setInterval(() => setElapsed((e) => e + 1), 1000);
+    return () => clearInterval(interval);
+  }, [question.id, revealed, submitted]);
 
   const toggle = (label: string) => {
     if (submitted || disabled) return;
@@ -89,11 +98,11 @@ export default function QuestionCard({
     if (!canSubmit) return;
     setSubmitted(true);
     if (question.type === "ordering") {
-      onSubmit({ ordered_ids: orderState.map((o) => o.id) });
+      onSubmit({ ordered_ids: orderState.map((o) => o.id), time_seconds: elapsed });
     } else if (question.type === "matching") {
-      onSubmit({ pairs: pairsState });
+      onSubmit({ pairs: pairsState, time_seconds: elapsed });
     } else {
-      onSubmit({ selected_labels: selected });
+      onSubmit({ selected_labels: selected, time_seconds: elapsed });
     }
   };
 
@@ -125,6 +134,11 @@ export default function QuestionCard({
           {question.difficulty >= 5 && (
             <span className="badge bg-rose-900/60 text-rose-300 border border-rose-700/50">
               BRUTAL
+            </span>
+          )}
+          {!revealed && (
+            <span className="font-mono text-xs px-2 py-1 rounded-md bg-panel2 text-gray-400">
+              {String(Math.floor(elapsed / 60)).padStart(2, "0")}:{String(elapsed % 60).padStart(2, "0")}
             </span>
           )}
           {questionNumber && totalQuestions && (
