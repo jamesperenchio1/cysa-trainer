@@ -1,0 +1,18 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, cysa-trainer]
+    steps:
+      - name: Pull latest and redeploy
+        run: |
+          cd /opt/cysa-trainer
+          git fetch origin
+          git reset --hard origin/main
+          docker compose build
+          docker compose up -d
+          docker image prune -f
