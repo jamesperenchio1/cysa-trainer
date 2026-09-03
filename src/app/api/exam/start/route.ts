@@ -3,6 +3,8 @@ import db from "@/lib/db";
 import { getQuestionsByIds } from "@/lib/queries";
 import { DOMAIN_WEIGHTS, EXAM_QUESTION_COUNT, EXAM_DURATION_SECONDS } from "@/lib/scoring";
 
+export const dynamic = "force-dynamic";
+
 function pickRandom<T>(arr: T[], n: number): T[] {
   const copy = [...arr];
   for (let i = copy.length - 1; i > 0; i--) {

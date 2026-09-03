@@ -5,6 +5,8 @@ import { isAnswerCorrect, getCorrectLabels, getExplanation } from "@/lib/queries
 import { scaleScore, PASSING_SCORE, DOMAIN_NAMES } from "@/lib/scoring";
 import { updateStreak } from "@/lib/streak";
 
+export const dynamic = "force-dynamic";
+
 interface QRow {
   id: number;
   domain_code: string;

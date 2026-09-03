@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import db from "@/lib/db";
 import { getQuestionsByIds } from "@/lib/queries";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest) {
   const count = Math.min(50, Number(req.nextUrl.searchParams.get("count") || 15));
   const domain = req.nextUrl.searchParams.get("domain"); // e.g. "SO" | "VM" | "IR" | "RC" | null for all

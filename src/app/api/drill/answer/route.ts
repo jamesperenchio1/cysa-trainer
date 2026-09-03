@@ -14,6 +14,8 @@ import {
 import { updateStreak } from "@/lib/streak";
 import { AnswerResultDTO, DrillAnswerPayload } from "@/lib/types";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req: NextRequest) {
   const body: DrillAnswerPayload = await req.json();
   const questionId = body.question_id;
