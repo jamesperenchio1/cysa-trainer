@@ -12,11 +12,11 @@ export function scaleScore(correct: number, total: number): number {
   return Math.min(900, Math.max(100, score));
 }
 
-// Set above the real CS0-003 bar (750/900, 165 min for 85 Qs) so a pass here
+// Set above the real CS0-004 bar (750/900, 165 min for 85 Qs) so a pass here
 // means comfortable headroom on test day, not a photo finish.
 export const PASSING_SCORE = 800;
 export const EXAM_QUESTION_COUNT = 85;
-export const EXAM_DURATION_SECONDS = 150 * 60;
+export const EXAM_DURATION_SECONDS = 165 * 60;
 
 export const DOMAIN_WEIGHTS: Record<string, number> = {
   SO: 34,
