@@ -17,6 +17,9 @@ export function scaleScore(correct: number, total: number): number {
 export const PASSING_SCORE = 800;
 export const EXAM_QUESTION_COUNT = 85;
 export const EXAM_DURATION_SECONDS = 165 * 60;
+// Real CS0-004 mixes MCQ with performance-based items (CompTIA doesn't publish
+// an exact split); reserve a slice of the 85 for PBQs, the rest stays MCQ.
+export const EXAM_PBQ_COUNT = 8;
 
 export const DOMAIN_WEIGHTS: Record<string, number> = {
   SO: 34,

@@ -7,8 +7,14 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   const sessionId = Number(params.id);
   const body = await req.json();
   const questionId: number = body.question_id;
-  const selected: string[] = body.selected_labels || [];
   const timeSeconds: number = body.time_seconds || 0;
+  // Shape varies by question type: mcq/hotspot -> selected_labels, ordering ->
+  // ordered_ids, matching -> pairs. Store whichever the client actually sent.
+  const answer: { selected_labels?: string[]; ordered_ids?: number[]; pairs?: Record<number, number> } = {
+    ...(body.selected_labels && { selected_labels: body.selected_labels }),
+    ...(body.ordered_ids && { ordered_ids: body.ordered_ids }),
+    ...(body.pairs && { pairs: body.pairs }),
+  };
 
   const row = db.prepare("SELECT answers, answer_times FROM exam_sessions WHERE id = ?").get(sessionId) as
     | { answers: string; answer_times: string }
@@ -16,7 +22,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   if (!row) return NextResponse.json({ error: "session not found" }, { status: 404 });
 
   const answers = JSON.parse(row.answers || "{}");
-  answers[questionId] = selected;
+  answers[questionId] = answer;
 
   // Accumulate rather than overwrite: the exam lets you revisit a question via
   // Previous/Next/palette, and QuestionCard's stopwatch restarts from 0 on each visit.

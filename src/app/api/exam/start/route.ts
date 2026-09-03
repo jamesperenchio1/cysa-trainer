@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import db from "@/lib/db";
 import { getQuestionsByIds } from "@/lib/queries";
-import { DOMAIN_WEIGHTS, EXAM_QUESTION_COUNT, EXAM_DURATION_SECONDS } from "@/lib/scoring";
+import { DOMAIN_WEIGHTS, EXAM_QUESTION_COUNT, EXAM_DURATION_SECONDS, EXAM_PBQ_COUNT } from "@/lib/scoring";
 
 export const dynamic = "force-dynamic";
 
@@ -17,14 +17,24 @@ function pickRandom<T>(arr: T[], n: number): T[] {
 export async function POST() {
   const domainRows = db.prepare("SELECT id, code FROM domains").all() as { id: number; code: string }[];
 
-  let questionIds: number[] = [];
+  // Performance-based questions first, like the real exam's mixed format.
+  // The PBQ pool is thin relative to 85 total, so pull from the whole pool
+  // rather than trying to force it into per-domain weighting.
+  const pbqPool = db
+    .prepare("SELECT id FROM questions WHERE type IN ('ordering', 'matching', 'hotspot')")
+    .all() as { id: number }[];
+  const pbqIds = pickRandom(
+    pbqPool.map((r) => r.id),
+    Math.min(EXAM_PBQ_COUNT, pbqPool.length)
+  );
+  const mcqTarget = EXAM_QUESTION_COUNT - pbqIds.length;
+
+  let questionIds: number[] = [...pbqIds];
   const totalWeight = Object.values(DOMAIN_WEIGHTS).reduce((a, b) => a + b, 0);
 
   for (const d of domainRows) {
     const weight = DOMAIN_WEIGHTS[d.code] ?? 0;
-    const target = Math.round((weight / totalWeight) * EXAM_QUESTION_COUNT);
-    // Mock exam stays MCQ-only: ordering/matching PBQs are a drill-mode-only
-    // learning tool for now, not built into the timed exam flow/scoring UI.
+    const target = Math.round((weight / totalWeight) * mcqTarget);
     const available = db
       .prepare("SELECT id FROM questions WHERE domain_id = ? AND type = 'mcq'")
       .all(d.id) as { id: number }[];
@@ -52,7 +62,7 @@ export async function POST() {
     questionIds.push(all[Math.floor(Math.random() * all.length)].id);
   }
 
-  // Shuffle final order so domains aren't presented in blocks.
+  // Shuffle final order so PBQs/domains aren't presented in blocks.
   questionIds = pickRandom(questionIds, questionIds.length);
 
   const info = db

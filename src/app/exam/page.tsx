@@ -1,9 +1,15 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import QuestionCard from "@/components/QuestionCard";
+import QuestionCard, { SubmitPayload } from "@/components/QuestionCard";
 import Timer from "@/components/Timer";
 import { QuestionDTO } from "@/lib/types";
+
+interface StoredAnswer {
+  selected_labels?: string[];
+  ordered_ids?: number[];
+  pairs?: Record<number, number>;
+}
 
 interface DomainBreakdown {
   domain_code: string;
@@ -19,6 +25,10 @@ interface ReviewItem {
   selected_labels: string[];
   explanation: string;
   domain_code: string;
+  ordered_ids?: number[];
+  correct_order?: { id: number; label: string; body: string }[];
+  pairs?: Record<number, number>;
+  correct_pairs?: { left: { id: number; label: string; body: string }; right: { id: number; label: string; body: string } }[];
 }
 interface FinishResult {
   correct: number;
@@ -38,7 +48,7 @@ export default function ExamPage() {
   const [questions, setQuestions] = useState<QuestionDTO[]>([]);
   const [duration, setDuration] = useState(9900);
   const [index, setIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<number, string[]>>({});
+  const [answers, setAnswers] = useState<Record<number, StoredAnswer>>({});
   const [result, setResult] = useState<FinishResult | null>(null);
   const [starting, setStarting] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(false);
@@ -56,13 +66,18 @@ export default function ExamPage() {
     setStarting(false);
   };
 
-  const selectAnswer = async (qid: number, labels: string[], timeSeconds: number) => {
-    setAnswers((prev) => ({ ...prev, [qid]: labels }));
+  const selectAnswer = async (qid: number, payload: SubmitPayload) => {
+    const stored: StoredAnswer = {
+      ...(payload.selected_labels && { selected_labels: payload.selected_labels }),
+      ...(payload.ordered_ids && { ordered_ids: payload.ordered_ids }),
+      ...(payload.pairs && { pairs: payload.pairs }),
+    };
+    setAnswers((prev) => ({ ...prev, [qid]: stored }));
     if (!sessionId) return;
     fetch(`/api/exam/${sessionId}/answer`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question_id: qid, selected_labels: labels, time_seconds: timeSeconds }),
+      body: JSON.stringify({ question_id: qid, ...payload }),
     }).catch(() => {});
   };
 
@@ -87,7 +102,8 @@ export default function ExamPage() {
           <h1 className="text-xl font-semibold mb-3">Full Mock Exam</h1>
           <ul className="text-sm text-gray-300 space-y-1.5 mb-5 list-disc list-inside">
             <li>85 questions, domain-weighted (34% / 26% / 24% / 16%) like the real CS0-004</li>
-            <li>150 minute timer (tighter than the real 165) — auto-submits when time runs out</li>
+            <li>Includes performance-based items (ordering, matching, hotspot) alongside multiple-choice, matching the real exam&apos;s mixed format</li>
+            <li>165 minute timer, matching the real exam — auto-submits when time runs out</li>
             <li>Passing score set to 800/900, above the real exam&apos;s 750 — a pass here means real margin</li>
             <li>No per-question feedback during the exam, matching real conditions</li>
             <li>Full scoring, domain breakdown, and explanations shown at the end</li>
@@ -113,7 +129,7 @@ export default function ExamPage() {
         <QuestionCard
           key={current.id}
           question={current}
-          onSubmit={(payload) => selectAnswer(current.id, payload.selected_labels || [], payload.time_seconds)}
+          onSubmit={(payload) => selectAnswer(current.id, payload)}
           feedback={null}
           questionNumber={index + 1}
           totalQuestions={questions.length}
@@ -221,7 +237,15 @@ export default function ExamPage() {
                   disabled
                   revealed
                   initialSelected={r.selected_labels}
-                  feedback={{ correct: r.correct, correct_labels: r.correct_labels, explanation: r.explanation }}
+                  initialOrderedIds={r.ordered_ids}
+                  initialPairs={r.pairs}
+                  feedback={{
+                    correct: r.correct,
+                    correct_labels: r.correct_labels,
+                    explanation: r.explanation,
+                    correct_order: r.correct_order,
+                    correct_pairs: r.correct_pairs,
+                  }}
                   questionNumber={i + 1}
                   totalQuestions={result.review.length}
                 />

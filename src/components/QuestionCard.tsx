@@ -39,6 +39,9 @@ interface Props {
   // with what the user actually selected during the exam.
   revealed?: boolean;
   initialSelected?: string[];
+  // Review mode, ordering/matching: what the user actually submitted during the exam.
+  initialOrderedIds?: number[];
+  initialPairs?: Record<number, number>;
 }
 
 export default function QuestionCard({
@@ -50,10 +53,18 @@ export default function QuestionCard({
   totalQuestions,
   revealed,
   initialSelected,
+  initialOrderedIds,
+  initialPairs,
 }: Props) {
   const [selected, setSelected] = useState<string[]>(revealed ? initialSelected || [] : []);
-  const [orderState, setOrderState] = useState<ChoiceDTO[]>(question.choices);
-  const [pairsState, setPairsState] = useState<Record<number, number>>({});
+  const initialOrderState =
+    revealed && initialOrderedIds && initialOrderedIds.length > 0
+      ? (initialOrderedIds
+          .map((id) => question.choices.find((c) => c.id === id))
+          .filter(Boolean) as ChoiceDTO[])
+      : question.choices;
+  const [orderState, setOrderState] = useState<ChoiceDTO[]>(initialOrderState);
+  const [pairsState, setPairsState] = useState<Record<number, number>>(revealed ? initialPairs || {} : {});
   const [submitted, setSubmitted] = useState(!!revealed);
   const [elapsed, setElapsed] = useState(0);
 
@@ -161,7 +172,7 @@ export default function QuestionCard({
       <div className="mt-4">
         {question.type === "ordering" && (
           <OrderingQuestion
-            items={question.choices}
+            items={initialOrderState}
             disabled={submitted || disabled}
             onChange={setOrderState}
             correctOrder={showFeedback ? feedback!.correct_order : null}
@@ -174,6 +185,7 @@ export default function QuestionCard({
             disabled={submitted || disabled}
             onChange={setPairsState}
             correctPairs={showFeedback ? feedback!.correct_pairs : null}
+            initialPairs={revealed ? initialPairs : undefined}
           />
         )}
 

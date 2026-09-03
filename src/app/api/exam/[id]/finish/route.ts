@@ -1,7 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import db from "@/lib/db";
 import { schedule } from "@/lib/srs";
-import { isAnswerCorrect, getCorrectLabels, getExplanation } from "@/lib/queries";
+import {
+  isAnswerCorrect,
+  getCorrectLabels,
+  getExplanation,
+  getQuestionType,
+  isOrderingCorrect,
+  getCorrectOrder,
+  isMatchingCorrect,
+  getCorrectPairs,
+} from "@/lib/queries";
 import { scaleScore, PASSING_SCORE, DOMAIN_NAMES } from "@/lib/scoring";
 import { updateStreak } from "@/lib/streak";
 
@@ -12,6 +21,12 @@ interface QRow {
   domain_code: string;
 }
 
+interface StoredAnswer {
+  selected_labels?: string[];
+  ordered_ids?: number[];
+  pairs?: Record<number, number>;
+}
+
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
   const sessionId = Number(params.id);
   const row = db.prepare("SELECT question_ids, answers, answer_times FROM exam_sessions WHERE id = ?").get(sessionId) as
@@ -20,7 +35,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   if (!row) return NextResponse.json({ error: "session not found" }, { status: 404 });
 
   const questionIds: number[] = JSON.parse(row.question_ids);
-  const answers: Record<string, string[]> = JSON.parse(row.answers || "{}");
+  const answers: Record<string, StoredAnswer> = JSON.parse(row.answers || "{}");
   const answerTimes: Record<string, number> = JSON.parse(row.answer_times || "{}");
 
   const qRows = db
@@ -40,6 +55,10 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     selected_labels: string[];
     explanation: string;
     domain_code: string;
+    ordered_ids?: number[];
+    correct_order?: { id: number; label: string; body: string }[];
+    pairs?: Record<number, number>;
+    correct_pairs?: { left: { id: number; label: string; body: string }; right: { id: number; label: string; body: string } }[];
   }[] = [];
 
   for (const qid of questionIds) {
@@ -47,8 +66,19 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     perDomain[domain] = perDomain[domain] || { correct: 0, total: 0 };
     perDomain[domain].total += 1;
 
-    const selected = answers[String(qid)] || [];
-    const correct = selected.length > 0 && isAnswerCorrect(qid, selected);
+    const type = getQuestionType(qid);
+    const stored = answers[String(qid)] || {};
+    let correct = false;
+    if (type === "ordering") {
+      const orderedIds = stored.ordered_ids || [];
+      correct = orderedIds.length > 0 && isOrderingCorrect(qid, orderedIds);
+    } else if (type === "matching") {
+      const pairs = stored.pairs || {};
+      correct = Object.keys(pairs).length > 0 && isMatchingCorrect(qid, pairs);
+    } else {
+      const selected = stored.selected_labels || [];
+      correct = selected.length > 0 && isAnswerCorrect(qid, selected);
+    }
     if (correct) {
       correctCount += 1;
       perDomain[domain].correct += 1;
@@ -75,10 +105,12 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     review.push({
       question_id: qid,
       correct,
-      correct_labels: getCorrectLabels(qid),
-      selected_labels: selected,
+      correct_labels: type === "ordering" || type === "matching" ? [] : getCorrectLabels(qid),
+      selected_labels: stored.selected_labels || [],
       explanation: getExplanation(qid),
       domain_code: domain,
+      ...(type === "ordering" && { ordered_ids: stored.ordered_ids || [], correct_order: getCorrectOrder(qid) }),
+      ...(type === "matching" && { pairs: stored.pairs || {}, correct_pairs: getCorrectPairs(qid) }),
     });
   }
 
