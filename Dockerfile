@@ -26,6 +26,7 @@ COPY --from=builder /app/next.config.mjs ./next.config.mjs
 COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/data ./data
 COPY --from=builder /app/src/lib ./src/lib
+COPY --from=builder /app/VERSION ./VERSION
 
 # /app/data holds the question-bank JSON that ships WITH the image (updated on
 # each rebuild via git pull). /app/db-data is where the actual SQLite progress
