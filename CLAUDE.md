@@ -47,6 +47,16 @@ back into content files.
 - Difficulty is measured from `reviews`, never declared by an author. Don't add a
   `difficulty` field back.
 
+## Versioning
+
+The root `VERSION` file is a single integer, shown in the app's footer (`src/app/layout.tsx`)
+so James can tell at a glance whether the instance he's looking at matches the latest push.
+
+- **Bump it by exactly 1** on every commit that changes app behavior — code, content, or
+  config that affects what's running. Doc-only edits (README, docs/, this file) don't need a bump.
+- Never reset it, skip a number, or bump by more than 1 in one commit.
+- One bump per commit, even if the commit touches several files.
+
 ## Commands
 
 ```bash

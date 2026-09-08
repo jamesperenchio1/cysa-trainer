@@ -1,5 +1,9 @@
 import type { Metadata, Viewport } from "next";
+import fs from "fs";
+import path from "path";
 import "./globals.css";
+
+const APP_VERSION = fs.readFileSync(path.join(process.cwd(), "VERSION"), "utf-8").trim();
 
 export const metadata: Metadata = {
   title: "CySA+ Trainer",
@@ -22,6 +26,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="bg-bg text-gray-100 min-h-screen antialiased">
         <div className="max-w-3xl mx-auto px-4 pb-16 pt-6">{children}</div>
+        <div className="fixed bottom-1.5 right-2 text-[10px] text-gray-600 select-none pointer-events-none z-50">
+          v{APP_VERSION}
+        </div>
         <script
           dangerouslySetInnerHTML={{
             __html: `
