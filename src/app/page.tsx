@@ -55,26 +55,13 @@ export default function Dashboard() {
         </Link>
       </div>
 
-      <Link href="/analytics" className="card hover:border-accent transition-colors flex items-center gap-3 mb-3">
+      <Link href="/analytics" className="card hover:border-accent transition-colors flex items-center gap-3 mb-6">
         <p className="text-2xl">📊</p>
         <div>
           <p className="font-semibold">Analytics</p>
           <p className="text-xs text-gray-500">Subtopic accuracy, activity trend, exam score history</p>
         </div>
       </Link>
-
-      <a
-        href="https://books.gingerbrosshop.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="card hover:border-accent transition-colors flex items-center gap-3 mb-6"
-      >
-        <p className="text-2xl">📚</p>
-        <div>
-          <p className="font-semibold">Books</p>
-          <p className="text-xs text-gray-500">CySA+ study guide, practice tests, and the rest of the library</p>
-        </div>
-      </a>
 
       <div className="card mb-6">
         <h2 className="font-semibold mb-4">Domain mastery</h2>
