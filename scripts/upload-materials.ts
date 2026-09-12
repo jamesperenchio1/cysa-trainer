@@ -1,6 +1,5 @@
 import fs from "fs";
 import path from "path";
-import { createClient } from "@supabase/supabase-js";
 
 // Uploads the local (gitignored) books and derived content to the self-hosted
 // Supabase Storage bucket, so the deployed app can serve them without baking
@@ -13,6 +12,8 @@ import { createClient } from "@supabase/supabase-js";
 //
 // Optional: SUPABASE_MATERIALS_BUCKET (default cysa-materials),
 //           SUPABASE_BOOKS_PREFIX (default books).
+//
+// Uses the Storage REST API directly (no @supabase/supabase-js dependency).
 
 const BUCKET = process.env.SUPABASE_MATERIALS_BUCKET || "cysa-materials";
 const BOOKS_PREFIX = (process.env.SUPABASE_BOOKS_PREFIX || "books").replace(
@@ -36,8 +37,8 @@ const EXT_MIME: Record<string, string> = {
   ".json": "application/json",
 };
 
-const url = process.env.SUPABASE_URL;
-const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const url = (process.env.SUPABASE_URL || "").replace(/\/+$/, "");
+const key = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 if (!url || !key) {
   console.error(
     "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set in the environment."
@@ -45,19 +46,34 @@ if (!url || !key) {
   process.exit(1);
 }
 
-const supabase = createClient(url, key, {
-  auth: { persistSession: false, autoRefreshToken: false },
-});
+function encodeObjectPath(objectPath: string): string {
+  return objectPath
+    .replace(/^\/+/, "")
+    .split("/")
+    .map(encodeURIComponent)
+    .join("/");
+}
 
 async function uploadFile(objectPath: string, filePath: string) {
   const ext = path.extname(filePath).toLowerCase();
   const contentType = EXT_MIME[ext] || "application/octet-stream";
   const body = fs.readFileSync(filePath);
-  const { error } = await supabase.storage
-    .from(BUCKET)
-    .upload(objectPath, body, { upsert: true, contentType });
-  if (error) {
-    throw new Error(`Failed to upload ${objectPath}: ${error.message}`);
+  const res = await fetch(
+    `${url}/storage/v1/object/${BUCKET}/${encodeObjectPath(objectPath)}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${key}`,
+        apikey: key,
+        "Content-Type": contentType,
+        "x-upsert": "true",
+      },
+      body,
+    }
+  );
+  if (!res.ok) {
+    const detail = await res.text().catch(() => "");
+    throw new Error(`Failed to upload ${objectPath}: ${res.status} ${detail}`);
   }
   console.log(`uploaded ${objectPath} (${(body.length / 1048576).toFixed(1)} MB)`);
 }

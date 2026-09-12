@@ -1,6 +1,5 @@
 import { promises as fs } from "fs";
 import path from "path";
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 // Books/materials live ONLY on the self-hosted instance, never in the public
 // repo. They are served from either:
@@ -9,6 +8,10 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 //       books are not baked into the image; or
 //   (b) a gitignored local directory (see .gitignore / .dockerignore) -- the
 //       default for local development.
+//
+// The Storage REST API is called directly with fetch rather than pulling in
+// @supabase/supabase-js, whose realtime client requires native WebSocket
+// (Node 22+) and would otherwise crash the Node 20 image on startup.
 export const MATERIALS_DIR =
   process.env.MATERIALS_DIR || path.join(process.cwd(), "materials");
 
@@ -18,7 +21,7 @@ const BOOKS_PREFIX = (process.env.SUPABASE_BOOKS_PREFIX || "books").replace(
   ""
 );
 
-const SUPABASE_URL = process.env.SUPABASE_URL || "";
+const SUPABASE_URL = (process.env.SUPABASE_URL || "").replace(/\/+$/, "");
 const SUPABASE_KEY =
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY || "";
 
@@ -38,14 +41,25 @@ export function usingSupabase(): boolean {
   return Boolean(SUPABASE_URL && SUPABASE_KEY);
 }
 
-let client: SupabaseClient | null = null;
-function supabase(): SupabaseClient {
-  if (!client) {
-    client = createClient(SUPABASE_URL, SUPABASE_KEY, {
-      auth: { persistSession: false, autoRefreshToken: false },
-    });
-  }
-  return client;
+function storageUrl(suffix: string): string {
+  return `${SUPABASE_URL}/storage/v1${suffix}`;
+}
+
+function authHeaders(extra: Record<string, string> = {}): Record<string, string> {
+  return {
+    Authorization: `Bearer ${SUPABASE_KEY}`,
+    apikey: SUPABASE_KEY,
+    ...extra,
+  };
+}
+
+// Encode each path segment but keep the slashes between them.
+function encodeObjectPath(objectPath: string): string {
+  return objectPath
+    .replace(/^\/+/, "")
+    .split("/")
+    .map(encodeURIComponent)
+    .join("/");
 }
 
 function slugify(name: string): string {
@@ -57,6 +71,31 @@ function slugify(name: string): string {
   // Include the extension so e.g. practice-tests.pdf and practice-tests.epub
   // get distinct keys instead of colliding on "practice-tests".
   return `${slug}-${ext}`;
+}
+
+interface StorageListItem {
+  name: string;
+  metadata: { size?: number } | null;
+}
+
+async function listRemote(): Promise<StorageListItem[]> {
+  try {
+    const res = await fetch(storageUrl(`/object/list/${BUCKET}`), {
+      method: "POST",
+      headers: authHeaders({ "Content-Type": "application/json" }),
+      body: JSON.stringify({
+        prefix: BOOKS_PREFIX,
+        limit: 200,
+        sortBy: { column: "name", order: "asc" },
+      }),
+      cache: "no-store",
+    });
+    if (!res.ok) return [];
+    const data = (await res.json()) as StorageListItem[];
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
 }
 
 async function listLocal(): Promise<Material[]> {
@@ -84,31 +123,25 @@ async function listLocal(): Promise<Material[]> {
   return materials;
 }
 
-async function listRemote(): Promise<Material[]> {
-  const { data, error } = await supabase()
-    .storage.from(BUCKET)
-    .list(BOOKS_PREFIX, { limit: 200, sortBy: { column: "name", order: "asc" } });
-  if (error || !data) return [];
-
-  const materials: Material[] = [];
-  for (const item of data) {
-    const name = item.name;
-    const ext = path.extname(name).toLowerCase();
-    const meta = EXT_MIME[ext];
-    if (!meta) continue;
-    const size = (item.metadata as { size?: number } | null)?.size ?? 0;
-    materials.push({
-      key: slugify(name),
-      name,
-      kind: meta.kind,
-      size_bytes: size,
-    });
-  }
-  return materials;
-}
-
 export async function listMaterials(): Promise<Material[]> {
-  const materials = usingSupabase() ? await listRemote() : await listLocal();
+  let materials: Material[];
+  if (usingSupabase()) {
+    const items = await listRemote();
+    materials = [];
+    for (const item of items) {
+      const ext = path.extname(item.name).toLowerCase();
+      const meta = EXT_MIME[ext];
+      if (!meta) continue;
+      materials.push({
+        key: slugify(item.name),
+        name: item.name,
+        kind: meta.kind,
+        size_bytes: item.metadata?.size ?? 0,
+      });
+    }
+  } else {
+    materials = await listLocal();
+  }
   return materials.sort((a, b) => a.name.localeCompare(b.name));
 }
 
@@ -126,14 +159,27 @@ export async function getMaterialBytes(
   material: Material
 ): Promise<Buffer | null> {
   if (usingSupabase()) {
-    const { data, error } = await supabase()
-      .storage.from(BUCKET)
-      .download(`${BOOKS_PREFIX}/${material.name}`);
-    if (error || !data) return null;
-    return Buffer.from(await data.arrayBuffer());
+    return downloadStorageBytes(`${BOOKS_PREFIX}/${material.name}`);
   }
   try {
     return await fs.readFile(materialPath(material));
+  } catch {
+    return null;
+  }
+}
+
+// Downloads any object from the bucket as bytes (null when missing).
+export async function downloadStorageBytes(
+  objectPath: string
+): Promise<Buffer | null> {
+  if (!usingSupabase()) return null;
+  try {
+    const res = await fetch(
+      storageUrl(`/object/${BUCKET}/${encodeObjectPath(objectPath)}`),
+      { headers: authHeaders(), cache: "no-store" }
+    );
+    if (!res.ok) return null;
+    return Buffer.from(await res.arrayBuffer());
   } catch {
     return null;
   }
@@ -145,10 +191,6 @@ export async function getMaterialBytes(
 export async function downloadStorageText(
   objectPath: string
 ): Promise<string | null> {
-  if (!usingSupabase()) return null;
-  const { data, error } = await supabase()
-    .storage.from(BUCKET)
-    .download(objectPath.replace(/^\/+/, ""));
-  if (error || !data) return null;
-  return await data.text();
+  const bytes = await downloadStorageBytes(objectPath);
+  return bytes ? bytes.toString("utf8") : null;
 }
