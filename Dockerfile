@@ -36,4 +36,4 @@ COPY --from=builder /app/src/lib ./src/lib
 RUN mkdir -p /app/db-data
 
 EXPOSE 3000
-CMD ["sh", "-c", "npx tsx scripts/seed.ts && npm run start"]
+CMD ["sh", "-c", "npx tsx scripts/seed.ts && npx tsx scripts/seed-cards.ts && npm run start"]

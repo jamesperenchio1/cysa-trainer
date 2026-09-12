@@ -1,5 +1,5 @@
 const CACHE_NAME = "cysa-trainer-v1";
-const APP_SHELL = ["/", "/drill", "/exam", "/manifest.json"];
+const APP_SHELL = ["/", "/drill", "/exam", "/books", "/manifest.json"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

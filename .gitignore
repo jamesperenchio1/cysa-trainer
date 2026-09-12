@@ -6,3 +6,15 @@ data/cysa.db-*
 .env
 .env.local
 .DS_Store
+
+# Copyrighted study material -- NEVER committed. This repo is public. The books
+# live only on the self-hosted instance (see materials/ and docker-compose.yml).
+cysa books/
+materials/
+
+# Derived content extracted from copyrighted books -- private/local only.
+data/derived/
+
+# Local tooling artifacts
+.playwright-mcp/
+__pycache__/
