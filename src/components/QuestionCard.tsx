@@ -26,6 +26,20 @@ interface Feedback {
   correct_pairs?: { left: { id: number; label: string; body: string }; right: { id: number; label: string; body: string } }[];
 }
 
+function parseExhibitImages(raw: string | null | undefined): string[] {
+  if (!raw) return [];
+  const s = raw.trim();
+  if (s.startsWith("[")) {
+    try {
+      const arr = JSON.parse(s);
+      return Array.isArray(arr) ? arr.filter((x): x is string => typeof x === "string") : [];
+    } catch {
+      return [];
+    }
+  }
+  return [s];
+}
+
 interface Props {
   question: QuestionDTO;
   onSubmit: (payload: SubmitPayload) => void;
@@ -166,6 +180,15 @@ export default function QuestionCard({
         )}
         {question.stem}
       </p>
+
+      {parseExhibitImages(question.exhibit_image).map((src, i) => (
+        <img
+          key={i}
+          src={src}
+          alt={`Question exhibit ${i + 1}`}
+          className="mt-3 w-full max-h-[460px] rounded-lg border border-gray-700 bg-white object-contain"
+        />
+      ))}
 
       {question.exhibit && <pre className="exhibit-block">{question.exhibit}</pre>}
 
