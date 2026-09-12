@@ -9,8 +9,9 @@ data/cysa.db-*
 
 # Copyrighted study material -- NEVER committed. This repo is public. The books
 # live only on the self-hosted instance (see materials/ and docker-compose.yml).
-cysa books/
-materials/
+# Anchored to the repo root so they do NOT match src/app/api/materials/.
+/cysa books/
+/materials/
 
 # Derived content extracted from copyrighted books -- private/local only.
 data/derived/

@@ -6,5 +6,5 @@ data/cysa.db-*
 .env*
 *.log
 cysa books
-materials
+/materials
 data/derived
