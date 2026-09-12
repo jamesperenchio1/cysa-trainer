@@ -1,6 +1,5 @@
-import { promises as fs } from "fs";
 import { NextResponse } from "next/server";
-import { materialPath, resolveMaterial } from "@/lib/materials";
+import { getMaterialBytes, resolveMaterial } from "@/lib/materials";
 
 export const dynamic = "force-dynamic";
 
@@ -22,10 +21,8 @@ export async function GET(
     return NextResponse.json({ material });
   }
 
-  let data: Buffer;
-  try {
-    data = await fs.readFile(materialPath(material));
-  } catch {
+  const data = await getMaterialBytes(material);
+  if (!data) {
     return new NextResponse("Not found", { status: 404 });
   }
 

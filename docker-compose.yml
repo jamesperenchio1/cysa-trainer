@@ -9,16 +9,20 @@ services:
       - "127.0.0.1:3477:3000"
     volumes:
       - cysa_db_data:/app/db-data
-      # Copyrighted books/PDFs/EPUBs live ONLY on the host machine, never in the
-      # image or the public repo. Bind-mount the host materials/ into the container
-      # so the /books viewer can serve them. Add your files to host ./materials.
-      - ./materials:/app/materials
-      # Derived content extracted from the copyrighted books (study-guide review
-      # questions -> flashcards). Also private/local only: kept out of the image
-      # and the public repo, bind-mounted here so seed-cards can import it.
-      - ./data/derived:/app/data/derived
     environment:
       - NODE_ENV=production
+      # Copyrighted books/PDFs/EPUBs and the derived flashcards live in the
+      # self-hosted Supabase Storage bucket, NOT in the image or the public repo.
+      # Leave these unset to fall back to a local ./materials directory (dev).
+      # Values come from the gitignored .env next to this file.
+      - SUPABASE_URL=${SUPABASE_URL:-}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY:-}
+      - SUPABASE_MATERIALS_BUCKET=${SUPABASE_MATERIALS_BUCKET:-cysa-materials}
+      - SUPABASE_BOOKS_PREFIX=${SUPABASE_BOOKS_PREFIX:-books}
+    # The Supabase gateway (envoy) is published on the host at :8000, so reach
+    # it through the host gateway rather than joining the Supabase network.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
 volumes:
   cysa_db_data:

@@ -8,10 +8,12 @@
     "start": "next start -p 3000",
     "seed": "tsx scripts/seed.ts",
     "seed-cards": "tsx scripts/seed-cards.ts",
+    "upload-materials": "tsx scripts/upload-materials.ts",
     "reseed": "tsx scripts/seed.ts --wipe",
     "add-questions": "tsx scripts/import-questions.ts"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.116.0",
     "better-sqlite3": "^11.3.0",
     "epubjs": "^0.3.93",
     "next": "14.2.35",

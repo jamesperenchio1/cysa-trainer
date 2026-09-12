@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import db from "../src/lib/db";
+import { downloadStorageText, usingSupabase } from "../src/lib/materials";
 
 interface DerivedCard {
   front: string;
@@ -18,6 +19,26 @@ const DERIVED_PATH =
   process.env.CYSA_CARDS_PATH ||
   path.join(process.cwd(), "data", "derived", "study-guide", "flashcards.json");
 
+// When Supabase Storage is configured (production), the derived flashcards are
+// read from the bucket instead of the local disk. Local dev falls back to the
+// file produced by scripts/extract_study_guide.py.
+const DERIVED_OBJECT =
+  process.env.SUPABASE_CARDS_OBJECT || "derived/study-guide/flashcards.json";
+
+async function loadCards(): Promise<DerivedCard[] | null> {
+  if (usingSupabase()) {
+    const text = await downloadStorageText(DERIVED_OBJECT);
+    if (text) {
+      return JSON.parse(text) as DerivedCard[];
+    }
+    console.log(
+      `No derived flashcards in storage at ${DERIVED_OBJECT} -- falling back to local file.`
+    );
+  }
+  if (!fs.existsSync(DERIVED_PATH)) return null;
+  return JSON.parse(fs.readFileSync(DERIVED_PATH, "utf8")) as DerivedCard[];
+}
+
 function domainIdFor(code: string | undefined): number | null {
   if (!code) return null;
   const row = db
@@ -26,18 +47,16 @@ function domainIdFor(code: string | undefined): number | null {
   return row?.id ?? null;
 }
 
-function main() {
+async function main() {
   const wipe = process.argv.includes("--wipe-cards");
 
-  if (!fs.existsSync(DERIVED_PATH)) {
+  const cards = await loadCards();
+  if (!cards) {
     console.log(
       `No derived flashcards at ${DERIVED_PATH} -- skipping (this is normal on a fresh clone; run scripts/extract_study_guide.py first).`
     );
     return;
   }
-
-  const raw = fs.readFileSync(DERIVED_PATH, "utf8");
-  const cards = JSON.parse(raw) as DerivedCard[];
   if (!Array.isArray(cards)) {
     throw new Error("flashcards.json is not an array");
   }
@@ -102,7 +121,11 @@ function main() {
   const total = (
     db.prepare("SELECT COUNT(*) AS n FROM flashcards").get() as { n: number }
   ).n;
-  console.log(`Seeded ${count} cards from ${DERIVED_PATH} (${total} total in bank).`);
+  const origin = usingSupabase() ? `storage:${DERIVED_OBJECT}` : DERIVED_PATH;
+  console.log(`Seeded ${count} cards from ${origin} (${total} total in bank).`);
 }
 
-main();
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
