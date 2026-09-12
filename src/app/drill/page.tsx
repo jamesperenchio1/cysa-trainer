@@ -23,6 +23,7 @@ export default function DrillPage() {
   const [loading, setLoading] = useState(true);
   const [done, setDone] = useState(false);
   const [domain, setDomain] = useState("");
+  const [ready, setReady] = useState(false);
 
   const loadBatch = useCallback(async (domainCode?: string) => {
     setLoading(true);
@@ -43,9 +44,16 @@ export default function DrillPage() {
   }, []);
 
   useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get("domain") ?? "";
+    if (["SO", "VM", "IR", "RC"].includes(requested)) setDomain(requested);
+    setReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!ready) return;
     loadBatch(domain);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [domain]);
+  }, [domain, ready]);
 
   const current = queue[index];
 

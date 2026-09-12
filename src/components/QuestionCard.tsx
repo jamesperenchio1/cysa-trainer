@@ -18,8 +18,7 @@ export interface SubmitPayload {
   time_seconds: number;
 }
 
-interface Feedback {
-  correct: boolean;
+interface Feedback {  correct: boolean;
   correct_labels: string[];
   explanation: string;
   correct_order?: { id: number; label: string; body: string }[];

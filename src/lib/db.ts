@@ -98,6 +98,70 @@ CREATE TABLE IF NOT EXISTS streak (
   last_practice_date TEXT
 );
 INSERT OR IGNORE INTO streak (id, current_streak, longest_streak, last_practice_date) VALUES (1, 0, 0, NULL);
+
+-- Reading state for book material (single-user app: one row per material).
+CREATE TABLE IF NOT EXISTS reading_state (
+  material_key TEXT PRIMARY KEY,
+  cfi TEXT,                        -- epub CFI of the last-read position
+  percent REAL NOT NULL DEFAULT 0, -- 0..1 progress through the book
+  chapter_href TEXT,
+  chapter_title TEXT,
+  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- Per-chapter progress, so /books can show a chapter list with domain + status.
+CREATE TABLE IF NOT EXISTS chapter_progress (
+  material_key TEXT NOT NULL,
+  chapter_href TEXT NOT NULL,
+  chapter_title TEXT,
+  domain_code TEXT,                -- 'SO' | 'VM' | 'IR' | 'RC' (nullable for non-domain chapters)
+  percent REAL NOT NULL DEFAULT 0,
+  completed INTEGER NOT NULL DEFAULT 0,
+  updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+  PRIMARY KEY (material_key, chapter_href)
+);
+
+CREATE TABLE IF NOT EXISTS bookmarks (
+  id INTEGER PRIMARY KEY,
+  material_key TEXT NOT NULL,
+  cfi TEXT NOT NULL,
+  label TEXT,
+  chapter_href TEXT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- Flashcards derived from the study guide (Exam Essentials / review Q&A).
+CREATE TABLE IF NOT EXISTS flashcards (
+  id INTEGER PRIMARY KEY,
+  external_key TEXT UNIQUE,        -- stable key from the derived seed, for safe re-import
+  domain_id INTEGER REFERENCES domains(id),
+  subtopic_id INTEGER REFERENCES subtopics(id),
+  chapter_href TEXT,
+  front TEXT NOT NULL,
+  back TEXT NOT NULL,
+  source TEXT,                     -- e.g. 'Exam Essentials: Chapter 3'
+  tags TEXT,                       -- JSON array of freeform tags
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS card_srs_state (
+  card_id INTEGER PRIMARY KEY REFERENCES flashcards(id) ON DELETE CASCADE,
+  repetitions INTEGER NOT NULL DEFAULT 0,
+  ease_factor REAL NOT NULL DEFAULT 2.5,
+  interval_days REAL NOT NULL DEFAULT 0,
+  due_at TEXT NOT NULL DEFAULT (datetime('now')),
+  last_result INTEGER,
+  last_seen_at TEXT,
+  times_seen INTEGER NOT NULL DEFAULT 0,
+  times_correct INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS card_review_log (
+  id INTEGER PRIMARY KEY,
+  card_id INTEGER NOT NULL REFERENCES flashcards(id),
+  correct INTEGER NOT NULL,
+  reviewed_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
 `);
 
 // Migrate existing DBs (the volume-mounted one on a running deployment) that predate
@@ -118,5 +182,10 @@ ensureColumn("exam_sessions", "answer_times", "answer_times TEXT NOT NULL DEFAUL
 // exhibit_image: single path ("/exhibits/x.png") or a JSON array of paths for
 // questions with more than one figure. Rendered above the choices.
 ensureColumn("questions", "exhibit_image", "exhibit_image TEXT");
+// flashcards.choices holds the JSON array of the original review-question choices
+// and correct_index the 0-based index of the right one, so a card can be graded
+// as a multiple-choice recall rather than a plain flip.
+ensureColumn("flashcards", "choices", "choices TEXT");
+ensureColumn("flashcards", "correct_index", "correct_index INTEGER");
 
 export default db;

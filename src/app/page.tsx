@@ -63,18 +63,49 @@ export default function Dashboard() {
         </div>
       </Link>
 
+      <Link href="/books" className="card hover:border-accent transition-colors flex items-center gap-3 mb-3">
+        <p className="text-2xl">📚</p>
+        <div>
+          <p className="font-semibold">Practice Tests & Books</p>
+          <p className="text-xs text-gray-500">Official CS0-004 exam reference, viewable on any device</p>
+        </div>
+      </Link>
+
       <a
         href="https://books.gingerbrosshop.com"
         target="_blank"
         rel="noopener noreferrer"
         className="card hover:border-accent transition-colors flex items-center gap-3 mb-6"
       >
-        <p className="text-2xl">📚</p>
+        <p className="text-2xl">🗂️</p>
         <div>
-          <p className="font-semibold">Books</p>
-          <p className="text-xs text-gray-500">CySA+ study guide, practice tests, and the rest of the library</p>
+          <p className="font-semibold">Online library</p>
+          <p className="text-xs text-gray-500">The rest of the book library (Calibre-Web)</p>
         </div>
       </a>
+
+      {stats &&
+        (() => {
+          const started = stats.domains.filter((d) => d.accuracy !== null);
+          const weakest = started.length
+            ? started.reduce((a, b) => ((b.accuracy ?? 0) < (a.accuracy ?? 0) ? b : a))
+            : stats.domains.reduce((a, b) => (b.exam_weight_pct > a.exam_weight_pct ? b : a));
+          return (
+            <Link
+              href="/books/study-guide-epub"
+              className="card hover:border-accent transition-colors flex items-center gap-3 mb-6"
+            >
+              <p className="text-2xl">📖</p>
+              <div>
+                <p className="font-semibold">Recommended reading</p>
+                <p className="text-xs text-gray-500">
+                  {started.length ? `Focus on ${weakest.domain_name}` : `Start with ${weakest.domain_name}`}
+                  {weakest.accuracy !== null && ` — ${weakest.accuracy}% accuracy`} · Study Guide chapters →
+                </p>
+              </div>
+            </Link>
+          );
+        })()}
 
       <div className="card mb-6">
         <h2 className="font-semibold mb-4">Domain mastery</h2>

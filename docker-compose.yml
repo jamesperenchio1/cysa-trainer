@@ -9,6 +9,14 @@ services:
       - "127.0.0.1:3477:3000"
     volumes:
       - cysa_db_data:/app/db-data
+      # Copyrighted books/PDFs/EPUBs live ONLY on the host machine, never in the
+      # image or the public repo. Bind-mount the host materials/ into the container
+      # so the /books viewer can serve them. Add your files to host ./materials.
+      - ./materials:/app/materials
+      # Derived content extracted from the copyrighted books (study-guide review
+      # questions -> flashcards). Also private/local only: kept out of the image
+      # and the public repo, bind-mounted here so seed-cards can import it.
+      - ./data/derived:/app/data/derived
     environment:
       - NODE_ENV=production
 

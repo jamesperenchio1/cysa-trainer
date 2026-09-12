@@ -5,3 +5,6 @@ data/cysa.db-*
 .git
 .env*
 *.log
+cysa books
+materials
+data/derived
