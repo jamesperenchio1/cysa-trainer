@@ -5,6 +5,7 @@ interface QuestionRow {
   id: number;
   stem: string;
   exhibit: string | null;
+  exhibit_image: string | null;
   difficulty: number;
   is_multi: number;
   select_n: number;
@@ -38,6 +39,7 @@ export function hydrateQuestions(rows: QuestionRow[]): QuestionDTO[] {
     type: r.type || "mcq",
     stem: r.stem,
     exhibit: r.exhibit,
+    exhibit_image: r.exhibit_image,
     // Shuffled per fetch: the authored choice order (correct answer was almost
     // always written 2nd) is otherwise a trivially learnable "always pick B" exploit.
     // For "ordering" questions this is what makes the puzzle work at all -- the
@@ -58,7 +60,7 @@ export function getQuestionsByIds(ids: number[]): QuestionDTO[] {
   const placeholders = ids.map(() => "?").join(",");
   const rows = db
     .prepare(
-      `SELECT q.id, q.stem, q.exhibit, q.difficulty, q.is_multi, q.select_n, q.type,
+      `SELECT q.id, q.stem, q.exhibit, q.exhibit_image, q.difficulty, q.is_multi, q.select_n, q.type,
               s.name as subtopic, d.code as domain_code, d.name as domain_name
        FROM questions q
        JOIN domains d ON d.id = q.domain_id

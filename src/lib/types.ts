@@ -20,6 +20,9 @@ export interface QuestionDTO {
   type: QuestionType;
   stem: string;
   exhibit: string | null;
+  // Optional image exhibit: a single "/exhibits/x.png" path, or a JSON array
+  // string of paths when a question has more than one figure.
+  exhibit_image: string | null;
   choices: ChoiceDTO[];
 }
 

@@ -21,6 +21,7 @@ type SeedQuestion = {
   type?: "mcq" | "ordering" | "matching" | "hotspot";
   stem: string;
   exhibit: string | null;
+  exhibit_image?: string | null;
   choices: SeedChoice[];
   explanation: string;
 };
@@ -48,13 +49,27 @@ function main() {
   const file = argPath ? path.resolve(argPath) : path.join(process.cwd(), "data", "questions.json");
   const items: SeedQuestion[] = JSON.parse(fs.readFileSync(file, "utf-8"));
 
+  if (process.argv.includes("--wipe")) {
+    db.transaction(() => {
+      db.prepare("DELETE FROM review_log").run();
+      db.prepare("DELETE FROM exam_sessions").run();
+      db.prepare("DELETE FROM choices").run();
+      db.prepare("DELETE FROM srs_state").run();
+      db.prepare("DELETE FROM questions").run();
+      db.prepare("DELETE FROM subtopics").run();
+      db.prepare("DELETE FROM domains").run();
+      db.prepare("UPDATE streak SET current_streak=0, longest_streak=0, last_practice_date=NULL WHERE id=1").run();
+    })();
+    console.log("Wiped existing questions, choices, SRS state, review log, and exam sessions.");
+  }
+
   const insertQuestion = db.prepare(`
-    INSERT INTO questions (external_key, domain_id, subtopic_id, difficulty, is_multi, select_n, type, stem, exhibit, explanation)
-    VALUES (@external_key, @domain_id, @subtopic_id, @difficulty, @is_multi, @select_n, @type, @stem, @exhibit, @explanation)
+    INSERT INTO questions (external_key, domain_id, subtopic_id, difficulty, is_multi, select_n, type, stem, exhibit, exhibit_image, explanation)
+    VALUES (@external_key, @domain_id, @subtopic_id, @difficulty, @is_multi, @select_n, @type, @stem, @exhibit, @exhibit_image, @explanation)
     ON CONFLICT(external_key) DO UPDATE SET
       domain_id=excluded.domain_id, subtopic_id=excluded.subtopic_id, difficulty=excluded.difficulty,
       is_multi=excluded.is_multi, select_n=excluded.select_n, type=excluded.type, stem=excluded.stem,
-      exhibit=excluded.exhibit, explanation=excluded.explanation
+      exhibit=excluded.exhibit, exhibit_image=excluded.exhibit_image, explanation=excluded.explanation
   `);
   const clearChoices = db.prepare("DELETE FROM choices WHERE question_id = ?");
   const insertChoice = db.prepare(`
@@ -81,6 +96,7 @@ function main() {
         type: item.type || "mcq",
         stem: item.stem,
         exhibit: item.exhibit,
+        exhibit_image: item.exhibit_image ?? null,
         explanation: item.explanation,
       });
       const row = getQuestionId.get(item.external_key) as { id: number };

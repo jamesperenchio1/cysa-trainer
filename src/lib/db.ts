@@ -112,5 +112,8 @@ ensureColumn("choices", "match_group", "match_group TEXT");
 ensureColumn("choices", "pair_key", "pair_key TEXT");
 ensureColumn("review_log", "time_seconds", "time_seconds INTEGER");
 ensureColumn("exam_sessions", "answer_times", "answer_times TEXT NOT NULL DEFAULT '{}'");
+// exhibit_image: single path ("/exhibits/x.png") or a JSON array of paths for
+// questions with more than one figure. Rendered above the choices.
+ensureColumn("questions", "exhibit_image", "exhibit_image TEXT");
 
 export default db;
