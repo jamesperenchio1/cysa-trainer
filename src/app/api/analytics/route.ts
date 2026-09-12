@@ -90,12 +90,13 @@ export async function GET() {
     avg_seconds: Math.round(r.avg_seconds),
   }));
 
-  // Daily activity for the last 30 days -- attempts + accuracy per day, drill + exam combined.
+  // Daily activity for the last year -- attempts + accuracy per day, drill + exam combined.
+  // Powers the GitHub/Anki-style contribution heatmap on the analytics page.
   const dailyRows = db
     .prepare(
       `SELECT date(answered_at) as day, COUNT(*) as attempts, SUM(correct) as correct
        FROM review_log
-       WHERE answered_at >= datetime('now', '-30 days')
+       WHERE answered_at >= datetime('now', '-371 days')
        GROUP BY date(answered_at)
        ORDER BY day ASC`
     )

@@ -68,6 +68,49 @@ function accuracyColor(acc: number | null) {
   return "bg-bad";
 }
 
+// Sequential single-hue ramp (panel -> accent) for the activity heatmap.
+// Encodes magnitude (questions answered), never accuracy -- accuracyColor
+// above is a separate status encoding and shouldn't be reused for this.
+const HEATMAP_LEVEL_COLORS = ["#171b21", "#1c2f4d", "#234a7a", "#2f68b0", "#4f8cff"];
+
+interface HeatmapDay {
+  key: string;
+  date: Date;
+  attempts: number;
+  accuracy: number | null;
+}
+
+function buildHeatmapWeeks(daily: DailyStat[]): HeatmapDay[][] {
+  const byDay = new Map(daily.map((d) => [d.day, d]));
+
+  const now = new Date();
+  const todayUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  const rangeStart = todayUTC - 370 * 86400000;
+  const gridStart = rangeStart - new Date(rangeStart).getUTCDay() * 86400000;
+
+  const days: HeatmapDay[] = [];
+  for (let t = gridStart; t <= todayUTC; t += 86400000) {
+    const date = new Date(t);
+    const key = date.toISOString().slice(0, 10);
+    const rec = byDay.get(key);
+    days.push({ key, date, attempts: rec?.attempts ?? 0, accuracy: rec?.accuracy ?? null });
+  }
+
+  const weeks: HeatmapDay[][] = [];
+  for (let i = 0; i < days.length; i += 7) weeks.push(days.slice(i, i + 7));
+  return weeks;
+}
+
+function heatmapLevel(attempts: number, thresholds: number[]): number {
+  if (attempts <= 0) return 0;
+  for (let i = 0; i < thresholds.length; i++) {
+    if (attempts <= thresholds[i]) return i + 1;
+  }
+  return thresholds.length + 1;
+}
+
+const MONTH_LABELS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 export default function AnalyticsPage() {
   const [data, setData] = useState<Analytics | null>(null);
 
@@ -90,7 +133,14 @@ export default function AnalyticsPage() {
     .sort((a, b) => (a.accuracy ?? 0) - (b.accuracy ?? 0))
     .slice(0, 8);
 
-  const maxDailyAttempts = Math.max(1, ...data.daily.map((d) => d.attempts));
+  const heatmapWeeks = buildHeatmapWeeks(data.daily);
+  const nonZeroAttempts = data.daily
+    .map((d) => d.attempts)
+    .filter((a) => a > 0)
+    .sort((a, b) => a - b);
+  const quantile = (q: number) =>
+    nonZeroAttempts.length === 0 ? 0 : nonZeroAttempts[Math.floor(q * (nonZeroAttempts.length - 1))];
+  const heatmapThresholds = [quantile(0.25), quantile(0.5), quantile(0.75)];
 
   return (
     <main>
@@ -171,21 +221,56 @@ export default function AnalyticsPage() {
 
       {data.daily.length > 0 && (
         <div className="card mb-6">
-          <h2 className="font-semibold mb-1">Activity, last 30 days</h2>
-          <p className="text-xs text-gray-500 mb-4">bar height = questions answered, color = accuracy</p>
-          <div className="flex items-end gap-[3px] h-24">
-            {data.daily.map((d) => (
-              <div
-                key={d.day}
-                className="flex-1 flex flex-col justify-end h-full"
-                title={`${d.day}: ${d.attempts} answered, ${d.accuracy ?? "—"}% correct`}
-              >
-                <div
-                  className={`w-full rounded-sm ${accuracyColor(d.accuracy)}`}
-                  style={{ height: `${Math.max(6, (d.attempts / maxDailyAttempts) * 100)}%` }}
-                />
+          <h2 className="font-semibold mb-1">Activity</h2>
+          <p className="text-xs text-gray-500 mb-4">past year, darker = more questions answered that day</p>
+          <div className="overflow-x-auto">
+            <div className="inline-flex flex-col gap-1" style={{ minWidth: heatmapWeeks.length * 13 }}>
+              <div className="flex gap-[3px] text-[10px] text-gray-500 pl-[3px]">
+                {heatmapWeeks.map((week, i) => {
+                  const first = week[0];
+                  const prevFirst = i > 0 ? heatmapWeeks[i - 1][0] : null;
+                  const showLabel =
+                    first.date.getUTCDate() <= 7 &&
+                    (!prevFirst || prevFirst.date.getUTCMonth() !== first.date.getUTCMonth());
+                  return (
+                    <div key={i} className="w-[10px]">
+                      {showLabel ? MONTH_LABELS[first.date.getUTCMonth()] : ""}
+                    </div>
+                  );
+                })}
               </div>
-            ))}
+              <div className="flex gap-[3px]">
+                {heatmapWeeks.map((week, i) => (
+                  <div key={i} className="flex flex-col gap-[3px]">
+                    {week.map((d) => {
+                      const level = heatmapLevel(d.attempts, heatmapThresholds);
+                      const future = d.date.getTime() > Date.now();
+                      return (
+                        <div
+                          key={d.key}
+                          className="w-[10px] h-[10px] rounded-sm"
+                          style={{ backgroundColor: future ? "transparent" : HEATMAP_LEVEL_COLORS[level] }}
+                          title={
+                            future
+                              ? undefined
+                              : `${d.key}: ${d.attempts} answered${
+                                  d.accuracy !== null ? `, ${d.accuracy}% correct` : ""
+                                }`
+                          }
+                        />
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+              <div className="flex items-center justify-end gap-1 text-[10px] text-gray-500 mt-1">
+                <span>Less</span>
+                {HEATMAP_LEVEL_COLORS.map((c, i) => (
+                  <div key={i} className="w-[10px] h-[10px] rounded-sm" style={{ backgroundColor: c }} />
+                ))}
+                <span>More</span>
+              </div>
+            </div>
           </div>
         </div>
       )}
