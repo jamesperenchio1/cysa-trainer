@@ -55,7 +55,7 @@ export default function Dashboard() {
         </Link>
       </div>
 
-      <Link href="/analytics" className="card hover:border-accent transition-colors flex items-center gap-3 mb-3">
+      <Link href="/analytics" className="card hover:border-accent transition-colors flex items-center gap-3 mb-6">
         <p className="text-2xl">📊</p>
         <div>
           <p className="font-semibold">Analytics</p>
@@ -70,19 +70,6 @@ export default function Dashboard() {
           <p className="text-xs text-gray-500">Official CS0-004 exam reference, viewable on any device</p>
         </div>
       </Link>
-
-      <a
-        href="https://books.gingerbrosshop.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="card hover:border-accent transition-colors flex items-center gap-3 mb-6"
-      >
-        <p className="text-2xl">🗂️</p>
-        <div>
-          <p className="font-semibold">Online library</p>
-          <p className="text-xs text-gray-500">The rest of the book library (Calibre-Web)</p>
-        </div>
-      </a>
 
       {stats &&
         (() => {
