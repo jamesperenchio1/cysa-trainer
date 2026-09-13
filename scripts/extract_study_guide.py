@@ -6,6 +6,10 @@ Review Questions, and their Answers) out of each of the 12 chapters and writes
 them to data/derived/ -- which is gitignored and never shipped in the Docker
 image. This content is copyrighted and stays local to this host.
 
+Flashcards are built from two sources per chapter: the Review Questions/Answers
+(external_key prefix SG-) and the Exam Essentials bullets, which the book already
+writes as a bold lead-in prompt followed by its own explanation (prefix EE-).
+
 Usage:
     python3 scripts/extract_study_guide.py [--epub PATH] [--out DIR]
 
@@ -160,6 +164,29 @@ def region(xhtml: str, start_title: str, end_titles: list[str]) -> str:
     return xhtml[start:end]
 
 
+def parse_exam_essentials(fragment: str) -> list[dict[str, str]]:
+    """Parse '<p><b>Lead-in.</b> Explanation...</p>' items into {front, back}.
+
+    The book already writes each Exam Essentials bullet as a self-quizzing prompt
+    (bold lead-in) followed by its answer (the rest of the paragraph), so no
+    question-generation is needed -- just split on the closing </b>.
+    """
+    out: list[dict[str, str]] = []
+    for m in re.finditer(r"(?is)<p>\s*<b>(.*?)</b>(.*?)</p>", fragment):
+        front = strip_tags(m.group(1))
+        back = strip_tags(m.group(2))
+        # The book sometimes closes the <b> before the lead-in's own period, so
+        # it lands as the first character of `back` -- move it back to `front`.
+        if back.startswith("."):
+            back = back[1:].lstrip()
+            front = front.rstrip(".") + "."
+        elif front and front[-1] not in ".!?":
+            front += "."
+        if front and back:
+            out.append({"front": front, "back": back})
+    return out
+
+
 def build_flashcards(
     questions: list[dict[str, object]], answers: list[dict[str, str]]
 ) -> list[dict[str, object]]:
@@ -218,6 +245,9 @@ def main() -> None:
             questions = parse_review_questions(rq_html)
             answers = parse_answers(ar_html)
 
+            ee_html = region(xhtml, "Exam Essentials", ["Lab Exercises", "Review Questions"])
+            essentials = parse_exam_essentials(ee_html)
+
             chapters_out.append(
                 {
                     "file": file,
@@ -237,9 +267,28 @@ def main() -> None:
                 card["chapter_title"] = title
                 card["domain_code"] = domain
             all_cards.extend(cards)
+
+            ee_cards: list[dict[str, object]] = []
+            for i, ee in enumerate(essentials, start=1):
+                ee_cards.append(
+                    {
+                        "front": ee["front"],
+                        "choices": [],
+                        "back": ee["back"],
+                        "answer_label": "",
+                        "correct_index": None,
+                        "external_key": f"EE-{domain}-{index:02d}-{i:03d}",
+                        "chapter_href": file,
+                        "chapter_title": title,
+                        "domain_code": domain,
+                    }
+                )
+            all_cards.extend(ee_cards)
+
             print(
                 f"  {file}: {len(questions)} questions, {len(answers)} answers, "
-                f"{len(cards)} cards, sections={list(sections)}"
+                f"{len(cards)} review cards, {len(ee_cards)} exam-essentials cards, "
+                f"sections={list(sections)}"
             )
 
     (out_dir / "chapters.json").write_text(
